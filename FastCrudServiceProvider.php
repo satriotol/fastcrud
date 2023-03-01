@@ -4,7 +4,7 @@ namespace satriotol\fastcrud;
 
 use Illuminate\Support\ServiceProvider;
 
-class ContactFormServiceProvider extends ServiceProvider
+class FastCrudServiceProvider extends ServiceProvider
 {
     public function boot()
     {
