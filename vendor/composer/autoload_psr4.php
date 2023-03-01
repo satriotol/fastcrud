@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'satriotol\\fastcrud\\' => array($baseDir . '/src'),
+    'Satriotol\\Fastcrud\\' => array($baseDir . '/src'),
 );
