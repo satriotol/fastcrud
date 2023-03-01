@@ -1,19 +1,26 @@
 {
-    "name": "satriotol/fastcrud",
-    "description": "Kalkulator sederhana dengan penambahan/pengurangan",
-    "type": "library",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "satriotol\\fastcrud\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "satriotol",
-            "email": "satriotol69@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {}
+  "name": "satriotol/fastcrud",
+  "description": "Kalkulator sederhana dengan penambahan/pengurangan",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "satriotol\\fastcrud\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "satriotol",
+      "email": "satriotol69@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {},
+  "extra": {
+    "laravel": {
+      "providers": [
+        "satriotol\\fastcrud\\FastCrudServiceProvider"
+      ]
+    }
+  }
 }
