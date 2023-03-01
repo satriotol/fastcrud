@@ -27,7 +27,7 @@ class FastcrudServiceProvider extends ServiceProvider
 
         // Publish configuration file
         $this->publishes([
-            __DIR__ . 'resources/views' => resource_path('views/')
+            __DIR__ . '/resources/views' => resource_path('views/')
         ]);
     }
 }
