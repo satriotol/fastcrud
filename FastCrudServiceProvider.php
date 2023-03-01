@@ -13,7 +13,7 @@ class FastCrudServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/Database/migrations');
 
         $this->publishes([
-            __DIR__ . '/resources/views' => resource_path('views/')
+            __DIR__ . 'resources/views' => resource_path('views/')
         ]);
     }
     public function register()
