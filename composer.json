@@ -19,7 +19,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "satriotol\\Fastcrud\\FastCrudServiceProvider"
+        "Satriotol\\Fastcrud\\FastCrudServiceProvider"
       ]
     }
   }
