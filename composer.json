@@ -1,11 +1,11 @@
 {
-  "name": "satriotol/fastcrud",
+  "name": "Satriotol/Fastcrud",
   "description": "Kalkulator sederhana dengan penambahan/pengurangan",
   "type": "library",
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "satriotol\\fastcrud\\": "src/"
+      "Satriotol\\Fastcrud\\": "src/"
     }
   },
   "authors": [
@@ -19,7 +19,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "satriotol\\fastcrud\\FastCrudServiceProvider"
+        "satriotol\\Fastcrud\\FastCrudServiceProvider"
       ]
     }
   }
