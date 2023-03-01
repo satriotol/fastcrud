@@ -1,22 +1,33 @@
 <?php
 
-namespace satriotol\fastcrud;
+namespace Satriotol\Fastcrud;
 
 use Illuminate\Support\ServiceProvider;
 
-class FastCrudServiceProvider extends ServiceProvider
+class FastcrudServiceProvider extends ServiceProvider
 {
+    /**
+     * Register services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        // Register any package services.
+    }
+
+    /**
+     * Bootstrap services.
+     *
+     * @return void
+     */
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
-        $this->loadViewsFrom(__DIR__ . '/resources/views', 'fastcrud');
-        $this->loadMigrationsFrom(__DIR__ . '/Database/migrations');
+        // Bootstrap any package services.
 
+        // Publish configuration file
         $this->publishes([
             __DIR__ . 'resources/views' => resource_path('views/')
         ]);
-    }
-    public function register()
-    {
     }
 }
