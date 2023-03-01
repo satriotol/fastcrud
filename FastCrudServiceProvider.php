@@ -1,11 +1,18 @@
 <?php
 
+namespace satriotol\fastcrud;
+
 use Illuminate\Support\ServiceProvider;
 
-class FastCrudServiceProvider extends ServiceProvider
+class ContactFormServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__ . '/views', 'satriotol');
+        $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+        $this->loadViewsFrom(__DIR__ . '/resources/views', 'fastcrud');
+        $this->loadMigrationsFrom(__DIR__.'/Database/migrations');
+    }
+    public function register()
+    {
     }
 }
