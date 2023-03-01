@@ -1,6 +1,6 @@
 {
     "name": "satriotol/fastcrud",
-    "type": "project",
+    "type": "library",
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
