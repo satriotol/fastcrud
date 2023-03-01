@@ -14,5 +14,6 @@
             "email": "satriotol69@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {}
 }
