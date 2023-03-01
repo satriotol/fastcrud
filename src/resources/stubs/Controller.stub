@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Models\{{modelName}};
+
+class {{modelName}}Controller extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('permission:{{modelNameSingular}}-index|{{modelNameSingular}}-create|{{modelNameSingular}}-edit|{{modelNameSingular}}-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:{{modelNameSingular}}-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:{{modelNameSingular}}-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:{{modelNameSingular}}-delete', ['only' => ['destroy']]);
+    }
+    public function index()
+    {
+        ${{modelNamePlural}} = {{modelName}}::paginate();
+        return view('backend.{{modelNameSingular}}.index',compact('{{modelNamePlural}}'));
+    }
+    public function create()
+    {
+        return view('backend.{{modelNameSingular}}.create');
+    }
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+
+        ]);
+        {{modelName}}::create($data);
+        session()->flash('success');
+        return redirect(route('{{modelNameSingular}}.index'));
+    }
+    public function edit({{modelName}} ${{modelNameSingular}})
+    {
+        return view('backend.{{modelNameSingular}}.create', compact('{{modelNameSingular}}'));
+    }
+    public function update(Request $request, {{modelName}} ${{modelNameSingular}})
+    {
+        $data = $request->validate([
+        ]);
+        ${{modelNameSingular}}->update($data);
+        session()->flash('success');
+        return redirect(route('{{modelNameSingular}}.index'));
+    }
+    public function destroy({{modelName}} ${{modelNameSingular}})
+    {
+        ${{modelNameSingular}}->delete();
+        session()->flash('success');
+        return back();
+    }
+}
