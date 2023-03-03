@@ -4,7 +4,7 @@ namespace Satriotol\Fastcrud;
 
 use Illuminate\Support\ServiceProvider;
 
-class FastcrudServiceProvider extends ServiceProvider
+class FastCrudServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
