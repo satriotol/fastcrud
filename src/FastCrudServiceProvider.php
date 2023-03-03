@@ -41,8 +41,8 @@ class FastcrudServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/public' => public_path('/')
         ]);
-        $this->loadRoutesFrom(__DIR__.'/packages/Satriotol/Fastcrud/src/routes/web.php');
-        $this->loadRoutesFrom(__DIR__.'/packages/Satriotol/Fastcrud/src/routes/api.php');
+        $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/routes/api.php');
         // $this->publishes([
         //     __DIR__ . '/routes' => base_path('routes/')
         // ]);
