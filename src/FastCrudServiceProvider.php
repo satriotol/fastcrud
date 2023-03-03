@@ -42,7 +42,7 @@ class FastcrudServiceProvider extends ServiceProvider
             __DIR__ . '/public' => public_path('/')
         ]);
         $this->publishes([
-            __DIR__ . '/routes/auth.php' => base_path('routes/')
+            __DIR__ . '/routes/auth.php' => base_path('routes/auth.php')
         ]);
         $this->loadRoutesFrom(__DIR__ . '/routes/auth.php');
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
