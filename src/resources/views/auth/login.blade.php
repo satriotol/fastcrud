@@ -71,12 +71,23 @@
                                                     v-model="form.email" required placeholder="Email">
                                             </div>
                                             <div class="wrap-input100 validate-input input-group" id="Password-toggle">
-                                                <a href="javascript:void(0)"
+                                                <a href="javascript:void(0)" @click="toggleShow"
                                                     class="input-group-text bg-white text-muted">
-                                                    <i class="zmdi zmdi-eye text-muted" aria-hidden="true"></i>
+                                                    <i class=" text-muted"
+                                                        :class="{
+                                                            'zmdi zmdi-eye-off': showPassword,
+                                                            'zmdi zmdi-eye': !
+                                                                showPassword
+                                                        }"
+                                                        aria-hidden="true"></i>
                                                 </a>
-                                                <input class="input100 border-start-0 form-control ms-0" type="password"
-                                                    v-model="form.password" required placeholder="Password">
+                                                <input v-if="!showPassword"
+                                                    class="input100 border-start-0 form-control ms-0" type="password"
+                                                    v-model="form.password" name="password" required
+                                                    placeholder="Password">
+                                                <input v-else class="input100 border-start-0 form-control ms-0"
+                                                    type="text" v-model="form.password" name="password" required
+                                                    placeholder="Password">
                                             </div>
                                             <div class="form-group mt-4 mb-4">
                                                 <div class="captcha">
@@ -148,6 +159,7 @@
             data() {
                 return {
                     message: 'Hello Vue!',
+                    showPassword: false,
                     form: {
                         email: '',
                         password: '',
@@ -160,6 +172,9 @@
                 this.reloadCaptcha();
             },
             methods: {
+                toggleShow() {
+                    this.showPassword = !this.showPassword;
+                },
                 login() {
                     Swal.fire({
                         title: 'Mencoba Masuk',
