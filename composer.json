@@ -1,6 +1,6 @@
 {
   "name": "satriotol/fastcrud",
-  "description": "Kalkulator sederhana dengan penambahan/pengurangan",
+  "description": "Laravel Fast Crud Buatan Satrio Tamvan",
   "type": "library",
   "license": "MIT",
   "authors": [
