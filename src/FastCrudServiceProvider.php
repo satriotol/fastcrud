@@ -35,6 +35,7 @@ class FastcrudServiceProvider extends ServiceProvider
             __DIR__ . '/routes/auth.php' => base_path('routes/auth.php'),
             __DIR__ . '/routes/web.php' => base_path('routes/web.php'),
             __DIR__ . '/routes/api.php' => base_path('routes/api.php'),
+            __DIR__ . '/app/console/Commands' => app_path('console/Commands'),
         ]);
         // $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
         // $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
