@@ -29,6 +29,11 @@
       "Satriotol\\Fastcrud\\": "src/"
     }
   },
+  "autoload-dev": {
+    "files": [
+      "app/helpers.php"
+    ]
+  },
   "extra": {
     "laravel": {
       "providers": [
