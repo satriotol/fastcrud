@@ -29,12 +29,7 @@
       "Satriotol\\Fastcrud\\": "src/"
     },
     "files": [
-      "app/helpers.php"
-    ]
-  },
-  "autoload-dev": {
-    "files": [
-      "app/helpers.php"
+      "src/app/helpers.php"
     ]
   },
   "extra": {
