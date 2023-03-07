@@ -45,7 +45,6 @@ class CrudController extends Controller
         Crud::create($data);
         $this->createMigration($data);
         $this->generateModel($data);
-        $this->generateModel($data);
         $this->generateController($data);
         $this->viewIndex($data);
         $this->addRoute($data);

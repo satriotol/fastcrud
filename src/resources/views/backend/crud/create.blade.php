@@ -50,7 +50,7 @@
                         </div> --}}
                         <table class="table table-bordered" id="dynamicAddRemove">
                             <tr>
-                                <th>Nama Tabel</th>
+                                <th>Nama Tabel | Tampilan</th>
                                 <th>Tipe Data</th>
                                 <th>Nullable</th>
                                 <th>Action</th>
@@ -59,6 +59,8 @@
                                 <td>
                                     <input type="text" name="tables[0][name]" required placeholder="Masukkan Nama Tabel"
                                         class="form-control" />
+                                    <input type="text" name="tables[0][tampilan]" required
+                                        placeholder="Masukkan Tampilan Nama" class="form-control">
                                 </td>
                                 <td>
                                     <select name="tables[0][type]" class="form-control" required>
@@ -93,22 +95,32 @@
         var i = 0;
         $("#dynamic-ar").click(function() {
             ++i;
-            $("#dynamicAddRemove").append(
-                `<tr>'+
-                '<td><input type="text" required name="tables[` + i + `][name]" placeholder="Masukkan Nama Tabel" class="form-control" /></td>' +
-                '<td><select name="tables[` + i + `][type]" class="form-control" required>' +
-                    '<option value="">Pilih Tipe</option>' +
-                    '@foreach ($types as $type)'+
-                    '<option value="{{ $type }}">{{ $type }}</option>' +
-                    '@endforeach' +
-                '</select></td>' +
-                '<td><select name="tables[` + i + `][is_null]" class="form-control">' +
-                    '<option value="">Tidak</option>' +
-                    '<option value="nullable">Ya</option>' +
-                '</select></td>' +
-                '<td><button type="button" class="btn btn-outline-danger remove-input-field">Hapus</button></td>' +
-                '</tr>`
-            );
+            const inputTemplate = `
+            <tr>
+                <td>
+                    <input type="text" name="tables[` + i + `][name]" required placeholder="Masukkan Nama Tabel"
+                        class="form-control" />
+                    <input type="text" name="tables[` + i + `][tampilan]" required
+                        placeholder="Masukkan Tampilan Nama" class="form-control">
+                </td>
+                <td>
+                    <select name="tables[` + i + `][type]" class="form-control" required>
+                        <option value="">Pilih Tipe</option>
+                        @foreach ($types as $type)
+                            <option value="{{ $type }}">{{ $type }}</option>
+                        @endforeach
+                    </select>
+                </td>
+                <td>
+                    <select name="tables[` + i + `][is_null]" class="form-control">
+                        <option value="0">Tidak</option>
+                        <option value="nullable">Ya</option>
+                    </select>
+                </td>
+                <td><button type="button" class="btn btn-danger remove-input-field">Hapus</button></td>
+            </tr>
+            `;
+            $("#dynamicAddRemove").append(inputTemplate);
         });
         $(document).on('click', '.remove-input-field', function() {
             $(this).parents('tr').remove();
