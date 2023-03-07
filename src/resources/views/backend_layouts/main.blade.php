@@ -32,6 +32,8 @@
     <link id="theme" rel="stylesheet" type="text/css" media="all"
         href="{{ asset('backend_assets/colors/color1.css') }}" />
     <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+        rel="stylesheet" />
 
     @stack('style')
     <style>
@@ -146,22 +148,17 @@
 
     <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
 
     <script>
-        const inputElement = document.querySelector('input[name="image"]');
-        const inputElementFile = document.querySelector('.upload-file');
-        const inputElementLogo = document.querySelector('.upload-logo');
-        const inputElementIcon = document.querySelector('.upload-icon');
-        const inputElementImages = document.querySelector('.upload-images');
-
+        const inputElement = document.querySelector('.upload-filepond');
+        const validation = {
+            acceptedFileTypes: ['image/*', 'application/pdf']
+        };
         FilePond.registerPlugin(
             FilePondPluginFileValidateType,
         );
-        const pond = FilePond.create(inputElement);
-        const pond2 = FilePond.create(inputElementFile);
-        const pond3 = FilePond.create(inputElementLogo);
-        const pond4 = FilePond.create(inputElementImages);
-        const pond5 = FilePond.create(inputElementIcon);
+        const pond = FilePond.create(inputElement, validation);
         FilePond.setOptions({
             server: {
                 process: '{{ route('upload.store') }}',

@@ -34,6 +34,18 @@ class UploadController extends Controller
             ]);
             return $file;
         };
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $images) {
+                $name = $images->getClientOriginalName();
+                $image_name = date('mdYHis') . '-' . $name;
+                $images = $images->storeAs('images', $image_name, 'public_uploads');
+
+                TemporaryFile::create([
+                    'filename' => $images
+                ]);
+                return $images;
+            }
+        };
     }
     public function revert(Request $request)
     {
