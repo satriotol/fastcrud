@@ -69,6 +69,7 @@
                                             <option value="{{ $type }}">{{ $type }}</option>
                                         @endforeach
                                     </select>
+                                    {!! Form::select('tables[0][is_file]', ['' => 'Apakah File?', '1' => 'Ya'], '', ['class' => 'form-control']) !!}
                                 </td>
                                 <td>
                                     <select name="tables[0][is_null]" class="form-control">
@@ -110,6 +111,7 @@
                             <option value="{{ $type }}">{{ $type }}</option>
                         @endforeach
                     </select>
+                    {!! Form::select('tables[` + i + `][is_file]', ['' => 'Apakah File?', '1' => 'Ya'], '', ['class' => 'form-control']) !!}
                 </td>
                 <td>
                     <select name="tables[` + i + `][is_null]" class="form-control">
