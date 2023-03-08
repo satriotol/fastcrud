@@ -44,10 +44,10 @@ class FastCrudServiceProvider extends ServiceProvider
                 __DIR__ . '/resources/views' => resource_path('views/'),
             ], 'fastcrudStarter');
             $this->publishes([
-                __DIR__ . '/app/Http/CrudController.php' => app_path('/Http'),
+                __DIR__ . '/app/Http/Controllers/CrudController.php' => app_path('/Http'),
                 __DIR__ . '/app/Traits' => app_path('/Traits'),
                 __DIR__ . '/resources/stubs' => resource_path('stubs/'),
-                __DIR__ . '/resources/views/backend/' => resource_path('views/backend/crud'),
+                __DIR__ . '/resources/views/backend/' => resource_path('views/backend/'),
             ], 'fastcrudContinue');
             $this->publishes([
                 __DIR__ . '/public' => public_path('/'),
