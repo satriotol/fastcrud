@@ -30,16 +30,18 @@ class FastCrudServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/resources/views' => resource_path('views/'),
                 __DIR__ . '/resources/stubs' => resource_path('stubs/'),
-                __DIR__ . '/database/migrations' => database_path('migrations/'),
-                __DIR__ . '/database/seeders' => database_path('seeders/'),
-                __DIR__ . '/public' => public_path('/'),
                 __DIR__ . '/routes/auth.php' => base_path('routes/auth.php'),
                 __DIR__ . '/routes/web.php' => base_path('routes/web.php'),
                 __DIR__ . '/routes/api.php' => base_path('routes/api.php'),
                 __DIR__ . '/lang' => base_path('lang/'),
                 __DIR__ . '/app' => app_path('/'),
                 __DIR__ . '/config' => config_path('/'),
-            ]);
+                __DIR__ . '/database/migrations' => database_path('migrations/'),
+                __DIR__ . '/database/seeders' => database_path('seeders/'),
+            ], 'fastcrudStarter');
+            $this->publishes([
+                __DIR__ . '/public' => public_path('/'),
+            ], 'fastcrudPublic');
         }
         // $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
         // $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
