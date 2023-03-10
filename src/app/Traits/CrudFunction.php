@@ -60,8 +60,8 @@ trait CrudFunction
     protected function viewCreate($data)
     {
         foreach ($data['tables'] as $d) {
-            $first = '<div class="form-group">';
-            $label = "{!! Form::label('{$d['name']}', '{$d['tampilan']}') !!}";
+            $first = "<div class='form-group'>\n";
+            $label = "{!! Form::label('{$d['name']}', '{$d['tampilan']}') !!}\n";
             if ($d["type"] == "string" || $d["type"] == "unsignedBigInteger") {
                 $input = "{!! Form::text('{$d['name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['name']} : @old('{$d['name']}'), [
                     'required',
@@ -81,7 +81,7 @@ trait CrudFunction
                     'placeholder' => 'Masukkan {$d['tampilan']}',
                 ]) !!}";
             }
-            $end = '</div>';
+            $end = "</div>\n";
             $view[] = $first . $label . $input . $end;
         }
         $view = trim(implode("\n", $view));
