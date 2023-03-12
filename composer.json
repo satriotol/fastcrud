@@ -9,7 +9,6 @@
       "email": "satriotol69@gmail.com"
     }
   ],
-  "minimum-stability": "stable",
   "require": {
     "php": "^8.0.2",
     "arcanedev/log-viewer": "9.x",
