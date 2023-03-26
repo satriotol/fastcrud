@@ -69,9 +69,10 @@ trait CrudFunction
                     'placeholder' => 'Masukkan {$d['tampilan']}',
                 ]) !!}";
             } elseif ($d["type"] == "uuid" || $d["type"] == "unsignedBigInteger") {
-                $input = "{!! Form::select('{$d['name']}', '', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['name']} : @old('{$d['name']}'), [
+                $input = "{!! Form::select('{$d['name']}', \${$data['plural']}, isset(\${$data['singular']}) ? \${$data['singular']}->{$d['name']} : @old('{$d['name']}'), [
                     'class' => 'form-control select2',
-                    'required'
+                    'required',
+                    'placeholder' => 'Pilih {$d['tampilan']}'
                 ]) !!}";
             } elseif ($d['type'] == "longText") {
                 $input = "{!! Form::textarea('{$d['name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['name']} : @old('{$d['name']}'), [
