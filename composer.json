@@ -3,6 +3,7 @@
   "description": "Laravel Fast Crud Buatan Satrio Tamvan",
   "type": "library",
   "license": "MIT",
+  "version": "1.0.0",
   "authors": [
     {
       "name": "satriotol",
