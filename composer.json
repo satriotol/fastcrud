@@ -10,6 +10,7 @@
       "email": "satriotol69@gmail.com"
     }
   ],
+  "minimum-stability": "dev",
   "require": {
     "arcanedev/log-viewer": "9.x",
     "barryvdh/laravel-dompdf": "^2.0",
