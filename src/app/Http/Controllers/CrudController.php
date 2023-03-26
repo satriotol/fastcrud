@@ -29,7 +29,8 @@ class CrudController extends Controller
             'string',
             'longText',
             'unsignedBigInteger',
-            'date'
+            'date',
+            'uuid'
         ];
         return view('backend.crud.create', compact('types'));
     }
