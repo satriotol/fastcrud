@@ -36,14 +36,14 @@
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->getUserRole($user) }}</td>
                                         <td>
-                                            <form action="{{ route('user.destroy', $user->id) }}" method="post">
+                                            <form action="{{ route('user.destroy', $user->uuid) }}" method="post">
                                                 @csrf
                                                 @method('delete')
                                                 <a class="btn btn-sm btn-warning"
-                                                    href="{{ route('user.edit', $user->id) }}">
+                                                    href="{{ route('user.edit', $user->uuid) }}">
                                                     Edit
                                                 </a>
-                                                <a href="{{ route('user.resetPassword', $user->id) }}"
+                                                <a href="{{ route('user.resetPassword', $user->uuid) }}"
                                                     class="btn btn-sm btn-info"
                                                     onclick="return confirm('Are you sure?')">Reset
                                                     Password</a>

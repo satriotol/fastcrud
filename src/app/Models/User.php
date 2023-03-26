@@ -15,6 +15,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Role;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable implements Auditable
 {
@@ -30,7 +31,8 @@ class User extends Authenticatable implements Auditable
         'email',
         'password',
         'last_signin_at',
-        'last_ip_address'
+        'last_ip_address',
+        'uuid'
     ];
 
     /**
@@ -51,14 +53,13 @@ class User extends Authenticatable implements Auditable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    protected static function boot()
+    {
+        parent::boot();
 
-    public function beritas()
-    {
-        return $this->hasMany(Berita::class, 'user_id', 'id');
-    }
-    public function verified_beritas()
-    {
-        return $this->hasMany(Berita::class, 'verified_by', 'id');
+        static::creating(function ($model) {
+            $model->uuid = Str::uuid()->toString();
+        });
     }
 
     public function scopeNotRole(Builder $query, $roles, $guard = null): Builder
