@@ -49,6 +49,7 @@
                             </tbody>
                         </table>
                     </div>
+                    {{ ${{modelNamePlural}}->appends($_GET)->links('pagination::bootstrap-5')->withClass('pagination-container') }}
                 </div>
             </div>
         </div>
