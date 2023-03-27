@@ -48,6 +48,7 @@ class FastCrudServiceProvider extends ServiceProvider
                 __DIR__ . '/app/Traits' => app_path('/Traits'),
                 __DIR__ . '/resources/stubs' => resource_path('stubs/'),
                 __DIR__ . '/resources/views/backend/crud' => resource_path('views/backend/crud'),
+                __DIR__ . '/resources/views/backend_layouts/main.blade.php' => resource_path('views/backend_layouts'),
             ], 'fastcrudContinue');
             $this->publishes([
                 __DIR__ . '/public' => public_path('/'),
