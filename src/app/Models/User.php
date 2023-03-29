@@ -91,13 +91,13 @@ class User extends Authenticatable implements Auditable
             });
         });
     }
-    public static function getUserRole($user)
+    public static function getUserRole()
     {
-        return $user->getRoleNames()->first() ?? '-';
+        return Auth::user()->getRoleNames()->first() ?? '-';
     }
     public static function getUser($user)
     {
-        if ($user->getUserRole($user) != 'SUPERADMIN') {
+        if ($this->getUserRole() != 'SUPERADMIN') {
             return User::notRole('SUPERADMIN')->get();
         } else {
             return User::all();
