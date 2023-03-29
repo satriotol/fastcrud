@@ -95,9 +95,9 @@ class User extends Authenticatable implements Auditable
     {
         return Auth::user()->getRoleNames()->first() ?? '-';
     }
-    public static function getUser($user)
+    public static function getUser()
     {
-        if ($this->getUserRole() != 'SUPERADMIN') {
+        if (Auth::user()->getUserRole() != 'SUPERADMIN') {
             return User::notRole('SUPERADMIN')->get();
         } else {
             return User::all();
