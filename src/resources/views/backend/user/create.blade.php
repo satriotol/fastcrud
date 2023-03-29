@@ -25,32 +25,38 @@
                             @method('PUT')
                         @endisset
                         <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control"
-                                value="{{ isset($user) ? $user->name : @old('name') }}" required name="name">
+                            {!! Form::label('name', 'Nama') !!}
+                            {!! Form::text('name', isset($user) ? $user->name : @old('name'), [
+                                'required',
+                                'class' => 'form-control',
+                                'placeholder' => 'Masukkan Nama',
+                            ]) !!}
                         </div>
                         <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" class="form-control"
-                                value="{{ isset($user) ? $user->email : @old('email') }}" required name="email">
+                            {!! Form::label('email', 'Email') !!}
+                            {!! Form::email('email', isset($user) ? $user->email : @old('email'), [
+                                'placeholder' => 'Masukkan Email',
+                                'class' => 'form-control',
+                                'required',
+                            ]) !!}
                         </div>
                         <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" class="form-control" value="""
+                            {!! Form::label('password', 'Password') !!}
+                            <input type="password" class="form-control" value=""
                                 @empty($user) required @endempty name="password">
                         </div>
                         <div class="form-group">
                             <label>Password Confirmation</label>
-                            <input type="password" class="form-control" value="""
+                            <input type="password" class="form-control" value=""
                                 @empty($user) required @endempty name="password_confirmation">
                         </div>
                         <div class="form-group">
-                            <label for="roles">Role</label>
+                            {!! Form::label('roles', 'Role') !!}
                             <select name="roles" class="form-control" id="" required>
                                 <option value="">Pilih Role</option>
                                 @foreach ($roles as $r)
                                     <option value="{{ $r->id }}"
-                                        @isset($user) @if ($r->name === $user->getUserRole($user)) selected @endif
+                                        @isset($user) @if ($r->name === Auth::user()->getUserRole()) selected @endif
                                 @endisset>
                                         {{ $r->name }}
                                     </option>

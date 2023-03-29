@@ -26,6 +26,7 @@
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Role</th>
+                                    <th>Aktivitas</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -34,7 +35,8 @@
                                     <tr>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->getUserRole($user) }}</td>
+                                        <td>{{ $user->getUserRole() }}</td>
+                                        <td>{{ $user->last_signin_at }}</td>
                                         <td>
                                             <form action="{{ route('user.destroy', $user->uuid) }}" method="post">
                                                 @csrf
