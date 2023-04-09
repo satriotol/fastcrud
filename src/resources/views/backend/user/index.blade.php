@@ -35,7 +35,7 @@
                                     <tr>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->getUserRole() }}</td>
+                                        <td>{{ $user->getOtherRole() }}</td>
                                         <td>{{ $user->last_signin_at }}</td>
                                         <td>
                                             <form action="{{ route('user.destroy', $user->uuid) }}" method="post">

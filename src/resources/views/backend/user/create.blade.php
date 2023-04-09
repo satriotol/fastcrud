@@ -56,7 +56,7 @@
                                 <option value="">Pilih Role</option>
                                 @foreach ($roles as $r)
                                     <option value="{{ $r->id }}"
-                                        @isset($user) @if ($r->name === Auth::user()->getUserRole()) selected @endif
+                                        @isset($user) @if ($r->name === $user->getOtherRole()) selected @endif
                                 @endisset>
                                         {{ $r->name }}
                                     </option>
