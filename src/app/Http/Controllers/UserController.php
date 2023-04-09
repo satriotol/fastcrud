@@ -120,6 +120,7 @@ class UserController extends Controller
     public function destroy($uuid)
     {
         $user = User::where('uuid', $uuid)->first();
+        $user->delete();
         session()->flash('success');
         return back();
     }
