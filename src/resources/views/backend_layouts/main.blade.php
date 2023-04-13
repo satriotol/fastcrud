@@ -131,12 +131,22 @@
     <script src="{{ asset('backend_assets/js/custom.js') }}"></script>
     <script src="{{ asset('backend_assets/plugins/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('backend_assets/js/select2.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.16/dist/sweetalert2.all.min.js"></script>
     @if (session()->has('success'))
         <script>
             notif({
                 msg: "<b>Sukses:</b> Proses Anda Berhasil",
                 type: "success"
             });
+        </script>
+    @endif
+    @if (session()->has('bug'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '{{ session()->get('bug') }}',
+            })
         </script>
     @endif
     <script>
