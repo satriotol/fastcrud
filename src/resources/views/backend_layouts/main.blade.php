@@ -31,9 +31,9 @@
     <!-- COLOR SKIN CSS -->
     <link id="theme" rel="stylesheet" type="text/css" media="all"
         href="{{ asset('backend_assets/colors/color1.css') }}" />
-    <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
-    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
-        rel="stylesheet" />
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css"
+        rel="stylesheet">
+    <link href="https://unpkg.com/filepond/dist/filepond.min.css" rel="stylesheet">
 
     @stack('style')
     <style>
@@ -160,27 +160,18 @@
         })
     </script>
 
-    <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
 
     <script>
-        const inputElement = document.querySelector('.upload-filepond');
-        const validation = {
-            acceptedFileTypes: ['image/*', 'application/pdf']
-        };
-        FilePond.registerPlugin(
-            FilePondPluginFileValidateType,
-        );
-        const pond = FilePond.create(inputElement, validation);
-        FilePond.setOptions({
+        const inputElement = document.querySelector('#filepond');
+        const pond = FilePond.create(inputElement);
+
+        pond.setOptions({
             server: {
                 process: '{{ route('upload.store') }}',
-                revert: '{{ route('upload.revert') }}',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            },
+                revert: '{{ route('upload.revert') }}'
+            }
         });
     </script>
     @stack('custom-scripts')
