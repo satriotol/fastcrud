@@ -21,7 +21,7 @@ class {{modelName}} extends Model implements Auditable
         parent::boot();
 
         static::creating(function ($model) {
-            $model->{$model->getKeyName()} = Str::uuid()->toString();
+            $model->uuid = Str::uuid()->toString();
         });
     }
 }
