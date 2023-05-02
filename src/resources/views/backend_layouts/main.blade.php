@@ -168,9 +168,13 @@
         const pond = FilePond.create(inputElement);
 
         pond.setOptions({
+            name: 'filepond',
             server: {
                 process: '{{ route('upload.store') }}',
-                revert: '{{ route('upload.revert') }}'
+                revert: '{{ route('upload.revert') }}',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
             }
         });
     </script>
