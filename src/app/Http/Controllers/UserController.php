@@ -60,6 +60,12 @@ class UserController extends Controller
         session()->flash('success');
         return redirect(route('user.index'));
     }
+    public function editProfile()
+    {
+        $user = Auth::user();
+        $editProfile = 'editProfile';
+        return view('backend.user.create', compact('user', 'editProfile'));
+    }
 
     /**
      * Display the specified resource.
@@ -98,17 +104,23 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|unique:users,email,' . $user->id,
             'password' => 'nullable|confirmed',
-            'roles' => 'required'
+            'editProfile' => 'nullable|in:iniTest',
+            'roles' => 'nullable' . ($request->input('editProfile') == null ? '|required' : ''),
         ]);
         $data = $request->except('password');
         if ($request->password) {
             $data['password'] = Hash::make($request->password);
         }
         $user->update($data);
-        DB::table('model_has_roles')->where('model_id', $user->id)->delete();
-        $user->assignRole($request['roles']);
-        session()->flash('success');
-        return redirect(route('user.index'));
+        if ($request->editProfile == null) {
+            DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+            $user->assignRole($request['roles']);
+            session()->flash('success');
+            return redirect(route('user.index'));
+        } else {
+            session()->flash('success');
+            return back();
+        }
     }
 
     /**

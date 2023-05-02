@@ -42,29 +42,35 @@
                         </div>
                         <div class="form-group">
                             {!! Form::label('password', 'Password') !!}
-                            <input type="password" class="form-control" value=""
-                                @empty($user) required @endempty name="password">
+                            {!! Form::password('password', ['class' => 'form-control', empty($user) ? 'required' : '']) !!}
                         </div>
                         <div class="form-group">
                             <label>Password Confirmation</label>
                             <input type="password" class="form-control" value=""
                                 @empty($user) required @endempty name="password_confirmation">
                         </div>
-                        <div class="form-group">
-                            {!! Form::label('roles', 'Role') !!}
-                            <select name="roles" class="form-control" id="" required>
-                                <option value="">Pilih Role</option>
-                                @foreach ($roles as $r)
-                                    <option value="{{ $r->id }}"
-                                        @isset($user) @if ($r->name === $user->getOtherRole()) selected @endif
+                        @empty($editProfile)
+                            <div class="form-group">
+                                {!! Form::label('roles', 'Role') !!}
+                                <select name="roles" class="form-control" id="" required>
+                                    <option value="">Pilih Role</option>
+                                    @foreach ($roles as $r)
+                                        <option value="{{ $r->id }}"
+                                            @isset($user) @if ($r->name === $user->getOtherRole()) selected @endif
                                 @endisset>
-                                        {{ $r->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                                            {{ $r->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endempty
+                        @isset($editProfile)
+                            {!! Form::hidden('editProfile', 'iniTest', []) !!}
+                        @endisset
                         <div class="text-end">
-                            <a class="btn btn-warning" href="{{ url()->previous() }}">Kembali</a>
+                            @empty($editProfile)
+                                <a class="btn btn-warning" href="{{ url()->previous() }}">Kembali</a>
+                            @endempty
                             <button class="btn btn-primary" type="submit">Submit</button>
                         </div>
                     </form>

@@ -36,6 +36,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     Route::resource('audit', AuditController::class);
     // CRUD_GENERATOR
     Route::resource('crud', CrudController::class);
+    Route::get('editProfile', [UserController::class, 'editProfile'])->name('user.editProfile');
     Route::get('user/resetPassword/{user}', [UserController::class, 'reset_password'])->name('user.resetPassword');
 });
 require __DIR__ . '/auth.php';
