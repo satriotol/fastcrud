@@ -24,6 +24,10 @@
                         @isset($permission)
                             @method('PUT')
                         @endisset
+                        <label class="custom-control custom-checkbox-md">
+                            {!! Form::checkbox('isDefault', 'checked', '', ['class' => 'custom-control-input']) !!}
+                            <span class="custom-control-label">Default CRUD</span>
+                        </label>
                         <table class="table table-bordered" id="dynamicAddRemove">
                             <tr>
                                 <th>Name</th>

@@ -46,12 +46,28 @@ class PermissionController extends Controller
         $this->validate($request, [
             'name.*' => 'required|unique:permissions,name',
             'guard_name' => 'nullable',
+            'isDefault' => 'nullable'
         ]);
-        foreach ($request->name as $key => $value) {
-            Permission::create([
-                'name' => $value,
-                'guard_name' => 'web'
-            ]);
+        if ($request->isDefault) {
+            $default = [
+                '-index',
+                '-create',
+                '-edit',
+                '-delete',
+            ];
+            foreach ($default as $d) {
+                Permission::create([
+                    'name' => $request->name[0] . $d,
+                    'guard_name' => 'web'
+                ]);
+            }
+        } else {
+            foreach ($request->name as $key => $value) {
+                Permission::create([
+                    'name' => $value,
+                    'guard_name' => 'web'
+                ]);
+            }
         }
         session()->flash('success');
         return redirect(route('permission.index'));
