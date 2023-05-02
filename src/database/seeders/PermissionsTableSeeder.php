@@ -14,12 +14,12 @@ class PermissionsTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('permissions')->delete();
-        
+
         \DB::table('permissions')->insert(array (
-            0 => 
+            0 =>
             array (
                 'id' => 1,
                 'name' => 'permission-index',
@@ -27,7 +27,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-01-12 21:56:57',
                 'updated_at' => '2023-01-12 21:56:57',
             ),
-            1 => 
+            1 =>
             array (
                 'id' => 2,
                 'name' => 'permission-create',
@@ -35,7 +35,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-01-12 21:56:57',
                 'updated_at' => '2023-01-12 21:56:57',
             ),
-            2 => 
+            2 =>
             array (
                 'id' => 3,
                 'name' => 'permission-edit',
@@ -43,7 +43,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-01-12 21:56:57',
                 'updated_at' => '2023-01-12 21:56:57',
             ),
-            3 => 
+            3 =>
             array (
                 'id' => 4,
                 'name' => 'permission-delete',
@@ -51,7 +51,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-01-12 21:56:57',
                 'updated_at' => '2023-01-12 21:56:57',
             ),
-            4 => 
+            4 =>
             array (
                 'id' => 5,
                 'name' => 'role-edit',
@@ -59,7 +59,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-01-12 21:57:51',
                 'updated_at' => '2023-01-12 21:57:51',
             ),
-            5 => 
+            5 =>
             array (
                 'id' => 6,
                 'name' => 'role-index',
@@ -67,7 +67,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-01-12 21:57:51',
                 'updated_at' => '2023-01-12 21:57:51',
             ),
-            6 => 
+            6 =>
             array (
                 'id' => 7,
                 'name' => 'role-create',
@@ -75,7 +75,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-01-12 21:57:51',
                 'updated_at' => '2023-01-12 21:57:51',
             ),
-            7 => 
+            7 =>
             array (
                 'id' => 8,
                 'name' => 'role-delete',
@@ -83,7 +83,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-01-12 21:57:51',
                 'updated_at' => '2023-01-12 21:57:51',
             ),
-            8 => 
+            8 =>
             array (
                 'id' => 9,
                 'name' => 'user-create',
@@ -91,7 +91,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-01-12 22:00:28',
                 'updated_at' => '2023-01-12 22:00:28',
             ),
-            9 => 
+            9 =>
             array (
                 'id' => 10,
                 'name' => 'user-index',
@@ -99,7 +99,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-01-12 22:00:28',
                 'updated_at' => '2023-01-12 22:00:28',
             ),
-            10 => 
+            10 =>
             array (
                 'id' => 11,
                 'name' => 'user-edit',
@@ -107,7 +107,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-01-12 22:00:28',
                 'updated_at' => '2023-01-12 22:00:28',
             ),
-            11 => 
+            11 =>
             array (
                 'id' => 12,
                 'name' => 'user-delete',
@@ -115,7 +115,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-01-12 22:00:28',
                 'updated_at' => '2023-01-12 22:00:28',
             ),
-            12 => 
+            12 =>
             array (
                 'id' => 13,
                 'name' => 'audit-index',
@@ -123,8 +123,40 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-01-31 20:53:55',
                 'updated_at' => '2023-01-31 20:53:55',
             ),
+            13 =>
+            array (
+                'id' => 14,
+                'name' => 'crud-index',
+                'guard_name' => 'web',
+                'created_at' => '2023-01-31 20:53:55',
+                'updated_at' => '2023-01-31 20:53:55',
+            ),
+            14 =>
+            array (
+                'id' => 15,
+                'name' => 'crud-create',
+                'guard_name' => 'web',
+                'created_at' => '2023-01-31 20:53:55',
+                'updated_at' => '2023-01-31 20:53:55',
+            ),
+            15 =>
+            array (
+                'id' => 16,
+                'name' => 'crud-delete',
+                'guard_name' => 'web',
+                'created_at' => '2023-01-31 20:53:55',
+                'updated_at' => '2023-01-31 20:53:55',
+            ),
+            16 =>
+            array (
+                'id' => 17,
+                'name' => 'crud-edit',
+                'guard_name' => 'web',
+                'created_at' => '2023-01-31 20:53:55',
+                'updated_at' => '2023-01-31 20:53:55',
+            ),
         ));
-        
-        
+
+
     }
 }
