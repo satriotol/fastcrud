@@ -32,11 +32,11 @@
                                     <tr>
                                         TableBody
                                         <td class="text-center">
-                                            <form action="{{ route('{{modelNameSingular}}.destroy', ${{modelNameSingular}}->id) }}" method="post">
+                                            <form action="{{ route('{{modelNameSingular}}.destroy', ${{modelNameSingular}}->uuid) }}" method="post">
                                                 @csrf
                                                 @method('delete')
                                                 <a class="btn btn-sm btn-warning"
-                                                    href="{{ route('{{modelNameSingular}}.edit', ${{modelNameSingular}}->id) }}">
+                                                    href="{{ route('{{modelNameSingular}}.edit', ${{modelNameSingular}}->uuid) }}">
                                                     Edit
                                                 </a>
                                                 <input type="submit" class="btn btn-sm btn-danger"

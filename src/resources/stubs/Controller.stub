@@ -33,20 +33,23 @@ class {{modelName}}Controller extends Controller
         session()->flash('success');
         return redirect(route('{{modelNameSingular}}.index'));
     }
-    public function edit({{modelName}} ${{modelNameSingular}})
+    public function edit($uuid)
     {
+        ${{modelNameSingular}} = where('uuid', $uuid)->firstOrFail();
         return view('backend.{{modelNameSingular}}.create', compact('{{modelNameSingular}}'));
     }
-    public function update(Request $request, {{modelName}} ${{modelNameSingular}})
+    public function update(Request $request, $uuid)
     {
+        ${{modelNameSingular}} = where('uuid', $uuid)->firstOrFail();
         $data = $request->validate([
         ]);
         ${{modelNameSingular}}->update($data);
         session()->flash('success');
         return redirect(route('{{modelNameSingular}}.index'));
     }
-    public function destroy({{modelName}} ${{modelNameSingular}})
+    public function destroy($uuid)
     {
+        ${{modelNameSingular}} = where('uuid', $uuid)->firstOrFail();
         ${{modelNameSingular}}->delete();
         session()->flash('success');
         return back();

@@ -18,7 +18,7 @@
                 <div class="card-body">
                     @include('partials.errors')
                     <form
-                        action="@isset(${{modelNameSingular}}) {{ route('{{modelNameSingular}}.update', ${{modelNameSingular}}->id) }} @endisset @empty(${{modelNameSingular}}) {{ route('{{modelNameSingular}}.store') }} @endempty"
+                        action="@isset(${{modelNameSingular}}) {{ route('{{modelNameSingular}}.update', ${{modelNameSingular}}->uuid) }} @endisset @empty(${{modelNameSingular}}) {{ route('{{modelNameSingular}}.store') }} @endempty"
                         method="POST" enctype="multipart/form-data">
                         @csrf
                         @isset(${{modelNameSingular}})
