@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -11,7 +10,7 @@ use Illuminate\Support\Str;
 
 class {{modelName}} extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait, HasUuids;
+    use HasFactory, AuditableTrait;
 
     protected $table = '{{modelNamePlural}}';
 
