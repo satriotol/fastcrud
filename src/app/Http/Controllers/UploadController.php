@@ -9,8 +9,8 @@ class UploadController extends Controller
 {
     public function store(Request $request)
     {
-        if ($request->file('filepond')) {
-            $file = $request->file('filepond');
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
             $name = $file->getClientOriginalName();
             $file_name = date('mdYHis') . '-' . $name;
             $file = $file->storeAs('file', $file_name, 'public_uploads');
@@ -19,7 +19,18 @@ class UploadController extends Controller
                 'filename' => $file
             ]);
             return $file;
-        }
+        };
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $name = $file->getClientOriginalName();
+            $file_name = date('mdYHis') . '-' . $name;
+            $file = $file->storeAs('image', $file_name, 'public_uploads');
+
+            TemporaryFile::create([
+                'filename' => $file
+            ]);
+            return $file;
+        };
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $images) {
                 $name = $images->getClientOriginalName();

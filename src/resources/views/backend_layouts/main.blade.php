@@ -168,7 +168,6 @@
         const pond = FilePond.create(inputElement);
 
         pond.setOptions({
-            name: 'filepond',
             server: {
                 process: '{{ route('upload.store') }}',
                 revert: '{{ route('upload.revert') }}',
