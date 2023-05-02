@@ -27,7 +27,7 @@ class {{modelName}}Controller extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-
+            {{validations}}
         ]);
         {{modelName}}::create($data);
         session()->flash('success');
@@ -42,6 +42,7 @@ class {{modelName}}Controller extends Controller
     {
         ${{modelNameSingular}} = {{modelName}}::where('uuid', $uuid)->firstOrFail();
         $data = $request->validate([
+            {{validations}}
         ]);
         ${{modelNameSingular}}->update($data);
         session()->flash('success');

@@ -10,16 +10,28 @@ trait CrudFunction
 {
     protected function generateController($data)
     {
+        foreach ($data['tables'] as $d) {
+            if ($d['is_null'] == 0) {
+                $wajib = 'required';
+            } else {
+                $wajib = 'nullable';
+            }
+            $content = "'{$d['name']}' => '$wajib',";
+            $validations[] = $content;
+        }
+        $validations = trim(implode("\n", $validations));
         $controllerTemplate = str_replace(
             [
                 '{{modelName}}',
                 '{{modelNamePlural}}',
-                '{{modelNameSingular}}'
+                '{{modelNameSingular}}',
+                '{{validations}}',
             ],
             [
                 $data['model'],
                 $data['plural'],
-                $data['singular']
+                $data['singular'],
+                $validations,
             ],
             file_get_contents(resource_path("stubs/Controller.stub"))
         );
