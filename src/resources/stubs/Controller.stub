@@ -33,7 +33,7 @@ class {{modelName}}Controller extends Controller
         //if ($image) {
         //    $data['image'] = $image->filename;
             //$image->delete();
-        };
+        //};
         {{modelName}}::create($data);
         session()->flash('success');
         return redirect(route('{{modelNameSingular}}.index'));
