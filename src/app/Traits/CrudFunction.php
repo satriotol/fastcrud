@@ -75,7 +75,7 @@ trait CrudFunction
             $first = "<div class='form-group'>\n";
             $label = "{!! Form::label('{$d['name']}', '{$d['tampilan']}') !!}\n";
             if ($d['is_file'] != null) {
-                $input = "{!! Form::file('{$d['name']}', ['id' => 'filepond','required]) !!}";
+                $input = "{!! Form::file('{$d['name']}', ['id' => 'filepond','required']) !!}";
             } else {
                 if ($d["type"] == "string") {
                     $input = "{!! Form::text('{$d['name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['name']} : @old('{$d['name']}'), [
