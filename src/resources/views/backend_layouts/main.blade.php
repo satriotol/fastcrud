@@ -159,9 +159,10 @@
                 .after('<span class="text-red">*</span>')
         })
     </script>
-
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
     <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js">
+    </script>
 
     <script>
         const inputElement = document.querySelector('#filepond');
@@ -175,6 +176,42 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 }
             }
+        });
+    </script>
+    <script>
+        const inputElements = document.querySelectorAll('.upload-filepond');
+        FilePond.registerPlugin(FilePondPluginFileValidateType);
+        inputElements.forEach(inputElement => {
+            FilePond.create(inputElement, {
+                acceptedFileTypes: ['application/pdf', 'image/jpeg', 'image/png', 'image/gif',
+                    'application/zip', 'application/x-rar-compressed'
+                ],
+                fileValidateTypeLabelExpectedTypes: {
+                    'application/pdf': '.pdf',
+                    'image/jpeg': '.jpeg, .jpg',
+                    'image/png': '.png',
+                    'image/gif': '.gif',
+                    'application/zip': '.zip',
+                    'application/x-rar-compressed': '.rar'
+                },
+                onaddfile: (error, file) => {
+                    if (error) {
+                        // Tampilkan pesan kesalahan jika file tidak sesuai dengan aturan validasi
+                        console.log(error);
+                    } else {
+                        // File sesuai dengan aturan validasi, lanjutkan dengan mengirimkan ke server
+                        console.log('File valid:', file);
+                    }
+                },
+                server: {
+                    process: '{{ route('upload.store') }}',
+                    revert: '{{ route('upload.revert') }}',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                },
+                maxFileSize: '100MB'
+            });
         });
     </script>
     @stack('custom-scripts')
