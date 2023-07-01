@@ -16,14 +16,25 @@ class AuditController extends Controller
     public function index(Request $request)
     {
         $user_id = $request->user_id;
+        $user_id = $request->user_id;
+        $event = $request->event;
+        $auditable_type = $request->auditable_type;
         $audits = Audit::query();
         if ($user_id) {
             $audits = $audits->where('user_id', $user_id);
         }
+        if ($event) {
+            $audits = $audits->where('event', $event);
+        }
+        if ($auditable_type) {
+            $audits = $audits->where('auditable_type', $auditable_type);
+        }
+        $events = Audit::getEvents();
+        $auditable_types = Audit::getAuditableTypes();
         $audits = $audits->orderBy('id', 'desc')->paginate();
         $users = User::all();
         $request->flash();
-        return view('backend.audit.index', compact('audits', 'users'));
+        return view('backend.audit.index', compact('audits', 'users', 'events', 'auditable_types'));
     }
 
     /**

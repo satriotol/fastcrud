@@ -17,15 +17,38 @@
                 </div>
                 <div class="card-body">
                     <form action="">
-                        <div class="form-group">
-                            <label for="">User</label>
-                            <select name="user_id" class="form-control select2-show-search" id="">
-                                <option value="">Pilih User</option>
-                                @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" @selected(@old('user_id'))>{{ $user->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="">User</label>
+                                    <select name="user_id" class="form-control select2-show-search" id="">
+                                        <option value="">Pilih User</option>
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->id }}" @selected(@old('user_id'))>
+                                                {{ $user->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {!! Form::label('event', 'Event') !!}
+                                    {!! Form::select('event', $events, old('event'), [
+                                        'class' => 'select2-show-search form-select',
+                                        'placeholder' => 'Pilih Event',
+                                    ]) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {!! Form::label('auditable_type', 'Auditable Type') !!}
+                                    {!! Form::select('auditable_type', $auditable_types, old('auditable_type'), [
+                                        'class' => 'select2-show-search form-select',
+                                        'placeholder' => 'Pilih Auditable Type',
+                                    ]) !!}
+                                </div>
+                            </div>
                         </div>
                         <div class="text-end">
                             <button type="submit" class="btn btn-success">Cari</button>
