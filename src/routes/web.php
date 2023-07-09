@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 // URL_CRUD_GENERATOR
+use App\Http\Controllers\MediaLibraryController;
 use App\Http\Controllers\CrudController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +36,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     Route::resource('user', UserController::class);
     Route::resource('audit', AuditController::class);
     // CRUD_GENERATOR
+    Route::resource('media_library', MediaLibraryController::class);
     Route::resource('crud', CrudController::class);
     Route::get('editProfile', [UserController::class, 'editProfile'])->name('user.editProfile');
     Route::get('user/resetPassword/{user}', [UserController::class, 'reset_password'])->name('user.resetPassword');

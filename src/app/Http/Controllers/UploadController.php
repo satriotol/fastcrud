@@ -13,7 +13,7 @@ class UploadController extends Controller
             $file = $request->file('file');
             $name = $file->getClientOriginalName();
             $file_name = date('mdYHis') . '-' . $name;
-            $file = $file->storeAs('file', $file_name, 'public_uploads');
+            $file = $file->storeAs('file', $file_name, 'public');
 
             TemporaryFile::create([
                 'filename' => $file
@@ -24,7 +24,7 @@ class UploadController extends Controller
             $file = $request->file('image');
             $name = $file->getClientOriginalName();
             $file_name = date('mdYHis') . '-' . $name;
-            $file = $file->storeAs('image', $file_name, 'public_uploads');
+            $file = $file->storeAs('image', $file_name, 'public');
 
             TemporaryFile::create([
                 'filename' => $file
@@ -35,7 +35,7 @@ class UploadController extends Controller
             foreach ($request->file('images') as $images) {
                 $name = $images->getClientOriginalName();
                 $image_name = date('mdYHis') . '-' . $name;
-                $images = $images->storeAs('images', $image_name, 'public_uploads');
+                $images = $images->storeAs('images', $image_name, 'public');
 
                 TemporaryFile::create([
                     'filename' => $images

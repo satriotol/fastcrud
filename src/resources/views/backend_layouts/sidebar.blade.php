@@ -44,6 +44,13 @@
                         <h3>User Management</h3>
                     </li>
                 @endcan
+                @can('media_library-index')
+                    <li>
+                        <a class="side-menu__item {{ active_class(['media_library.*']) }}"
+                            href="{{ route('media_library.index') }}"><i class="side-menu__icon fe fe-grid"></i><span
+                                class="side-menu__label">Media Library</span></a>
+                    </li>
+                @endcan
                 @can('user-index')
                     <li>
                         <a class="side-menu__item {{ active_class(['user.*']) }}" href="{{ route('user.index') }}"><i
