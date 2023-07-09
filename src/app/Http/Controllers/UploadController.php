@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TemporaryFile;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class UploadController extends Controller
@@ -11,20 +12,20 @@ class UploadController extends Controller
     {
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $name = $file->getClientOriginalName();
-            $file_name = date('mdYHis') . '-' . $name;
-            $file = $file->storeAs('file', $file_name, 'public');
+            $fileExtension = $file->getClientOriginalExtension();
+            $fileName = date('mdYHis') . '-' . Str::random(8) . '.' . $fileExtension;
+            $file = $file->storeAs('file', $fileName, 'public');
 
             TemporaryFile::create([
-                'filename' => $file
+                'filename' => $fileName
             ]);
             return $file;
         };
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $name = $file->getClientOriginalName();
-            $file_name = date('mdYHis') . '-' . $name;
-            $file = $file->storeAs('image', $file_name, 'public');
+            $fileExtension = $file->getClientOriginalExtension();
+            $fileName = date('mdYHis') . '-' . Str::random(8) . '.' . $fileExtension;
+            $file = $file->storeAs('image', $fileName, 'public');
 
             TemporaryFile::create([
                 'filename' => $file
@@ -33,9 +34,9 @@ class UploadController extends Controller
         };
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $images) {
-                $name = $images->getClientOriginalName();
-                $image_name = date('mdYHis') . '-' . $name;
-                $images = $images->storeAs('images', $image_name, 'public');
+                $fileExtension = $images->getClientOriginalExtension();
+                $fileName = date('mdYHis') . '-' . Str::random(8) . '.' . $fileExtension;
+                $images = $images->storeAs('images', $fileName, 'public');
 
                 TemporaryFile::create([
                     'filename' => $images
