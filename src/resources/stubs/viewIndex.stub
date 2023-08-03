@@ -16,9 +16,11 @@
                     <h3 class="card-title">{{modelName}}</h3>
                 </div>
                 <div class="card-body">
-                    <div class="text-end mb-2">
-                        <a href="{{ route('{{modelNameSingular}}.create') }}" class="btn btn-sm btn-primary">Tambah</a>
-                    </div>
+                    @can('{{modelNameSingular}}-create')
+                        <div class="text-end mb-2">
+                            <a href="{{ route('{{modelNameSingular}}.create') }}" class="btn btn-sm btn-primary">Tambah</a>
+                        </div>
+                    @endcan
                     <div class="table-responsive">
                         <table class="table border table-bordered text-nowrap text-md-nowrap table-sm mb-0">
                             <thead>
@@ -35,13 +37,17 @@
                                             <form action="{{ route('{{modelNameSingular}}.destroy', ${{modelNameSingular}}->uuid) }}" method="post">
                                                 @csrf
                                                 @method('delete')
-                                                <a class="btn btn-sm btn-warning"
-                                                    href="{{ route('{{modelNameSingular}}.edit', ${{modelNameSingular}}->uuid) }}">
-                                                    Edit
-                                                </a>
-                                                <input type="submit" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Are you sure?')" value="Delete"
-                                                    id="">
+                                                @can('{{modelNameSingular}}-edit')
+                                                    <a class="btn btn-sm btn-warning"
+                                                        href="{{ route('{{modelNameSingular}}.edit', ${{modelNameSingular}}->uuid) }}">
+                                                        Edit
+                                                    </a>
+                                                @endcan
+                                                @can('{{modelNameSingular}}-delete')
+                                                    <input type="submit" class="btn btn-sm btn-danger"
+                                                        onclick="return confirm('Are you sure?')" value="Delete"
+                                                        id="">
+                                                @endcan
                                             </form>
                                         </td>
                                     </tr>
