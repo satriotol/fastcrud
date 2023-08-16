@@ -41,7 +41,7 @@ class CrudController extends Controller
             'singular' => 'required|unique:cruds,singular',
             'tables' => 'required',
         ]);
-        $data['plural'] = Str::plural($data['singular']);
+        $data['plural'] = strtolower(Str::plural($data['singular']));
         $this->viewCreate($data);
         Crud::create($data);
         $this->createMigration($data);
