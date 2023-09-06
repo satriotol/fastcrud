@@ -28,6 +28,13 @@
                         href="{{ route('dashboard') }}"><i class="side-menu__icon fe fe-home"></i><span
                             class="side-menu__label">Dashboard</span></a>
                 </li>
+                @can('media_library-index')
+                    <li>
+                        <a class="side-menu__item {{ active_class(['media_library.*']) }}"
+                            href="{{ route('media_library.index') }}"><i class="side-menu__icon fe fe-grid"></i><span
+                                class="side-menu__label">Media Library</span></a>
+                    </li>
+                @endcan
                 @canany(['crud-index'])
                     <li class="sub-category">
                         <h3>CRUD</h3>
@@ -42,13 +49,6 @@
                 @canany(['user-index', 'role-index', 'permission-index'])
                     <li class="sub-category">
                         <h3>User Management</h3>
-                    </li>
-                @endcan
-                @can('media_library-index')
-                    <li>
-                        <a class="side-menu__item {{ active_class(['media_library.*']) }}"
-                            href="{{ route('media_library.index') }}"><i class="side-menu__icon fe fe-grid"></i><span
-                                class="side-menu__label">Media Library</span></a>
                     </li>
                 @endcan
                 @can('user-index')
