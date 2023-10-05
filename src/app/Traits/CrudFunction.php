@@ -103,6 +103,7 @@ trait CrudFunction
                     ]) !!}";
                 }
             }
+            $input .= "@error('{$d['name']}') <div class='text-danger'>{{ \$message }}</div>@enderror";
             $end = "</div>\n";
             $view[] = $first . $label . $input . $end;
         }

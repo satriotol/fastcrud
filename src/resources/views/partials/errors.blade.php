@@ -12,12 +12,6 @@
                         <path fill="#e62a45" d="M12,14a1,1,0,0,1-1-1V9a1,1,0,0,1,2,0v4A1,1,0,0,1,12,14Z"></path>
                     </svg></span>
                 <strong>Terjadi Kesalahan !</strong>
-                <hr class="message-inner-separator">
-                <ul class="list-group">
-                    @foreach ($errors->all() as $error)
-                        <li class="list-group-item list-group-item-danger">{{ $error }}</li>
-                    @endforeach
-                </ul>
             </div>
         </div>
     </div>
