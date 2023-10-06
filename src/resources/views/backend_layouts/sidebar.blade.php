@@ -28,6 +28,18 @@
                         href="{{ route('dashboard') }}"><i class="side-menu__icon fe fe-home"></i><span
                             class="side-menu__label">Dashboard</span></a>
                 </li>
+                @can('test-index')
+                    <li>
+                        <a class="side-menu__item {{ active_class(['test.*']) }}" href="{{ route('test.index') }}"><i
+                                class="side-menu__icon fe fe-grid"></i><span class="side-menu__label">Test</span></a>
+                    </li>
+                @endcan
+                @can('post-index')
+                    <li>
+                        <a class="side-menu__item {{ active_class(['post.*']) }}" href="{{ route('post.index') }}"><i
+                                class="side-menu__icon fe fe-grid"></i><span class="side-menu__label">Post</span></a>
+                    </li>
+                @endcan
                 @can('media_library-index')
                     <li>
                         <a class="side-menu__item {{ active_class(['media_library.*']) }}"
@@ -43,7 +55,7 @@
                 @can('crud-index')
                     <li>
                         <a class="side-menu__item {{ active_class(['crud.*']) }}" href="{{ route('crud.index') }}"><i
-                                class="side-menu__icon fe fe-grid"></i><span class="side-menu__label">CRUD</span></a>
+                                class="side-menu__icon fe fe-edit"></i><span class="side-menu__label">CRUD</span></a>
                     </li>
                 @endcan
                 @canany(['user-index', 'role-index', 'permission-index'])
@@ -54,26 +66,26 @@
                 @can('user-index')
                     <li>
                         <a class="side-menu__item {{ active_class(['user.*']) }}" href="{{ route('user.index') }}"><i
-                                class="side-menu__icon fe fe-grid"></i><span class="side-menu__label">User</span></a>
+                                class="side-menu__icon fe fe-users"></i><span class="side-menu__label">User</span></a>
                     </li>
                 @endcan
                 @can('role-index')
                     <li>
                         <a class="side-menu__item {{ active_class(['role.*']) }}" href="{{ route('role.index') }}"><i
-                                class="side-menu__icon fe fe-grid"></i><span class="side-menu__label">Role</span></a>
+                                class="side-menu__icon fe fe-settings"></i><span class="side-menu__label">Role</span></a>
                     </li>
                 @endcan
                 @can('permission-index')
                     <li>
                         <a class="side-menu__item {{ active_class(['permission.*']) }}"
-                            href="{{ route('permission.index') }}"><i class="side-menu__icon fe fe-grid"></i><span
+                            href="{{ route('permission.index') }}"><i class="side-menu__icon fe fe-settings"></i><span
                                 class="side-menu__label">Permission</span></a>
                     </li>
                 @endcan
                 @can('audit-index')
                     <li>
                         <a class="side-menu__item {{ active_class(['audit.*']) }}" href="{{ route('audit.index') }}"><i
-                                class="side-menu__icon fe fe-grid"></i><span class="side-menu__label">Audit</span></a>
+                                class="side-menu__icon fe fe-file-text"></i><span class="side-menu__label">Audit</span></a>
                     </li>
                 @endcan
             </ul>
