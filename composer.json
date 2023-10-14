@@ -2,6 +2,7 @@
   "name": "satriotol/fastcrud",
   "description": "Laravel Fast Crud Buatan Satrio Tamvan",
   "type": "library",
+  "version": "9.0",
   "license": "MIT",
   "authors": [
     {
