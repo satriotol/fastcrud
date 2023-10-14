@@ -114,10 +114,10 @@ trait CrudFunction
             } else {
                 $required = 'false';
             }
-            if($d['type'] == "string" && $d['is_file'] == true ){
+            if ($d['type'] == "string" && $d['is_file'] == true) {
                 $input = <<<HTML
                 <div class="row mb-3">
-                <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
+                    <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
                     <div class="col-sm-10">
                         {!! Form::file('{$d['column_name']}', [
                             'class' => 'form-control',
@@ -131,8 +131,7 @@ trait CrudFunction
                     </div>
                 </div>
                 HTML;
-            }
-            if ($d["type"] == "string") {
+            } elseif ($d["type"] == "string") {
                 $input = <<<HTML
                 <div class="row mb-3">
                     <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
@@ -237,6 +236,7 @@ trait CrudFunction
             $view[] = $input;
         }
         $view = trim(implode("\n", $view));
+        dd($view);
         $createTemplate = str_replace(
             [
                 '{modelName}',

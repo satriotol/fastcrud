@@ -38,6 +38,9 @@
                             @method('PUT')
                         @endisset
                         <div class="row mb-3">
+                            @include('partials.errors')
+                        </div>
+                        <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="model">Nama Model</label>
                             <div class="col-sm-10">
                                 {!! Form::text('model', isset($crud) ? $crud->model : @old('model'), [
@@ -85,7 +88,8 @@
                                     'required',
                                     'placeholder' => 'far fa-window-restore',
                                 ]) !!}
-                                <a href="https://fontawesome.com/v5/search?o=r&m=free&s=regular" target="_blank">Font Awesome</a>
+                                <a href="https://fontawesome.com/v5/search?o=r&m=free&s=regular" target="_blank">Font
+                                    Awesome</a>
                                 @error('sidebarLogo')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -96,31 +100,39 @@
                                 <div data-repeater-list="columns">
                                     <div data-repeater-item>
                                         <div class="row">
-                                            <div class="mb-3 col-md-4 mb-0">
+                                            <div class="mb-3 col-md-4">
                                                 <label class="form-label" for="form-repeater-1-3">Tabel</label>
-                                                {!! Form::text('column_name', '', [
+                                                {!! Form::text('column_name', @old('column_name'), [
                                                     'class' => 'form-control',
                                                     'id' => 'form-repeater-1-1',
                                                     'placeholder' => 'Masukkan Nama Kolom',
                                                     'required',
                                                 ]) !!}
-                                                {!! Form::text('column_name_view', '', [
+                                                {!! Form::text('column_name_view', @old('column_name'), [
                                                     'class' => 'form-control',
                                                     'id' => 'form-repeater-1-1',
                                                     'placeholder' => 'Masukkan Nama Kolom View',
                                                     'required',
                                                 ]) !!}
                                             </div>
-                                            <div class="mb-3 col-md-4 mb-0">
+                                            <div class="mb-3 col-md-2">
                                                 <label class="form-label" for="form-repeater-1-3">Tipe</label>
                                                 {!! Form::select('type', [$type], '', ['class' => 'form-select', 'placeholder' => 'Pilih Tipe', 'required']) !!}
                                             </div>
-                                            <div class="mb-3 col-md-2 mb-0">
+                                            <div class="mb-3 col-md-2">
+                                                <label class="form-label" for="form-repeater-1-3">Is File</label>
+                                                {!! Form::select('is_file', [false => 'Tidak', true => 'Ya'], '', [
+                                                    'class' => 'form-select',
+                                                    'required'
+                                                ]) !!}
+                                            </div>
+                                            <div class="mb-3 col-md-2">
                                                 <label class="form-label" for="form-repeater-1-3">Nullable</label>
                                                 {!! Form::select('nullable', ['0' => 'Wajib', 'nullable' => 'Tidak Wajib'], '', [
                                                     'class' => 'form-select',
                                                     'required',
                                                 ]) !!}
+
                                             </div>
                                             <div class="mb-3 col-md-2 d-flex align-items-center mb-0">
                                                 <button class="btn btn-label-danger mt-4" data-repeater-delete
