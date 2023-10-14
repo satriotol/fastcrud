@@ -16,22 +16,37 @@ trait CrudFunction
             } else {
                 $wajib = 'nullable';
             }
+            if ($d['is_file']) {
+                $upload = <<<HTML
+                    if (\$request->file('{$d['column_name']}')) {
+                        \${$d['column_name']} = \$request->file('{$d['column_name']}');
+                        \${$d['column_name']}Extension = \${$d['column_name']}->getClientOriginalExtension();
+                        \${$d['column_name']}Name = 'file/' . date('mdYHis') . '-' . Str::random(8) . '.' . \${$d['column_name']}Extension;
+                        \${$d['column_name']}->storeAs('public', \${$d['column_name']}Name);
+                        \$data['{$d['column_name']}'] = \${$d['column_name']}Name;
+                    }
+                HTML;
+            }
             $content = "'{$d['column_name']}' => '$wajib',";
             $validations[] = $content;
+            $uploads[] = $upload;
         }
         $validations = trim(implode("\n", $validations));
+        $uploads = trim(implode("\n", $uploads));
         $controllerTemplate = str_replace(
             [
                 '{{modelName}}',
                 '{{modelNamePlural}}',
                 '{{modelNameSingular}}',
                 '{{validations}}',
+                '//is_file'
             ],
             [
                 $data['model'],
                 $data['plural'],
                 $data['singular'],
                 $validations,
+                $uploads,
             ],
             file_get_contents(resource_path("stubs/Controller.stub"))
         );
@@ -122,7 +137,7 @@ trait CrudFunction
                         {!! Form::file('{$d['column_name']}', [
                             'class' => 'form-control',
                             'id' => 'formFile',
-                            'required' => {$required},
+                            'required' => isset(\${$d['model']}) ? true : false,
                         ]) !!}
                         @error('{$d['column_name']}')
                             <br>

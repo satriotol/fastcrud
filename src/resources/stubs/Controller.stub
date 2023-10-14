@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\{{modelName}};
+use Illuminate\Support\Str;
 
 class {{modelName}}Controller extends Controller
 {
@@ -29,6 +30,7 @@ class {{modelName}}Controller extends Controller
         $data = $request->validate([
             {{validations}}
         ]);
+        //is_file
         {{modelName}}::create($data);
         session()->flash('success', '{{modelName}} Berhasil Dibuat');
         return redirect(route('{{modelNameSingular}}.index'));
@@ -44,6 +46,7 @@ class {{modelName}}Controller extends Controller
         $data = $request->validate([
             {{validations}}
         ]);
+        //is_file
         ${{modelNameSingular}}->update($data);
         session()->flash('success', '{{modelName}} Berhasil Diubah');
         return redirect(route('{{modelNameSingular}}.index'));
