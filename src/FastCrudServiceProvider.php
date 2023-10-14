@@ -28,20 +28,15 @@ class FastCrudServiceProvider extends ServiceProvider
         // Publish configuration file
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/resources/views' => resource_path('views/'),
-
+                __DIR__ . '/resources' => resource_path('/'),
                 __DIR__ . '/routes/auth.php' => base_path('routes/auth.php'),
                 __DIR__ . '/routes/web.php' => base_path('routes/web.php'),
                 __DIR__ . '/lang' => base_path('lang/'),
-                __DIR__ . '/app/console' => app_path('/console'),
-                __DIR__ . '/app/Http' => app_path('/Http'),
-                __DIR__ . '/app/Models' => app_path('/Models'),
-                __DIR__ . '/app/Providers/MenuServiceProvider.php' => app_path('/Providers/MenuServiceProvider.php'),
-                __DIR__ . '/app/Helpers/Helpers.php' => app_path('/Helpers/Helpers.php'),
+                __DIR__ . '/app' => app_path('/'),
                 __DIR__ . '/config' => config_path('/'),
                 __DIR__ . '/database/migrations' => database_path('migrations/'),
                 __DIR__ . '/database/seeders' => database_path('seeders/'),
-                __DIR__ . '/resources' => resource_path('/'),
+                __DIR__ . '/package.json' => bas_path('/'),
             ], 'fastcrudStarter');
             $this->publishes([
                 __DIR__ . '/app/Http/Controllers/CrudController.php' => app_path('Http/Controllers/CrudController.php'),
