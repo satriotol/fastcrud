@@ -10,13 +10,13 @@ trait CrudFunction
 {
     protected function generateController($data)
     {
-        foreach ($data['tables'] as $d) {
-            if ($d['is_null'] == 0) {
+        foreach ($data['columns'] as $d) {
+            if ($d['nullable'] == 0) {
                 $wajib = 'required';
             } else {
                 $wajib = 'nullable';
             }
-            $content = "'{$d['name']}' => '$wajib',";
+            $content = "'{$d['column_name']}' => '$wajib',";
             $validations[] = $content;
         }
         $validations = trim(implode("\n", $validations));
@@ -37,11 +37,48 @@ trait CrudFunction
         );
         file_put_contents(app_path("/Http/Controllers/{$data['model']}Controller.php"), $controllerTemplate);
     }
+    protected function generateSidebar($data)
+    {
+        $singular = $data['singular'];
+        $model = $data['model'];
+        $sidebarLogo = $data['sidebarLogo'];
+        $verticalMenuFile = resource_path('views/layouts/sections/menu/verticalMenu.blade.php');
+        $marker = '{{-- CRUD-GENERATOR-SIDEBAR --}}';
+
+        if (file_exists($verticalMenuFile)) {
+            $input = <<<HTML
+            
+            @can('{$singular}-index')
+                <li class="menu-item {{ request()->routeIs('{$singular}.*') ? 'active' : '' }}">
+                    <a href="{{ route('{$singular}.index') }}" class="menu-link">
+                        <i class="menu-icon {$sidebarLogo}"></i>
+                        <div>{$model}</div>
+                    </a>
+                </li>
+            @endcan
+            HTML;
+
+            $contents = file_get_contents($verticalMenuFile);
+            $position = strpos($contents, $marker);
+
+            if ($position !== false) {
+                // Sisipkan sidebar setelah marker
+                $position += strlen($marker);
+                $updatedContents = substr_replace($contents, $input, $position, 0);
+                file_put_contents($verticalMenuFile, $updatedContents);
+            }
+        } else {
+            // Handle jika file tidak ditemukan
+            echo "File verticalMenu.blade.php tidak ditemukan.";
+        }
+    }
+
+
     protected function viewIndex($data)
     {
-        foreach ($data['tables'] as $d) {
-            $column = "<td>{{\${$data['singular']}->{$d['name']}}}</td>";
-            $thead = "<th>{$d['tampilan']}</th>";
+        foreach ($data['columns'] as $d) {
+            $column = "<td>{{\${$data['singular']}->{$d['column_name']}}}</td>";
+            $thead = "<th>{$d['column_name_view']}</th>";
             $rows[] = $column;
             $theadRows[] = $thead;
         }
@@ -49,9 +86,9 @@ trait CrudFunction
         $rows = trim(implode("\n", $rows));
         $indexTemplate = str_replace(
             [
-                '{{modelName}}',
-                '{{modelNamePlural}}',
-                '{{modelNameSingular}}',
+                '{modelName}',
+                '{modelNamePlural}',
+                '{modelNameSingular}',
                 'TableHead',
                 'TableBody'
             ],
@@ -71,49 +108,141 @@ trait CrudFunction
     }
     protected function viewCreate($data)
     {
-        foreach ($data['tables'] as $d) {
-            $first = "<div class='form-group'>\n";
-            $label = "{!! Form::label('{$d['name']}', '{$d['tampilan']}') !!}\n";
-            if ($d['is_file'] != null) {
-                $input = "{!! Form::file('{$d['name']}', ['id' => 'filepond','required','data-allow-reorder' => 'ture']) !!}";
+        foreach ($data['columns'] as $d) {
+            if ($d['nullable'] == '0') {
+                $required = 'true';
             } else {
-                if ($d["type"] == "string") {
-                    $input = "{!! Form::text('{$d['name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['name']} : @old('{$d['name']}'), [
-                        'required',
-                        'class' => 'form-control',
-                        'placeholder' => 'Masukkan {$d['tampilan']}',
-                    ]) !!}";
-                } elseif ($d["type"] == "uuid" || $d["type"] == "unsignedBigInteger") {
-                    $input = "{!! Form::select('{$d['name']}', '', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['name']} : @old('{$d['name']}'), [
-                        'class' => 'form-control select2',
-                        'required',
-                        'placeholder' => 'Pilih {$d['tampilan']}'
-                    ]) !!}";
-                } elseif ($d['type'] == "longText") {
-                    $input = "{!! Form::textarea('{$d['name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['name']} : @old('{$d['name']}'), [
-                        'required',
-                        'class' => 'form-control summernote',
-                        'placeholder' => 'Masukkan {$d['tampilan']}',
-                    ]) !!}";
-                } elseif ($d['type'] == "date") {
-                    $input = "{!! Form::date('{$d['name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['name']} : @old('{$d['name']}'), [
-                        'required',
-                        'class' => 'form-control',
-                        'placeholder' => 'Masukkan {$d['tampilan']}',
-                    ]) !!}";
-                }
+                $required = 'false';
             }
-            $input .= "@error('{$d['name']}') <div class='text-danger'>{{ \$message }}</div>@enderror";
-            $end = "</div>\n";
-            $view[] = $first . $label . $input . $end;
+            if($d['type'] == "string" && $d['is_file'] == true ){
+                $input = <<<HTML
+                <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
+                    <div class="col-sm-10">
+                        {!! Form::file('{$d['column_name']}', [
+                            'class' => 'form-control',
+                            'id' => 'formFile',
+                            'required' => {$required},
+                        ]) !!}
+                        @error('{$d['column_name']}')
+                            <br>
+                            <small class="text-danger">{{ \$message }}</small>
+                        @enderror
+                    </div>
+                </div>
+                HTML;
+            }
+            if ($d["type"] == "string") {
+                $input = <<<HTML
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
+                    <div class="col-sm-10">
+                        {!! Form::text('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'), [
+                            'class' => 'form-control',
+                            'placeholder' => 'Masukkan {$d['column_name_view']}',
+                            'required' => {$required},
+                        ]) !!}
+                        @error('{$d['column_name']}')
+                            <small class="text-danger">{{ \$message }}</small>
+                        @enderror
+                    </div>
+                </div>
+                    
+                HTML;
+            }
+            if ($d['type'] == 'integer') {
+                $input = <<<HTML
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
+                    <div class="col-sm-10">
+                        {!! Form::number('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'), [
+                            'class' => 'form-control',
+                            'placeholder' => 'Masukkan {$d['column_name_view']}',
+                            'required' => {$required},
+                        ]) !!}
+                        @error('{$d['column_name']}')
+                            <small class="text-danger">{{ \$message }}</small>
+                        @enderror
+                    </div>
+                </div>
+
+                HTML;
+            }
+            if ($d['type'] == 'longText') {
+                $input = <<<HTML
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
+                    <div class="col-sm-10">
+                        {!! Form::textarea('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'), [
+                            'class' => 'form-control ckeditor',
+                            'placeholder' => 'Masukkan {$d['column_name_view']}',
+                            'required' => {$required},
+                        ]) !!}
+                        @error('{$d['column_name']}')
+                            <small class="text-danger">{{ \$message }}</small>
+                        @enderror
+                    </div>
+                </div>
+        
+                HTML;
+            }
+            if ($d['type'] == 'date') {
+                $input = <<<HTML
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
+                    <div class="col-sm-10">
+                        {!! Form::date('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'), [
+                            'class' => 'form-control ckeditor',
+                            'placeholder' => 'Masukkan {$d['column_name_view']}',
+                            'required' => {$required},
+                        ]) !!}
+                        @error('{$d['column_name']}')
+                            <small class="text-danger">{{ \$message }}</small>
+                        @enderror
+                    </div>
+                </div>
+        
+                HTML;
+            }
+            if ($d['type'] == 'unsignedBigInteger') {
+                $input = <<<HTML
+                    <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
+                        <div class="col-sm-10">
+                            {!! Form::select('{$d['column_name']}', '', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'), [
+                                'class' => 'form-control select2',
+                                'placeholder' => 'Masukkan {$d['column_name_view']}',
+                                'required' => {$required},
+                            ]) !!}
+                            @error('{$d['column_name']}')
+                                <small class="text-danger">{{ \$message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+                HTML;
+            }
+            if ($d['type'] == 'boolean') {
+                $input = <<<HTML
+                        <div class="form-check mt-3">
+                            {!! Form::checkbox('{$d['column_name']}', true, isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'), [
+                                'class' => 'form-check-input',
+                                'id' => '{$d['column_name']}',
+                                'required' => {$required},
+                            ]) !!}
+                    <label class="form-check-label" for="{$d['column_name']}"> {$d['column_name_view']} </label>     
+                    </div>
+                HTML;
+            }
+
+            $view[] = $input;
         }
         $view = trim(implode("\n", $view));
         $createTemplate = str_replace(
             [
-                '{{modelName}}',
-                '{{modelNamePlural}}',
-                '{{modelNameSingular}}',
-                '{{createForm}}',
+                '{modelName}',
+                '{modelNamePlural}',
+                '{modelNameSingular}',
+                '{createForm}',
 
             ],
             [
@@ -183,11 +312,11 @@ trait CrudFunction
     }
     protected function createMigration($data)
     {
-        foreach ($data['tables'] as $d) {
-            $column = "\$table->{$d['type']}('{$d['name']}')";
+        foreach ($data['columns'] as $d) {
+            $column = "\$table->{$d['type']}('{$d['column_name']}')";
 
-            if ($d['is_null']) {
-                $column .= "->{$d['is_null']}()";
+            if ($d['nullable']) {
+                $column .= "->{$d['nullable']}()";
             }
             $rows[] = $column . ";\n";
         }
@@ -208,9 +337,9 @@ trait CrudFunction
     }
     protected function generateModel($data)
     {
-        foreach ($data['tables'] as $d) {
-            $column = $d['name'];
-            $array = explode(" ", $d['name']);
+        foreach ($data['columns'] as $d) {
+            $column = $d['column_name'];
+            $array = explode(" ", $d['column_name']);
             $array_quoted = array_map(function ($word) {
                 return '"' . $word . '"';
             }, $array);

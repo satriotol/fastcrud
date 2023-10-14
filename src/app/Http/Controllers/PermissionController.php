@@ -9,26 +9,15 @@ class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware('permission:permission-index|permission-create|permission-edit|permission-delete', ['only' => ['index', 'show']]);
-        $this->middleware('permission:permission-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:permission-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:permission-delete', ['only' => ['destroy']]);
-    }
     public function index()
     {
-        $permissions = Permission::all();
+        $permissions = Permission::latest()->paginate();
         return view('backend.permission.index', compact('permissions'));
     }
 
     /**
-     * Show the form for Permissioneating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show the form for creating a new resource.
      */
     public function create()
     {
@@ -36,15 +25,12 @@ class PermissionController extends Controller
     }
 
     /**
-     * Store a newly Permissioneated resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name.*' => 'required|unique:permissions,name',
+        $data = $request->validate([
+            'name' => 'required|unique:permissions,name',
             'guard_name' => 'nullable',
             'isDefault' => 'nullable'
         ]);
@@ -54,41 +40,34 @@ class PermissionController extends Controller
                 '-create',
                 '-edit',
                 '-delete',
+                '-show',
             ];
             foreach ($default as $d) {
                 Permission::create([
-                    'name' => $request->name[0] . $d,
+                    'name' => $data['name'] . $d,
                     'guard_name' => 'web'
                 ]);
             }
         } else {
-            foreach ($request->name as $key => $value) {
-                Permission::create([
-                    'name' => $value,
-                    'guard_name' => 'web'
-                ]);
-            }
+            Permission::create([
+                'name' => $data['name'],
+                'guard_name' => 'web'
+            ]);
         }
-        session()->flash('success');
+        session()->flash('success', 'Permission berhasil dibuat');
         return redirect(route('permission.index'));
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  \App\Models\Permission  $permission
-     * @return \Illuminate\Http\Response
      */
-    public function show(Permission $permission)
+    public function show(string $id)
     {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Permission  $permission
-     * @return \Illuminate\Http\Response
      */
     public function edit(Permission $permission)
     {
@@ -97,26 +76,28 @@ class PermissionController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Permission  $permission
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Permission $permission)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|unique:permissions,name',
+            'guard_name' => 'nullable',
+            'isDefault' => 'nullable'
+        ]);
+        $permission->update([
+            'name' => $data['name']
+        ]);
+        session()->flash('success', 'Permission berhasil diubah');
+        return redirect(route('permission.index'));
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Permission  $permission
-     * @return \Illuminate\Http\Response
      */
     public function destroy(Permission $permission)
     {
         $permission->delete();
-        session()->flash('success');
+        session()->flash('success', 'Permission berhasil dihapus');
         return back();
     }
 }

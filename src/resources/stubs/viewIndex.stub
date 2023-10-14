@@ -1,63 +1,119 @@
-@extends('backend_layouts.main')
+@extends('layouts/layoutMaster')
+
+@section('title', '{modelName} List - Pages')
+
+@section('vendor-style')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
+@endsection
+
+@section('vendor-script')
+    <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
+@endsection
+
+@section('page-script')
+    @include('partials.success')
+@endsection
+
 @section('content')
-    <div class="page-header">
-        <h1 class="page-title">{{modelName}}</h1>
-        <div>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('{{modelNameSingular}}.index') }}">{{modelName}}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{modelName}} Tabel</li>
-            </ol>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">{{modelName}}</h3>
+    <div class="card">
+
+        <div class="card-header border-bottom">
+            <div class="row">
+                <div class="col-md">
+                    <h5 class="card-title mb-3">{modelName}</h5>
                 </div>
-                <div class="card-body">
-                    @can('{{modelNameSingular}}-create')
-                        <div class="text-end mb-2">
-                            <a href="{{ route('{{modelNameSingular}}.create') }}" class="btn btn-sm btn-primary">Tambah</a>
+                @can('{modelNameSingular}-create')
+                    <div class="col-md">
+                        <div
+                            class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
+                            <div class="dt-buttons btn-group flex-wrap">
+                                @can('{modelNameSingular}-create')
+                                    <a href="{{ route('{modelNameSingular}.create') }}" class="btn btn-secondary btn-primary">
+                                        <span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>
+                                            <span class="d-none d-sm-inline-block">Tambah</span>
+                                        </span>
+                                    </a>
+                                @endcan
+
+                            </div>
                         </div>
-                    @endcan
-                    <div class="table-responsive">
-                        <table class="table border table-bordered text-nowrap text-md-nowrap table-sm mb-0">
-                            <thead>
-                                <tr class="text-center">
-                                    TableHead
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (${{modelNamePlural}} as ${{modelNameSingular}})
-                                    <tr>
-                                        TableBody
-                                        <td class="text-center">
-                                            <form action="{{ route('{{modelNameSingular}}.destroy', ${{modelNameSingular}}->uuid) }}" method="post">
-                                                @csrf
-                                                @method('delete')
-                                                @can('{{modelNameSingular}}-edit')
-                                                    <a class="btn btn-sm btn-warning"
-                                                        href="{{ route('{{modelNameSingular}}.edit', ${{modelNameSingular}}->uuid) }}">
-                                                        Edit
-                                                    </a>
-                                                @endcan
-                                                @can('{{modelNameSingular}}-delete')
-                                                    <input type="submit" class="btn btn-sm btn-danger"
-                                                        onclick="return confirm('Are you sure?')" value="Delete"
-                                                        id="">
-                                                @endcan
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
                     </div>
-                    {{ ${{modelNamePlural}}->appends($_GET)->links('pagination::bootstrap-5')->withClass('pagination-container') }}
-                </div>
+                @endcan
             </div>
+            <form action="">
+
+                <div class="d-flex justify-content-between align-items-center row pb-2 gap-3 gap-md-0 mt-3">
+                    <div class="col-md-4">
+                        {{ html()->text('name')->class('form-control')->placeholder('Cari Nama')->value(@old('name')) }}
+                    </div>
+                </div>
+                <div
+                    class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
+                    <div class="dt-buttons btn-group flex-wrap">
+                        <button class="btn btn-secondary add-new btn-primary" type="submit">
+                            <span><i class="ti ti-search me-0 me-sm-1 ti-xs"></i>
+                                <span class="d-none d-sm-inline-block">Cari</span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
         </div>
+        <div class="card-body">
+            <div class="table-responsive text-nowrap">
+                <table class="table text-wrap">
+                    <thead>
+                        <tr>
+                            TableHead
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <th>No</th>
+                        @php
+                            $no = (${modelNamePlural}->currentPage() - 1) * ${modelNamePlural}->perPage() + 1;
+                        @endphp
+                        @foreach (${modelNamePlural} as ${modelNameSingular})
+                            <tr>
+                                <td>{{ $no++ }}</td>
+                                TableBody
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                            data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
+                                        <div class="dropdown-menu">
+                                            @can('{modelNameSingular}-edit')
+                                                <a class="dropdown-item"
+                                                    href="{{ route('{modelNameSingular}.edit', ${modelNameSingular}->id) }}"><i
+                                                        class="ti ti-pencil me-1"></i>
+                                                    Edit</a>
+                                            @endcan
+                                            @can('{modelNameSingular}-delete')
+                                                <form
+                                                    action="{{ route('{modelNameSingular}.destroy', ${modelNameSingular}->id) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button type="submit" class="dropdown-item"
+                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus {modelName} ini?')">
+                                                        <i class="ti ti-trash me-1"></i> Delete
+                                                    </button>
+                                                </form>
+                                            @endcan
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+
+                    </tbody>
+                </table>
+            </div>
+            {{ ${modelNamePlural}->appends($_GET)->links('pagination::bootstrap-5')->withClass('pagination-container') }}
+        </div>
+
     </div>
 @endsection

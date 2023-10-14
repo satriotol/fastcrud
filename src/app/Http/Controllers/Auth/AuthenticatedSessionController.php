@@ -4,39 +4,27 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
      * Display the login view.
-     *
-     * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(): View
     {
         return view('auth.login');
     }
 
     /**
      * Handle an incoming authentication request.
-     *
-     * @param  \App\Http\Requests\Auth\LoginRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
      */
-
-    public function store(LoginRequest $request)
+    public function store(LoginRequest $request): RedirectResponse
     {
-        $user = User::where('email', $request->email)->where('password', '')->first();
-        if ($user) {
-            $user->update([
-                'password' => Hash::make($request->password)
-            ]);
-        }
         $request->authenticate();
 
         $request->session()->regenerate();
@@ -46,11 +34,8 @@ class AuthenticatedSessionController extends Controller
 
     /**
      * Destroy an authenticated session.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 

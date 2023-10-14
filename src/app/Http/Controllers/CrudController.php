@@ -2,72 +2,91 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Crud;
 use App\Traits\CrudFunction;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class CrudController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     use CrudFunction;
-    public function __construct()
-    {
-        $this->middleware('permission:crud-index|crud-create|crud-edit|crud-delete', ['only' => ['index', 'show']]);
-        $this->middleware('permission:crud-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:crud-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:crud-delete', ['only' => ['destroy']]);
-    }
-
     public function index()
     {
-        $cruds = Crud::paginate();
-        return view('backend.crud.index', compact('cruds'));
+        return view('backend.crud.index');
     }
+
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        $types = [
-            'string',
-            'longText',
-            'unsignedBigInteger',
-            'date',
-            'uuid'
+        $type = [
+            'string' => "string",
+            'integer' => 'integer',
+            'longText' => 'longText',
+            'unsignedBigInteger' => 'unsignedBigInteger',
+            'boolean' => 'boolean',
+            'date' => 'date'
         ];
-        return view('backend.crud.create', compact('types'));
+        return view('backend.crud.create', compact('type'));
     }
+
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         $data = $request->validate([
-            'model' => 'required|unique:cruds,model',
-            'singular' => 'required|unique:cruds,singular',
-            'tables' => 'required',
+            'model' => 'required',
+            'singular' => 'required',
+            'table' => 'required',
+            'columns.*' => 'required',
+            'sidebarLogo' => 'required',
         ]);
-        $data['plural'] = strtolower(Str::plural($data['singular']));
-        $this->viewCreate($data);
-        Crud::create($data);
+        $data['plural'] = Str::plural($data['singular']);
         $this->createMigration($data);
         $this->generateModel($data);
         $this->generateController($data);
-        $this->viewIndex($data);
         $this->addRoute($data);
+        $this->generateSidebar($data);
+        $this->viewIndex($data);
+        $this->viewCreate($data);
         $this->storePermission($data);
-        session()->flash('success');
-        return redirect(route('crud.index'));
-    }
-    public function edit(Crud $crud)
-    {
-        return view('backend.crud.create', compact('crud'));
-    }
-    public function update(Request $request, Crud $crud)
-    {
-        $data = $request->validate([]);
-        $crud->update($data);
-        session()->flash('success');
-        return redirect(route('crud.index'));
-    }
-    public function destroy(Crud $crud)
-    {
-        $crud->delete();
-        session()->flash('success');
         return back();
+    }
+    
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
     }
 }

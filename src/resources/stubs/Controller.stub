@@ -17,7 +17,7 @@ class {{modelName}}Controller extends Controller
     }
     public function index()
     {
-        ${{modelNamePlural}} = {{modelName}}::paginate();
+        ${{modelNamePlural}} = {{modelName}}::latest()->paginate();
         return view('backend.{{modelNameSingular}}.index',compact('{{modelNamePlural}}'));
     }
     public function create()
@@ -29,13 +29,8 @@ class {{modelName}}Controller extends Controller
         $data = $request->validate([
             {{validations}}
         ]);
-        //$image = TemporaryFile::where('filename', $request->image)->first();
-        //if ($image) {
-        //    $data['image'] = $image->filename;
-            //$image->delete();
-        //};
         {{modelName}}::create($data);
-        session()->flash('success');
+        session()->flash('success', '{{modelName}} Berhasil Dibuat');
         return redirect(route('{{modelNameSingular}}.index'));
     }
     public function edit($uuid)
@@ -50,14 +45,14 @@ class {{modelName}}Controller extends Controller
             {{validations}}
         ]);
         ${{modelNameSingular}}->update($data);
-        session()->flash('success');
+        session()->flash('success', '{{modelName}} Berhasil Diubah');
         return redirect(route('{{modelNameSingular}}.index'));
     }
     public function destroy($uuid)
     {
         ${{modelNameSingular}} = {{modelName}}::where('uuid', $uuid)->firstOrFail();
         ${{modelNameSingular}}->delete();
-        session()->flash('success');
+        session()->flash('success', '{{modelName}} Berhasil Dibuat');
         return back();
     }
 }

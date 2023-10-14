@@ -1,22 +1,35 @@
-@extends('backend_layouts.main')
+@extends('layouts/layoutMaster')
+
+@section('title', ' CRUD')
+
+@section('vendor-style')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css') }}" />
+@endsection
+
+@section('vendor-script')
+    <script src="{{ asset('assets/vendor/libs/autosize/autosize.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/jquery-repeater/jquery-repeater.js') }}"></script>
+@endsection
+
+@section('page-script')
+    <script src="{{ asset('assets/js/forms-extras.js') }}"></script>
+@endsection
+
 @section('content')
-    <div class="page-header">
-        <h1 class="page-title">Crud</h1>
-        <div>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('crud.index') }}">Crud</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Crud Form</li>
-            </ol>
-        </div>
-    </div>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Forms/</span> Crud</h4>
+
+    <!-- Basic Layout & Basic with Icons -->
     <div class="row">
-        <div class="col-lg-12 col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Form Crud</h3>
+        <!-- Basic Layout -->
+        <div class="col-xxl">
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Crud</h5>
                 </div>
                 <div class="card-body">
-                    @include('partials.errors')
                     <form
                         action="@isset($crud) {{ route('crud.update', $crud->id) }} @endisset @empty($crud) {{ route('crud.store') }} @endempty"
                         method="POST" enctype="multipart/form-data">
@@ -24,66 +37,117 @@
                         @isset($crud)
                             @method('PUT')
                         @endisset
-                        <div class="form-group">
-                            {!! Form::label('model', 'Model') !!}
-                            {!! Form::text('model', isset($crud) ? $crud->model : @old('model'), [
-                                'required',
-                                'placeholder' => 'Masukkan Nama Model',
-                                'class' => 'form-control',
-                            ]) !!}
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="model">Nama Model</label>
+                            <div class="col-sm-10">
+                                {!! Form::text('model', isset($crud) ? $crud->model : @old('model'), [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Masukkan Nama Model',
+                                    'required',
+                                ]) !!}
+                                @error('model')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
                         </div>
-                        <div class="form-group">
-                            {!! Form::label('singular', 'Singular') !!}
-                            {!! Form::text('singular', isset($crud) ? $crud->singular : @old('singular'), [
-                                'required',
-                                'placeholder' => 'Masukkan Tunggal',
-                                'class' => 'form-control',
-                            ]) !!}
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="table">Nama Tabel</label>
+                            <div class="col-sm-10">
+                                {!! Form::text('table', isset($crud) ? $crud->table : @old('table'), [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Masukkan Nama Tabel',
+                                    'required',
+                                ]) !!}
+                                @error('table')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
                         </div>
-                        {{-- <div class="form-group">
-                            {!! Form::label('plural', 'Plural') !!}
-                            {!! Form::text('plural', isset($crud) ? $crud->plural : @old('plural'), [
-                                'required',
-                                'placeholder' => 'Masukkan Jamak',
-                                'class' => 'form-control',
-                            ]) !!}
-                        </div> --}}
-                        <table class="table table-bordered" id="dynamicAddRemove">
-                            <tr>
-                                <th>Nama Tabel | Tampilan</th>
-                                <th>Tipe Data</th>
-                                <th>Nullable</th>
-                                <th>Action</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="text" name="tables[0][name]" required placeholder="Masukkan Nama Tabel"
-                                        class="form-control" />
-                                    <input type="text" name="tables[0][tampilan]" required
-                                        placeholder="Masukkan Tampilan Nama" class="form-control">
-                                </td>
-                                <td>
-                                    <select name="tables[0][type]" class="form-control" required>
-                                        <option value="">Pilih Tipe</option>
-                                        @foreach ($types as $type)
-                                            <option value="{{ $type }}">{{ $type }}</option>
-                                        @endforeach
-                                    </select>
-                                    {!! Form::select('tables[0][is_file]', ['' => 'Apakah File?', '1' => 'Ya'], '', ['class' => 'form-control']) !!}
-                                </td>
-                                <td>
-                                    <select name="tables[0][is_null]" class="form-control">
-                                        <option value="0">Tidak</option>
-                                        <option value="nullable">Ya</option>
-                                    </select>
-                                </td>
-                                <td><button type="button" name="add" id="dynamic-ar"
-                                        class="btn btn-outline-primary">Tambah</button></td>
-                            </tr>
-                        </table>
-                        <div class="text-end">
-                            <a class="btn btn-warning" href="{{ route('crud.index') }}">Kembali</a>
-                            <button class="btn btn-primary" type="submit">Submit</button>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="singular">Singular</label>
+                            <div class="col-sm-10">
+                                {!! Form::text('singular', isset($crud) ? $crud->singular : @old('singular'), [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Masukkan Singular',
+                                    'required',
+                                ]) !!}
+                                @error('singular')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="sidebarLogo">Sidebar Logo</label>
+                            <div class="col-sm-10">
+                                {!! Form::text('sidebarLogo', isset($crud) ? $crud->sidebarLogo : @old('sidebarLogo'), [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Masukkan Sidebar Logo',
+                                    'required',
+                                    'placeholder' => 'far fa-window-restore',
+                                ]) !!}
+                                <a href="https://fontawesome.com/v5/search?o=r&m=free&s=regular" target="_blank">Font Awesome</a>
+                                @error('sidebarLogo')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-repeater">
+                                <div data-repeater-list="columns">
+                                    <div data-repeater-item>
+                                        <div class="row">
+                                            <div class="mb-3 col-md-4 mb-0">
+                                                <label class="form-label" for="form-repeater-1-3">Tabel</label>
+                                                {!! Form::text('column_name', '', [
+                                                    'class' => 'form-control',
+                                                    'id' => 'form-repeater-1-1',
+                                                    'placeholder' => 'Masukkan Nama Kolom',
+                                                    'required',
+                                                ]) !!}
+                                                {!! Form::text('column_name_view', '', [
+                                                    'class' => 'form-control',
+                                                    'id' => 'form-repeater-1-1',
+                                                    'placeholder' => 'Masukkan Nama Kolom View',
+                                                    'required',
+                                                ]) !!}
+                                            </div>
+                                            <div class="mb-3 col-md-4 mb-0">
+                                                <label class="form-label" for="form-repeater-1-3">Tipe</label>
+                                                {!! Form::select('type', [$type], '', ['class' => 'form-select', 'placeholder' => 'Pilih Tipe', 'required']) !!}
+                                            </div>
+                                            <div class="mb-3 col-md-2 mb-0">
+                                                <label class="form-label" for="form-repeater-1-3">Nullable</label>
+                                                {!! Form::select('nullable', ['0' => 'Wajib', 'nullable' => 'Tidak Wajib'], '', [
+                                                    'class' => 'form-select',
+                                                    'required',
+                                                ]) !!}
+                                            </div>
+                                            <div class="mb-3 col-md-2 d-flex align-items-center mb-0">
+                                                <button class="btn btn-label-danger mt-4" data-repeater-delete
+                                                    type="button">
+                                                    <i class="ti ti-x ti-xs me-1"></i>
+                                                    <span class="align-middle">Delete</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+                                <div class="mb-0">
+                                    <button class="btn btn-primary" data-repeater-create type="button">
+                                        <i class="ti ti-plus me-1"></i>
+                                        <span class="align-middle">Add</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-end text-end">
+                            <div class="col-sm-10">
+                                <a href="{{ route('crud.index') }}" class="btn btn-warning">Kembali</a>
+                                <button type="submit" class="btn btn-primary"
+                                    onclick="return confirm('Apakah Anda yakin ingin menyimpan?')">Simpan</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -91,41 +155,3 @@
         </div>
     </div>
 @endsection
-@push('custom-scripts')
-    <script type="text/javascript">
-        var i = 0;
-        $("#dynamic-ar").click(function() {
-            ++i;
-            const inputTemplate = `
-            <tr>
-                <td>
-                    <input type="text" name="tables[` + i + `][name]" required placeholder="Masukkan Nama Tabel"
-                        class="form-control" />
-                    <input type="text" name="tables[` + i + `][tampilan]" required
-                        placeholder="Masukkan Tampilan Nama" class="form-control">
-                </td>
-                <td>
-                    <select name="tables[` + i + `][type]" class="form-control" required>
-                        <option value="">Pilih Tipe</option>
-                        @foreach ($types as $type)
-                            <option value="{{ $type }}">{{ $type }}</option>
-                        @endforeach
-                    </select>
-                    {!! Form::select('tables[` + i + `][is_file]', ['' => 'Apakah File?', '1' => 'Ya'], '', ['class' => 'form-control']) !!}
-                </td>
-                <td>
-                    <select name="tables[` + i + `][is_null]" class="form-control">
-                        <option value="0">Tidak</option>
-                        <option value="nullable">Ya</option>
-                    </select>
-                </td>
-                <td><button type="button" class="btn btn-danger remove-input-field">Hapus</button></td>
-            </tr>
-            `;
-            $("#dynamicAddRemove").append(inputTemplate);
-        });
-        $(document).on('click', '.remove-input-field', function() {
-            $(this).parents('tr').remove();
-        });
-    </script>
-@endpush

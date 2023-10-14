@@ -1,22 +1,36 @@
-@extends('backend_layouts.main')
+@extends('layouts/layoutMaster')
+
+@section('title', ' Horizontal Layouts - Forms')
+
+@section('vendor-style')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
+@endsection
+
+@section('vendor-script')
+    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+@endsection
+
+@section('page-script')
+    <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
+@endsection
+
 @section('content')
-    <div class="page-header">
-        <h1 class="page-title">Permission</h1>
-        <div>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('permission.index') }}">Permission</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Permission Tabel</li>
-            </ol>
-        </div>
-    </div>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Forms/</span> {Permission}</h4>
+
+    <!-- Basic Layout & Basic with Icons -->
     <div class="row">
-        <div class="col-lg-12 col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Form Permission</h3>
+        <!-- Basic Layout -->
+        <div class="col-xxl">
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">{Permission}</h5>
                 </div>
                 <div class="card-body">
-                    @include('partials.errors')
                     <form
                         action="@isset($permission) {{ route('permission.update', $permission->id) }} @endisset @empty($permission) {{ route('permission.store') }} @endempty"
                         method="POST" enctype="multipart/form-data">
@@ -24,25 +38,36 @@
                         @isset($permission)
                             @method('PUT')
                         @endisset
-                        <label class="custom-control custom-checkbox-md">
-                            {!! Form::checkbox('isDefault', 'checked', '', ['class' => 'custom-control-input']) !!}
-                            <span class="custom-control-label">Default CRUD</span>
-                        </label>
-                        <table class="table table-bordered" id="dynamicAddRemove">
-                            <tr>
-                                <th>Name</th>
-                                <th>Action</th>
-                            </tr>
-                            <tr>
-                                <td><input type="text" name="name[]" placeholder="Name" required class="form-control" />
-                                </td>
-                                <td><button type="button" name="add" id="add-btn" class="btn btn-success">Add
-                                        More</button></td>
-                            </tr>
-                        </table>
-                        <div class="text-end">
-                            <a class="btn btn-warning" href="{{ url()->previous() }}">Kembali</a>
-                            <button class="btn btn-primary" type="submit">Submit</button>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="name">Nama Permission</label>
+                            <div class="col-sm-10">
+                                {!! Form::text('name', isset($permission) ? $permission->name : @old('name'), [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Masukkan Nama Permission',
+                                    'required',
+                                ]) !!}
+                                @error('name')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check mt-3">
+                                {!! Form::checkbox('isDefault', 'checked', '', [
+                                    'class' => 'form-check-input',
+                                    'for' => 'defaultCheck1',
+                                    'id' => 'defaultCheck1',
+                                ]) !!}
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Default Permission
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row justify-content-end text-end">
+                            <div class="col-sm-10">
+                                <a href="{{ route('permission.index') }}" class="btn btn-warning">Kembali</a>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -50,17 +75,3 @@
         </div>
     </div>
 @endsection
-@push('custom-scripts')
-    <script type="text/javascript">
-        var i = 0;
-        $("#add-btn").click(function() {
-            ++i;
-            $("#dynamicAddRemove").append('<tr><td><input type="text" required name="name[' + i +
-                ']" placeholder="Name" class="form-control" /></td><td><button type="button" class="btn btn-danger remove-tr">Remove</button></td></tr>'
-            );
-        });
-        $(document).on('click', '.remove-tr', function() {
-            $(this).parents('tr').remove();
-        });
-    </script>
-@endpush

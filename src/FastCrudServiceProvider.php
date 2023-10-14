@@ -54,10 +54,5 @@ class FastCrudServiceProvider extends ServiceProvider
                 __DIR__ . '/public' => public_path('/'),
             ], 'fastcrudPublic');
         }
-        // $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
-        // $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
-        // $this->publishes([
-        //     __DIR__ . '/routes' => base_path('routes/')
-        // ]);
     }
 }

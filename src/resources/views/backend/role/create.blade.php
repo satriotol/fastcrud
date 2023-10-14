@@ -1,22 +1,66 @@
-@extends('backend_layouts.main')
+@extends('layouts/layoutMaster')
+
+@section('title', ' Role - Forms')
+
+@section('vendor-style')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
+@endsection
+
+@section('vendor-script')
+    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+@endsection
+
+@section('page-script')
+    <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            // Inisialisasi plugin Select2 pada elemen dengan class 'select2'
+            $('.select2').select2();
+
+            // Handle perubahan pada elemen select dengan class 'prefix-select'
+            $('.prefix-select').on('change', function() {
+                var prefix = $(this).val(); // Dapatkan prefix yang dipilih
+                var checkboxes = $('input[name="permissions[]"]'); // Semua checkbox permissions
+
+                // Uncheck semua checkbox terlebih dahulu
+                checkboxes.prop('checked', false);
+
+                // Cek jika checkbox memiliki prefix yang sesuai dan ubah statusnya
+                checkboxes.each(function() {
+                    if ($(this).data('prefix') === prefix) {
+                        $(this).prop('checked', true);
+                    }
+                });
+            });
+
+            // Handle klik pada elemen dengan class 'check-all'
+            $('.check-all').on('change', function() {
+                var isChecked = $(this).prop('checked'); // Dapatkan status checkbox 'check-all'
+                var prefix = $(this).data('prefix'); // Dapatkan prefix yang sesuai
+
+                // Cek semua checkbox dengan prefix yang sesuai
+                $('input[name="permissions[]"]').each(function() {
+                    if ($(this).data('prefix') === prefix) {
+                        $(this).prop('checked', isChecked);
+                    }
+                });
+            });
+        });
+    </script>
+@endsection
+
 @section('content')
-    <div class="page-header">
-        <h1 class="page-title">Role</h1>
-        <div>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('role.index') }}">Role</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Role Tabel</li>
-            </ol>
-        </div>
-    </div>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Forms/</span> {Role}</h4>
+
+    <!-- Basic Layout & Basic with Icons -->
     <div class="row">
-        <div class="col-lg-12 col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Form Role</h3>
+        <!-- Basic Layout -->
+        <div class="col-xxl">
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">{Role}</h5>
                 </div>
                 <div class="card-body">
-                    @include('partials.errors')
                     <form
                         action="@isset($role) {{ route('role.update', $role->id) }} @endisset @empty($role) {{ route('role.store') }} @endempty"
                         method="POST" enctype="multipart/form-data">
@@ -24,37 +68,58 @@
                         @isset($role)
                             @method('PUT')
                         @endisset
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control"
-                                value="{{ isset($role) ? $role->name : @old('name') }}" required name="name">
-                        </div>
-                        <div class="form-group">
-                            <label class="custom-switch form-switch me-5">
-                                <input type="checkbox" id="checkAll" class="custom-switch-input">
-                                <span class="custom-switch-indicator"></span>
-                                <span class="custom-switch-description">Select All</span>
-                            </label><br>
-                            <div class="row">
-                                @foreach ($permissions as $permission)
-                                    <div class="col-md-3">
-                                        <label class="custom-switch form-switch me-5">
-                                            <input type="checkbox" name="permission[]"
-                                                @isset($role)
-                                        {{ in_array($permission->id, $rolePermissions) ? 'checked' : '' }}
-                                    @endisset
-                                                value="{{ $permission->id }}" class="custom-switch-input name">
-                                            <span class="custom-switch-indicator"></span>
-                                            <span class="custom-switch-description">{{ $permission->name }}</span>
-                                        </label>
-                                    </div>
-                                @endforeach
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="name">Nama Role</label>
+                            <div class="col-sm-10">
+                                {!! Form::text('name', isset($role) ? $role->name : @old('name'), [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Masukkan Nama Role',
+                                    'required',
+                                ]) !!}
+                                @error('name')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
-
                         </div>
-                        <div class="text-end">
-                            <a class="btn btn-warning" href="{{ url()->previous() }}">Kembali</a>
-                            <button class="btn btn-primary" type="submit">Submit</button>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Permission</label>
+                            <div class="col-sm-10">
+                                <div class="row">
+                                    @foreach ($permissionsGrouped as $groupedPrefix => $permissions)
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+
+                                                <h6 class="mb-0">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input check-all" type="checkbox"
+                                                            data-prefix="{{ $groupedPrefix }}">{{ $groupedPrefix }}
+                                                    </label>
+                                                </h6>
+                                            </div>
+                                            @foreach ($permissions as $permission)
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="permissions[]"
+                                                        id="checkPermission{{ $permission->id }}"
+                                                        value="{{ $permission->id }}"
+                                                        @isset($role) {{ $role->permissions->contains($permission) ? 'checked' : '' }} @endisset
+                                                        data-prefix="{{ $groupedPrefix }}"> <!-- Tambahkan data-prefix -->
+                                                    <label class="form-check-label"
+                                                        for="checkPermission{{ $permission->id }}">{{ $permission->name }}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endforeach
+                                </div>
+                                @error('permissions')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row justify-content-end text-end">
+                            <div class="col-sm-10">
+                                <a href="{{ route('permission.index') }}" class="btn btn-warning">Kembali</a>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -62,10 +127,3 @@
         </div>
     </div>
 @endsection
-@push('custom-scripts')
-    <script>
-        $("#checkAll").click(function() {
-            $('.name').not(this).prop('checked', this.checked);
-        });
-    </script>
-@endpush
