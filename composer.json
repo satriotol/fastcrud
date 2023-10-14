@@ -28,7 +28,7 @@
       "Satriotol\\Fastcrud\\": "src/"
     },
     "files": [
-      "app/Helpers/Helpers.php"
+      "src/app/Helpers/Helpers.php"
     ]
   },
   "extra": {
