@@ -66,12 +66,12 @@
                 <table class="table text-wrap">
                     <thead>
                         <tr>
+                            <th>No</th>
                             TableHead
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <th>No</th>
                         @php
                             $no = (${modelNamePlural}->currentPage() - 1) * ${modelNamePlural}->perPage() + 1;
                         @endphp

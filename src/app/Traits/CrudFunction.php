@@ -236,7 +236,6 @@ trait CrudFunction
             $view[] = $input;
         }
         $view = trim(implode("\n", $view));
-        dd($view);
         $createTemplate = str_replace(
             [
                 '{modelName}',
