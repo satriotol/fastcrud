@@ -86,13 +86,13 @@
                                         <div class="dropdown-menu">
                                             @can('{modelNameSingular}-edit')
                                                 <a class="dropdown-item"
-                                                    href="{{ route('{modelNameSingular}.edit', ${modelNameSingular}->id) }}"><i
+                                                    href="{{ route('{modelNameSingular}.edit', ${modelNameSingular}->uuid) }}"><i
                                                         class="ti ti-pencil me-1"></i>
                                                     Edit</a>
                                             @endcan
                                             @can('{modelNameSingular}-delete')
                                                 <form
-                                                    action="{{ route('{modelNameSingular}.destroy', ${modelNameSingular}->id) }}"
+                                                    action="{{ route('{modelNameSingular}.destroy', ${modelNameSingular}->uuid) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('delete')
