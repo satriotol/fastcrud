@@ -12,7 +12,6 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "arcanedev/log-viewer": "9.x",
     "guzzlehttp/guzzle": "^7.2",
     "laravel/framework": "^10.23",
     "laravel/sanctum": "^3.2",
@@ -26,7 +25,10 @@
   "autoload": {
     "psr-4": {
       "Satriotol\\Fastcrud\\": "src/"
-    }
+    },
+    "files": [
+      "app/Helpers/Helpers.php"
+    ]
   },
   "extra": {
     "laravel": {
