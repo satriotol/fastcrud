@@ -23,28 +23,37 @@ class FastCrudServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Bootstrap any package services.
-
         // Publish configuration file
         if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__ . '/resources' => resource_path('/'),
-                __DIR__ . '/routes/auth.php' => base_path('routes/auth.php'),
-                __DIR__ . '/routes/web.php' => base_path('routes/web.php'),
-                __DIR__ . '/lang' => base_path('lang/'),
-                __DIR__ . '/app' => app_path('/'),
-                __DIR__ . '/config' => config_path('/'),
-                __DIR__ . '/database/migrations' => database_path('migrations/'),
-                __DIR__ . '/database/seeders' => database_path('seeders/'),
-                __DIR__ . '/package.json' => base_path('/'),
-            ], 'fastcrudStarter');
-            $this->publishes([
-                __DIR__ . '/app/Http/Controllers/CrudController.php' => app_path('Http/Controllers/CrudController.php'),
-                __DIR__ . '/app/Traits' => app_path('/Traits'),
-            ], 'fastcrudContinue');
-            $this->publishes([
-                __DIR__ . '/public' => public_path('/'),
-            ], 'fastcrudPublic');
+            $baseDir = __DIR__;
+    
+            $publishGroups = [
+                'fastcrudStarter' => [
+                    'resources' => 'resources',
+                    'routes/auth.php' => 'routes/auth.php',
+                    'routes/web.php' => 'routes/web.php',
+                    'lang' => 'lang',
+                    'app' => 'app',
+                    'config' => 'config',
+                    'database/migrations' => 'database/migrations',
+                    'database/seeders' => 'database/seeders',
+                    'package.json' => 'package.json',
+                ],
+                'fastcrudContinue' => [
+                    'app/Http/Controllers/CrudController.php' => 'app/Http/Controllers/CrudController.php',
+                    'app/Traits' => 'app/Traits',
+                ],
+                'fastcrudPublic' => [
+                    'public' => 'public',
+                ],
+            ];
+    
+            foreach ($publishGroups as $group => $paths) {
+                $this->publishes(array_map(function ($path) use ($baseDir) {
+                    return "$baseDir/$path";
+                }, $paths), $group);
+            }
         }
     }
+    
 }
