@@ -137,12 +137,15 @@ trait CrudFunction
                         {!! Form::file('{$d['column_name']}', [
                             'class' => 'form-control',
                             'id' => 'formFile',
-                            'required' => isset(\${$d['model']}) ? true : false,
+                            'required' => isset(\${$data['singular']}) ? false : true,
                         ]) !!}
                         @error('{$d['column_name']}')
                             <br>
                             <small class="text-danger">{{ \$message }}</small>
                         @enderror
+                        @isset(\${$data['singular']})
+                            <a href="{{asset('storage/'. \${$data['singular']}->{$d['column_name']})}}" target="_blank">Buka File</a>
+                        @endisset
                     </div>
                 </div>
                 HTML;
