@@ -42,6 +42,7 @@ class FastCrudServiceProvider extends ServiceProvider
                 __DIR__ . '/database/migrations' => database_path('migrations/'),
                 __DIR__ . '/database/seeders' => database_path('seeders/'),
                 __DIR__ . '/resources/views' => resource_path('views/'),
+                __DIR__ . '/resources/menu' => resource_path('menu/'),
             ], 'fastcrudStarter');
             $this->publishes([
                 __DIR__ . '/app/Http/Controllers/CrudController.php' => app_path('Http/Controllers/CrudController.php'),
