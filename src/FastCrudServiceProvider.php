@@ -36,6 +36,7 @@ class FastCrudServiceProvider extends ServiceProvider
                 __DIR__ . '/app/console' => app_path('/console'),
                 __DIR__ . '/app/Http' => app_path('/Http'),
                 __DIR__ . '/app/Models' => app_path('/Models'),
+                __DIR__ . '/app/Models/Providers' => app_path('/Models/Providers'),
                 __DIR__ . '/app/Helpers/Helpers.php' => app_path('app/Helpers/Helpers.php'),
                 __DIR__ . '/config' => config_path('/'),
                 __DIR__ . '/database/migrations' => database_path('migrations/'),
