@@ -10,12 +10,18 @@ trait CrudFunction
 {
     protected function generateController($data)
     {
+        $validations = [];
+        $uploads = [];
+    
         foreach ($data['columns'] as $d) {
             if ($d['nullable'] == 0) {
                 $wajib = 'required';
             } else {
                 $wajib = 'nullable';
             }
+            
+            $upload = '';
+    
             if ($d['is_file']) {
                 $upload = <<<HTML
                     if (\$request->file('{$d['column_name']}')) {
@@ -27,19 +33,22 @@ trait CrudFunction
                     }
                 HTML;
             }
+    
             $content = "'{$d['column_name']}' => '$wajib',";
             $validations[] = $content;
             $uploads[] = $upload;
         }
-        $validations = trim(implode("\n", $validations));
-        $uploads = trim(implode("\n", $uploads));
+    
+        $validations = implode("\n", $validations);
+        $uploads = implode("\n", $uploads);
+    
         $controllerTemplate = str_replace(
             [
                 '{{modelName}}',
                 '{{modelNamePlural}}',
                 '{{modelNameSingular}}',
                 '{{validations}}',
-                '//is_file'
+                '//is_file',
             ],
             [
                 $data['model'],
@@ -50,8 +59,9 @@ trait CrudFunction
             ],
             file_get_contents(resource_path("stubs/Controller.stub"))
         );
+    
         file_put_contents(app_path("/Http/Controllers/{$data['model']}Controller.php"), $controllerTemplate);
-    }
+    }    
     protected function generateSidebar($data)
     {
         $singular = $data['singular'];
