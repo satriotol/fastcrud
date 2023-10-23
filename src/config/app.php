@@ -172,6 +172,7 @@ return [
     Spatie\Html\HtmlServiceProvider::class,
     Spatie\Permission\PermissionServiceProvider::class,
     OwenIt\Auditing\AuditingServiceProvider::class,
+    Barryvdh\Debugbar\ServiceProvider::class,
   ])->toArray(),
 
   /*
@@ -188,6 +189,7 @@ return [
   'aliases' => Facade::defaultAliases()->merge([
     // 'Example' => App\Facades\Example::class,
     'Helper' => App\Helpers\Helpers::class,
+    'Debugbar' => Barryvdh\Debugbar\Facade::class,
   ])->toArray(),
 
 ];

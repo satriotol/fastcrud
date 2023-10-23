@@ -55,7 +55,7 @@ class {{modelName}}Controller extends Controller
     {
         ${{modelNameSingular}} = {{modelName}}::where('uuid', $uuid)->firstOrFail();
         ${{modelNameSingular}}->delete();
-        session()->flash('success', '{{modelName}} Berhasil Dibuat');
+        session()->flash('success', '{{modelName}} Berhasil Dihapus');
         return back();
     }
 }
