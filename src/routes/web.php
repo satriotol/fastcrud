@@ -22,6 +22,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 // URL_CRUD_GENERATOR
 
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MediaController;
 // Main Page Route
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
@@ -47,5 +48,6 @@ Route::middleware('auth')->group(function () {
   Route::get('audit', [AuditController::class, 'index'])->name('audit.index');
   // CRUD_GENERATOR
 
+Route::resource('menu', MenuController::class);
 Route::resource('media', MediaController::class);});
 require __DIR__ . '/auth.php';

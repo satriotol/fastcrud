@@ -38,6 +38,14 @@
             <span class="menu-header-text">Data</span>
         </li>
         {{-- CRUD-GENERATOR-SIDEBAR --}}
+        @can('menu-index')
+            <li class="menu-item {{ request()->routeIs('menu.*') ? 'active' : '' }}">
+                <a href="{{ route('menu.index') }}" class="menu-link">
+                    <i class="menu-icon fas fa-bars"></i>
+                    <div>Menu</div>
+                </a>
+            </li>
+        @endcan
         @can('media-index')
             <li class="menu-item {{ request()->routeIs('media.*') ? 'active' : '' }}">
                 <a href="{{ route('media.index') }}" class="menu-link">
