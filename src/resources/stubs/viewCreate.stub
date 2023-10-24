@@ -15,7 +15,7 @@
 @section('page-script')
     <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
     <script>
-        CKEDITOR.replace('editor', {
+        CKEDITOR.replace('ckeditor', {
             toolbar: 'Basic'
         });
     </script>
