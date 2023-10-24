@@ -11,7 +11,7 @@
     }
   ],
   "minimum-stability": "dev",
-  "prefer-stable": false,
+  "prefer-stable": true,
   "require": {
     "barryvdh/laravel-debugbar": "^3.9",
     "guzzlehttp/guzzle": "^7.2",
