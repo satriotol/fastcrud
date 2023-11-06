@@ -43,7 +43,6 @@
                         </div>
                         <!-- /Logo -->
                         <h4 class="mb-1 pt-2">Selamat Datang 👋</h4>
-                        <p class="mb-4">Please sign-in to your account and start the adventure</p>
 
                         <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="POST">
                             @csrf
@@ -57,9 +56,6 @@
                             <div class="mb-3 form-password-toggle">
                                 <div class="d-flex justify-content-between">
                                     {{ html()->label()->text('Password')->class('form-label') }}
-                                    <a href="{{ url('auth/forgot-password-basic') }}">
-                                        <small>Forgot Password?</small>
-                                    </a>
                                 </div>
                                 <div class="input-group input-group-merge">
                                     {{ html()->password('password')->id('password')->placeholder('Masukkan Password')->class('form-control')->required() }}
@@ -82,9 +78,9 @@
                             </div>
                         </form>
                         <p class="text-center">
-                            <span>New on our platform?</span>
+                            <span>Belum Punya Akun ?</span>
                             <a href="{{ route('register') }}">
-                                <span>Create an account</span>
+                                <span>Registrasi Sekarang</span>
                             </a>
                         </p>
 

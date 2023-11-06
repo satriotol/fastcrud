@@ -10,6 +10,13 @@ class PermissionController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware('permission:permission-index|permission-create|permission-show|permission-edit|permission-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:permission-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:permission-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:permission-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $permissions = Permission::latest()->paginate();

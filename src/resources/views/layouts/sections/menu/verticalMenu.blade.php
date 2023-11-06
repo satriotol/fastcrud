@@ -76,25 +76,25 @@
                 </a>
             </li>
         @endcan
-        <li class="menu-item {{ request()->routeIs(['role.*', 'permission.*']) ? 'active open' : '' }}">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons ti ti-settings"></i>
-                <div>Roles &amp; Permissions</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item {{ request()->routeIs('role.*') ? 'active' : '' }}">
-                    <a href="{{ route('role.index') }}" class="menu-link">
-                        <div>Roles</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ request()->routeIs('permission.*') ? 'active' : '' }}">
-                    <a href="{{ route('permission.index') }}" class="menu-link">
-                        <div>Permission</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
         @can('role-index')
+            <li class="menu-item {{ request()->routeIs(['role.*', 'permission.*']) ? 'active open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-settings"></i>
+                    <div>Roles &amp; Permissions</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ request()->routeIs('role.*') ? 'active' : '' }}">
+                        <a href="{{ route('role.index') }}" class="menu-link">
+                            <div>Roles</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ request()->routeIs('permission.*') ? 'active' : '' }}">
+                        <a href="{{ route('permission.index') }}" class="menu-link">
+                            <div>Permission</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <li class="menu-item {{ request()->routeIs('audit.*') ? 'active' : '' }}">
                 <a href="{{ route('audit.index') }}" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-line-dashed"></i>
