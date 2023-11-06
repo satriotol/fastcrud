@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
 use OwenIt\Auditing\Auditable as AuditingAuditable;
@@ -58,4 +59,19 @@ class User extends Authenticatable implements Auditable
     {
         return $this->roles[0];
     }
+    public static function getUsers()
+    {
+        if (Auth::user()->hasRole('SUPERADMIN')) {
+            // User is a superadmin, retrieve all users
+            $users = User::query();
+        } else {
+            // User is not a superadmin, filter users with the 'SUPERADMIN' role
+            $users = User::whereHas('roles', function ($query) {
+                $query->whereNot('name', 'SUPERADMIN');
+            });
+        }
+    
+        return $users;
+    }
+    
 }

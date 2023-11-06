@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
@@ -24,7 +25,7 @@ class UserController extends Controller
   public function index(Request $request)
   {
     $name = $request->name;
-    $users = User::query();
+    $users = User::getUsers();
     if ($name) {
       $users->where('name', 'LIKE', '%' . $name . '%');
     }
@@ -38,7 +39,11 @@ class UserController extends Controller
    */
   public function create()
   {
-    $roles = Role::all();
+    if (Auth::user()->getRole()->name == 'SUPERADMIN') {
+      $roles = Role::all();
+    } else {
+      $roles = Role::where('name', '!=', 'SUPERADMIN')->get();
+    }
     return view('backend.user.create', compact('roles'));
   }
 
@@ -75,9 +80,14 @@ class UserController extends Controller
   /**
    * Show the form for editing the specified resource.
    */
-  public function edit(User $user)
+  public function edit($uuid)
   {
-    $roles = Role::all();
+    $user = User::where('uuid', $uuid)->first();
+    if (Auth::user()->getRole()->name == 'SUPERADMIN') {
+      $roles = Role::all();
+    } else {
+      $roles = Role::where('name', '!=', 'SUPERADMIN')->get();
+    }
     return view('backend.user.create', compact('user', 'roles'));
   }
 

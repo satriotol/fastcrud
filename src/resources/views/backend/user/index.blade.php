@@ -86,20 +86,22 @@
                                             data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                                         <div class="dropdown-menu">
                                             @can('user-edit')
-                                                <a class="dropdown-item" href="{{ route('user.edit', $user->id) }}"><i
+                                                <a class="dropdown-item" href="{{ route('user.edit', $user->uuid) }}"><i
                                                         class="ti ti-pencil me-1"></i>
                                                     Edit</a>
                                             @endcan
-                                            @can('user-delete')
-                                                <form action="{{ route('user.destroy', $user->id) }}" method="post">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <button type="submit" class="dropdown-item"
-                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')">
-                                                        <i class="ti ti-trash me-1"></i> Delete
-                                                    </button>
-                                                </form>
-                                            @endcan
+                                            @if (Auth::user()->id != $user->id)
+                                                @can('user-delete')
+                                                    <form action="{{ route('user.destroy', $user->id) }}" method="post">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <button type="submit" class="dropdown-item"
+                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')">
+                                                            <i class="ti ti-trash me-1"></i> Delete
+                                                        </button>
+                                                    </form>
+                                                @endcan
+                                            @endif
 
                                         </div>
                                     </div>
