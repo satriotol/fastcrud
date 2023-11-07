@@ -15,8 +15,8 @@
 @section('page-script')
     <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
     <script>
-        CKEDITOR.replace('editor', {
-            toolbar: 'Basic'
+        $(document).ready(function() {
+            CKEDITOR.replaceClass = 'ckeditor';
         });
     </script>
 @endsection
@@ -61,7 +61,7 @@
                             <label class="col-sm-2 col-form-label" for="content">Konten</label>
                             <div class="col-sm-10">
                                 {!! Form::textarea('content', isset($menu) ? $menu->content : @old('content'), [
-                                    'class' => 'form-control editor',
+                                    'class' => 'form-control ckeditor',
                                     'placeholder' => 'Masukkan Konten',
                                     'required' => true,
                                 ]) !!}
