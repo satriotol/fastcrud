@@ -41,6 +41,9 @@
                         @isset($user)
                             @method('PUT')
                         @endisset
+                        @if (route('user.profile'))
+                            {!! Form::hidden('profile', 'edit_profile', []) !!}
+                        @endif
                         <div class="row mb-3">
                             {{ html()->label('Nama')->class('col-sm-2 col-form-label')->for('name') }}
                             <div class="col-sm-10">

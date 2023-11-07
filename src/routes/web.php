@@ -46,8 +46,10 @@ Route::middleware('auth')->group(function () {
   Route::resource('role', RoleController::class);
   Route::resource('crud', CrudController::class);
   Route::get('audit', [AuditController::class, 'index'])->name('audit.index');
+  Route::get('profile', [UserController::class, 'profile'])->name('user.profile');
   // CRUD_GENERATOR
 
-Route::resource('menu', MenuController::class);
-Route::resource('media', MediaController::class);});
+  Route::resource('menu', MenuController::class);
+  Route::resource('media', MediaController::class);
+});
 require __DIR__ . '/auth.php';

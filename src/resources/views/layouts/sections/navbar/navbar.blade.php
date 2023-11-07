@@ -61,8 +61,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
                 <li>
-                    <a class="dropdown-item"
-                        href="{{ Route::has('profile.show') ? route('profile.show') : url('pages/profile-user') }}">
+                    <a class="dropdown-item" href="{{ route('user.profile') }}">
                         <div class="d-flex">
                             <div class="flex-shrink-0 me-3">
                                 <div class="avatar avatar-online">
@@ -78,7 +77,7 @@
                                         John Doe
                                     @endif
                                 </span>
-                                <small class="text-muted">{{Auth::user()->getRole()->name}}</small>
+                                <small class="text-muted">{{ Auth::user()->getRole()->name }}</small>
                             </div>
                         </div>
                     </a>

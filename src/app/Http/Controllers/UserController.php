@@ -80,6 +80,16 @@ class UserController extends Controller
   /**
    * Show the form for editing the specified resource.
    */
+  public function profile()
+  {
+    $user = Auth::user();
+    if (Auth::user()->getRole()->name == 'SUPERADMIN') {
+      $roles = Role::all();
+    } else {
+      $roles = Role::where('name', '!=', 'SUPERADMIN')->get();
+    }
+    return view('backend.user.create', compact('user', 'roles'));
+  }
   public function edit($uuid)
   {
     $user = User::where('uuid', $uuid)->first();
@@ -112,10 +122,12 @@ class UserController extends Controller
     if ($data['password'] !== null) {
       $userData['password'] = Hash::make($data['password']);
     }
-
     $user->update($userData);
     $user->syncRoles($data['role']);
     session()->flash('success', 'Pengguna Berhasil Diupdate');
+    if ($request->profile) {
+      return back();
+    }
     return redirect(route('user.index'));
   }
 
