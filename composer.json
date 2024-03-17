@@ -3,7 +3,7 @@
   "description": "Laravel Fast Crud Buatan Satrio Tamvan",
   "type": "library",
   "license": "MIT",
-  "version": "10.0",
+  "version": "11.0",
   "authors": [
     {
       "name": "satriotol",
@@ -18,7 +18,6 @@
     "laravel/framework": "^11.0",
     "laravel/sanctum": "^4.0",
     "laravel/tinker": "^2.8",
-    "laravelcollective/html": "^6.4",
     "orangehill/iseed": "^3.0",
     "owen-it/laravel-auditing": "^13.5",
     "spatie/laravel-html": "^3.2",
