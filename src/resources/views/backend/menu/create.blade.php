@@ -46,11 +46,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="title">Title</label>
                             <div class="col-sm-10">
-                                {!! Form::text('title', isset($menu) ? $menu->title : @old('title'), [
-                                    'class' => 'form-control',
-                                    'placeholder' => 'Masukkan Title',
-                                    'required' => true,
-                                ]) !!}
+                                {{ html('title', isset($menu) ? $menu->title : @old('title'))->text()->placeholder('Masukkan Title')->class('form-control')->required(true) }}
                                 @error('title')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -60,11 +56,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="content">Konten</label>
                             <div class="col-sm-10">
-                                {!! Form::textarea('content', isset($menu) ? $menu->content : @old('content'), [
-                                    'class' => 'form-control ckeditor',
-                                    'placeholder' => 'Masukkan Konten',
-                                    'required' => true,
-                                ]) !!}
+                                {{ html()->textarea('content', isset($menu) ? $menu->content : @old('content'))->class('form-control ckeditor')->placeholder('Masukkan Konten')->required(true) }}
                                 @error('content')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror

@@ -70,7 +70,7 @@ return [
     |
     */
 
-  'timezone' => 'Asia/Jakarta',
+  'timezone' => 'UTC',
 
   /*
     |--------------------------------------------------------------------------
@@ -83,7 +83,7 @@ return [
     |
     */
 
-  'locale' => 'id',
+  'locale' => 'en',
 
   /*
     |--------------------------------------------------------------------------
@@ -96,7 +96,7 @@ return [
     |
     */
 
-  'fallback_locale' => 'id',
+  'fallback_locale' => 'en',
 
   /*
     |--------------------------------------------------------------------------
@@ -109,7 +109,7 @@ return [
     |
     */
 
-  'faker_locale' => 'id_ID',
+  'faker_locale' => 'en_US',
 
   /*
     |--------------------------------------------------------------------------
@@ -173,6 +173,7 @@ return [
     Spatie\Permission\PermissionServiceProvider::class,
     OwenIt\Auditing\AuditingServiceProvider::class,
     Barryvdh\Debugbar\ServiceProvider::class,
+    Spatie\Html\HtmlServiceProvider::class,
   ])->toArray(),
 
   /*

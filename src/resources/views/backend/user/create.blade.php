@@ -42,7 +42,7 @@
                             @method('PUT')
                         @endisset
                         @if (route('user.profile'))
-                            {!! Form::hidden('profile', 'edit_profile', []) !!}
+                            {{ html()->hidden('profile', 'edit_profile') }}
                         @endif
                         <div class="row mb-3">
                             {{ html()->label('Nama')->class('col-sm-2 col-form-label')->for('name') }}
@@ -56,7 +56,7 @@
                         <div class="row mb-3">
                             {{ html()->label('E-mail')->class('col-sm-2 col-form-label')->for('name') }}
                             <div class="col-sm-10">
-                                {{ html()->email('email')->class('form-control')->placeholder('Masukkan E-mail')->value(isset($user) ? $user->email : @old('email'))->required() }}
+                                {{ html()->email('email')->class('form-control')->placeholder('Masukkan E-mail')->value(isset($user) ? $user->email : @old('email'))->required(true) }}
                                 @error('email')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -65,11 +65,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="role">Role</label>
                             <div class="col-sm-10">
-                                {!! Form::select('role', $roles->pluck('name', 'name'), isset($user) ? $user->getRole()->name : '', [
-                                    'class' => 'form-control select2',
-                                    'required',
-                                    'placeholder' => 'Pilih Role',
-                                ]) !!}
+                                {{ html()->select('role', $roles->pluck('name', 'name'), isset($user) ? $user->getRole()->name : '')->class('form-control select2')->placeholder('Pilih Role')->required(true) }}
                                 @error('role')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
