@@ -12,16 +12,16 @@ trait CrudFunction
     {
         $validations = [];
         $uploads = [];
-    
+
         foreach ($data['columns'] as $d) {
             if ($d['nullable'] == 0) {
                 $wajib = 'required';
             } else {
                 $wajib = 'nullable';
             }
-            
+
             $upload = '';
-    
+
             if ($d['is_file']) {
                 $upload = <<<HTML
                     if (\$request->file('{$d['column_name']}')) {
@@ -33,15 +33,15 @@ trait CrudFunction
                     }
                 HTML;
             }
-    
+
             $content = "'{$d['column_name']}' => '$wajib',";
             $validations[] = $content;
             $uploads[] = $upload;
         }
-    
+
         $validations = implode("\n", $validations);
         $uploads = implode("\n", $uploads);
-    
+
         $controllerTemplate = str_replace(
             [
                 '{{modelName}}',
@@ -59,9 +59,9 @@ trait CrudFunction
             ],
             file_get_contents(resource_path("stubs/Controller.stub"))
         );
-    
+
         file_put_contents(app_path("/Http/Controllers/{$data['model']}Controller.php"), $controllerTemplate);
-    }    
+    }
     protected function generateSidebar($data)
     {
         $singular = $data['singular'];
@@ -144,11 +144,7 @@ trait CrudFunction
                 <div class="row mb-3">
                     <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
                     <div class="col-sm-10">
-                        {!! Form::file('{$d['column_name']}', [
-                            'class' => 'form-control',
-                            'id' => 'formFile',
-                            'required' => isset(\${$data['singular']}) ? false : true,
-                        ]) !!}
+                        {{html()->file('{$d['column_name']}')->class('form-control')->id('formFile')->required(isset(\${$data['singular']}) ? false : true)}}
                         @error('{$d['column_name']}')
                             <br>
                             <small class="text-danger">{{ \$message }}</small>
@@ -164,11 +160,7 @@ trait CrudFunction
                 <div class="row mb-3">
                     <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
                     <div class="col-sm-10">
-                        {!! Form::text('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'), [
-                            'class' => 'form-control',
-                            'placeholder' => 'Masukkan {$d['column_name_view']}',
-                            'required' => {$required},
-                        ]) !!}
+                        {{html()->text('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'))->class('form-control')->placeholder('Masukkan {$d['column_name_view']}')->required({$required})}}
                         @error('{$d['column_name']}')
                             <small class="text-danger">{{ \$message }}</small>
                         @enderror
@@ -182,11 +174,7 @@ trait CrudFunction
                 <div class="row mb-3">
                     <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
                     <div class="col-sm-10">
-                        {!! Form::number('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'), [
-                            'class' => 'form-control',
-                            'placeholder' => 'Masukkan {$d['column_name_view']}',
-                            'required' => {$required},
-                        ]) !!}
+                        {{html()->number('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'))->class('form-control')->placeholder('Masukkan {$d['column_name_view']}')->required({$required})}}
                         @error('{$d['column_name']}')
                             <small class="text-danger">{{ \$message }}</small>
                         @enderror
@@ -200,11 +188,7 @@ trait CrudFunction
                 <div class="row mb-3">
                     <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
                     <div class="col-sm-10">
-                        {!! Form::textarea('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'), [
-                            'class' => 'form-control ckeditor',
-                            'placeholder' => 'Masukkan {$d['column_name_view']}',
-                            'required' => {$required},
-                        ]) !!}
+                        {{html()->textarea('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'))->class('form-control ckeditor')->placeholder('Masukkan {$d['column_name_view']}')->required({$required})}}
                         @error('{$d['column_name']}')
                             <small class="text-danger">{{ \$message }}</small>
                         @enderror
@@ -218,11 +202,7 @@ trait CrudFunction
                 <div class="row mb-3">
                     <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
                     <div class="col-sm-10">
-                        {!! Form::date('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'), [
-                            'class' => 'form-control ckeditor',
-                            'placeholder' => 'Masukkan {$d['column_name_view']}',
-                            'required' => {$required},
-                        ]) !!}
+                        {{html()->date('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'))->class('form-control')->placeholder('Masukkan {$d['column_name_view']}')->required({$required})}}
                         @error('{$d['column_name']}')
                             <small class="text-danger">{{ \$message }}</small>
                         @enderror
@@ -236,11 +216,7 @@ trait CrudFunction
                     <div class="row mb-3">
                     <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
                         <div class="col-sm-10">
-                            {!! Form::select('{$d['column_name']}', '', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'), [
-                                'class' => 'form-control select2',
-                                'placeholder' => 'Masukkan {$d['column_name_view']}',
-                                'required' => {$required},
-                            ]) !!}
+                            {{html()->select('{$d['column_name']}', '', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'))->class('form-control select2')->placeholder('Masukkan {$d['column_name_view']}')->required({$required})}}
                             @error('{$d['column_name']}')
                                 <small class="text-danger">{{ \$message }}</small>
                             @enderror
@@ -250,13 +226,9 @@ trait CrudFunction
             }
             if ($d['type'] == 'boolean') {
                 $input = <<<HTML
-                        <div class="form-check mt-3">
-                            {!! Form::checkbox('{$d['column_name']}', true, isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'), [
-                                'class' => 'form-check-input',
-                                'id' => '{$d['column_name']}',
-                                'required' => {$required},
-                            ]) !!}
-                    <label class="form-check-label" for="{$d['column_name']}"> {$d['column_name_view']} </label>     
+                    <div class="form-check mt-3">
+                        {{html()->checkbox('{$d['column_name']}', true, isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'))->class('form-check-input')->id('{$d['column_name']}')->required({$required})}}
+                        <label class="form-check-label" for="{$d['column_name']}"> {$d['column_name_view']} </label>     
                     </div>
                 HTML;
             }

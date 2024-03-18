@@ -71,11 +71,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="name">Nama Role</label>
                             <div class="col-sm-10">
-                                {!! Form::text('name', isset($role) ? $role->name : @old('name'), [
-                                    'class' => 'form-control',
-                                    'placeholder' => 'Masukkan Nama Role',
-                                    'required',
-                                ]) !!}
+                                {{ html()->text('name', isset($role) ? $role->name : @old('name'))->class('form-control')->placeholder('Masukkan Nama Role')->required() }}
                                 @error('name')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -100,7 +96,7 @@
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" name="permissions[]"
                                                         id="checkPermission{{ $permission->id }}"
-                                                        value="{{ $permission->id }}"
+                                                        value="{{ $permission->name }}"
                                                         @isset($role) {{ $role->permissions->contains($permission) ? 'checked' : '' }} @endisset
                                                         data-prefix="{{ $groupedPrefix }}"> <!-- Tambahkan data-prefix -->
                                                     <label class="form-check-label"

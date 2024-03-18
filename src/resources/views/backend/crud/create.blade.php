@@ -96,12 +96,12 @@
                                             </div>
                                             <div class="mb-3 col-md-2">
                                                 <label class="form-label" for="form-repeater-1-3">Is File</label>
-                                                {{ html()->select('is_file', [false => 'Tidak', true => 'Ya'])->class('form-select')->placeholder('Pilih Tipe Kolom')->required(true) }}
+                                                {{ html()->select('is_file', [false => 'Tidak', true => 'Ya'])->class('form-select')->placeholder('Apakah Format Upload')->required(true) }}
 
                                             </div>
                                             <div class="mb-3 col-md-2">
                                                 <label class="form-label" for="form-repeater-1-3">Nullable</label>
-                                                {{ html()->select('is_file', ['0' => 'Wajib', 'nullable' => 'Tidak Wajib'])->class('form-select')->placeholder('Pilih Tipe Kolom')->required(true) }}
+                                                {{ html()->select('nullable', ['0' => 'Wajib', 'nullable' => 'Tidak Wajib'])->class('form-select')->placeholder('Pilih Tipe Kolom')->required(true) }}
 
 
                                             </div>

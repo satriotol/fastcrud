@@ -89,7 +89,6 @@ class RoleController extends Controller
             'permissions' => 'required',
         ]);
         $role->update(['name' => $data['name']]);
-
         $role->syncPermissions($request->input('permissions')); // Ubah 'permission' menjadi 'permissions'
 
         session()->flash('success', 'Role berhasil diubah.'); // Tambahkan pesan sukses
