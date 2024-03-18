@@ -18,7 +18,6 @@
     "laravel/framework": "^11.0",
     "laravel/sanctum": "^4.0",
     "laravel/tinker": "^2.8",
-    "orangehill/iseed": "^3.0",
     "owen-it/laravel-auditing": "^13.5",
     "spatie/laravel-html": "^3.6",
     "spatie/laravel-permission": "^6.0"
