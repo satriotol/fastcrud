@@ -43,11 +43,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="model">Nama Model</label>
                             <div class="col-sm-10">
-                                {!! Form::text('model', isset($crud) ? $crud->model : @old('model'), [
-                                    'class' => 'form-control',
-                                    'placeholder' => 'Masukkan Nama Model',
-                                    'required',
-                                ]) !!}
+                                {{ html()->text('model', isset($crud) ? $crud->model : @old('model'))->class('form-control')->placeholder('Masukkan Nama Model')->required(true) }}
                                 @error('model')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -56,11 +52,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="table">Nama Tabel</label>
                             <div class="col-sm-10">
-                                {!! Form::text('table', isset($crud) ? $crud->table : @old('table'), [
-                                    'class' => 'form-control',
-                                    'placeholder' => 'Masukkan Nama Tabel',
-                                    'required',
-                                ]) !!}
+                                {{ html()->text('table', isset($crud) ? $crud->table : @old('table'))->class('form-control')->placeholder('Masukkan Nama Table')->required(true) }}
                                 @error('table')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -69,11 +61,8 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="singular">Singular</label>
                             <div class="col-sm-10">
-                                {!! Form::text('singular', isset($crud) ? $crud->singular : @old('singular'), [
-                                    'class' => 'form-control',
-                                    'placeholder' => 'Masukkan Singular',
-                                    'required',
-                                ]) !!}
+                                {{ html()->text('singular', isset($crud) ? $crud->singular : @old('singular'))->class('form-control')->placeholder('Masukkan Nama Singular')->required(true) }}
+
                                 @error('singular')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -82,12 +71,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="sidebarLogo">Sidebar Logo</label>
                             <div class="col-sm-10">
-                                {!! Form::text('sidebarLogo', isset($crud) ? $crud->sidebarLogo : @old('sidebarLogo'), [
-                                    'class' => 'form-control',
-                                    'placeholder' => 'Masukkan Sidebar Logo',
-                                    'required',
-                                    'placeholder' => 'far fa-window-restore',
-                                ]) !!}
+                                {{ html()->text('sidebarLogo', isset($crud) ? $crud->sidebarLogo : @old('sidebarLogo'))->class('form-control')->placeholder('far fa-window-restore')->required(true) }}
                                 <a href="https://fontawesome.com/v5/search?o=r&m=free&s=regular" target="_blank">Font
                                     Awesome</a>
                                 @error('sidebarLogo')
@@ -102,36 +86,23 @@
                                         <div class="row">
                                             <div class="mb-3 col-md-4">
                                                 <label class="form-label" for="form-repeater-1-3">Tabel</label>
-                                                {!! Form::text('column_name', @old('column_name'), [
-                                                    'class' => 'form-control',
-                                                    'id' => 'form-repeater-1-1',
-                                                    'placeholder' => 'Masukkan Nama Kolom',
-                                                    'required',
-                                                ]) !!}
-                                                {!! Form::text('column_name_view', @old('column_name'), [
-                                                    'class' => 'form-control',
-                                                    'id' => 'form-repeater-1-1',
-                                                    'placeholder' => 'Masukkan Nama Kolom View',
-                                                    'required',
-                                                ]) !!}
+                                                {{ html()->text('column_name', isset($crud) ? $crud->column_name : @old('column_name'))->class('form-control')->placeholder('Masukkan Nama Kolom')->required(true) }}
+                                                {{ html()->text('column_name_view', isset($crud) ? $crud->column_name_view : @old('column_name_view'))->class('form-control')->placeholder('Masukkan Nama Kolom View')->required(true) }}
+
                                             </div>
                                             <div class="mb-3 col-md-2">
                                                 <label class="form-label" for="form-repeater-1-3">Tipe</label>
-                                                {!! Form::select('type', [$type], '', ['class' => 'form-select', 'placeholder' => 'Pilih Tipe', 'required']) !!}
+                                                {{ html()->select('type', [$type])->class('form-select')->placeholder('Pilih Tipe Kolom')->required(true) }}
                                             </div>
                                             <div class="mb-3 col-md-2">
                                                 <label class="form-label" for="form-repeater-1-3">Is File</label>
-                                                {!! Form::select('is_file', [false => 'Tidak', true => 'Ya'], '', [
-                                                    'class' => 'form-select',
-                                                    'required'
-                                                ]) !!}
+                                                {{ html()->select('is_file', [false => 'Tidak', true => 'Ya'])->class('form-select')->placeholder('Pilih Tipe Kolom')->required(true) }}
+
                                             </div>
                                             <div class="mb-3 col-md-2">
                                                 <label class="form-label" for="form-repeater-1-3">Nullable</label>
-                                                {!! Form::select('nullable', ['0' => 'Wajib', 'nullable' => 'Tidak Wajib'], '', [
-                                                    'class' => 'form-select',
-                                                    'required',
-                                                ]) !!}
+                                                {{ html()->select('is_file', ['0' => 'Wajib', 'nullable' => 'Tidak Wajib'])->class('form-select')->placeholder('Pilih Tipe Kolom')->required(true) }}
+
 
                                             </div>
                                             <div class="mb-3 col-md-2 d-flex align-items-center mb-0">
