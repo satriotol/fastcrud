@@ -80,32 +80,43 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label">Permission</label>
                             <div class="col-sm-10">
-                                <div class="row">
-                                    @foreach ($permissionsGrouped as $groupedPrefix => $permissions)
-                                        <div class="col-md-4">
-                                            <div class="form-check">
-
-                                                <h6 class="mb-0">
-                                                    <label class="form-check-label">
-                                                        <input class="form-check-input check-all" type="checkbox"
-                                                            data-prefix="{{ $groupedPrefix }}">{{ $groupedPrefix }}
-                                                    </label>
-                                                </h6>
-                                            </div>
-                                            @foreach ($permissions as $permission)
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="permissions[]"
-                                                        id="checkPermission{{ $permission->id }}"
-                                                        value="{{ $permission->name }}"
-                                                        @isset($role) {{ $role->permissions->contains($permission) ? 'checked' : '' }} @endisset
-                                                        data-prefix="{{ $groupedPrefix }}"> <!-- Tambahkan data-prefix -->
-                                                    <label class="form-check-label"
-                                                        for="checkPermission{{ $permission->id }}">{{ $permission->name }}</label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endforeach
-                                </div>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Group Prefix</th>
+                                            <th>Permissions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($permissionsGrouped as $groupedPrefix => $permissions)
+                                            <tr>
+                                                <td>{{ $groupedPrefix }}</td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <h6 class="mb-0">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input check-all" type="checkbox"
+                                                                    data-prefix="{{ $groupedPrefix }}">{{ $groupedPrefix }}
+                                                            </label>
+                                                        </h6>
+                                                    </div>
+                                                    @foreach ($permissions as $permission)
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="permissions[]"
+                                                                id="checkPermission{{ $permission->id }}"
+                                                                value="{{ $permission->name }}"
+                                                                @isset($role) {{ $role->permissions->contains($permission) ? 'checked' : '' }} @endisset
+                                                                data-prefix="{{ $groupedPrefix }}">
+                                                            <label class="form-check-label"
+                                                                for="checkPermission{{ $permission->id }}">{{ $permission->name }}</label>
+                                                        </div>
+                                                    @endforeach
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                                 @error('permissions')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
