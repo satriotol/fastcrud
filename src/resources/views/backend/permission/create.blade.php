@@ -20,7 +20,7 @@
 @endsection
 
 @section('content')
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Forms/</span> {Permission}</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Forms/</span> Permission</h4>
 
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
@@ -28,7 +28,7 @@
         <div class="col-xxl">
             <div class="card mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="mb-0">{Permission}</h5>
+                    <h5 class="mb-0">Permission</h5>
                 </div>
                 <div class="card-body">
                     <form
@@ -41,11 +41,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="name">Nama Permission</label>
                             <div class="col-sm-10">
-                                {!! Form::text('name', isset($permission) ? $permission->name : @old('name'), [
-                                    'class' => 'form-control',
-                                    'placeholder' => 'Masukkan Nama Permission',
-                                    'required',
-                                ]) !!}
+                                {{ html()->text('name', isset($permission) ? $permission->name : @old('name'))->class('form-control')->placeholder('Masukkan Permission')->required(true) }}
                                 @error('name')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -53,11 +49,7 @@
                         </div>
                         <div class="mb-3">
                             <div class="form-check mt-3">
-                                {!! Form::checkbox('isDefault', 'checked', '', [
-                                    'class' => 'form-check-input',
-                                    'for' => 'defaultCheck1',
-                                    'id' => 'defaultCheck1',
-                                ]) !!}
+                                {{ html()->checkbox('isDefault', 'checked')->class('form-check-input')->id('defaultCheck1') }}
                                 <label class="form-check-label" for="defaultCheck1">
                                     Default Permission
                                 </label>

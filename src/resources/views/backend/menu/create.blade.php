@@ -46,7 +46,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="title">Title</label>
                             <div class="col-sm-10">
-                                {{ html('title', isset($menu) ? $menu->title : @old('title'))->text()->placeholder('Masukkan Title')->class('form-control')->required(true) }}
+                                {{ html()->text('title', isset($menu) ? $menu->title : @old('title'))->placeholder('Masukkan Title')->class('form-control')->required(true) }}
                                 @error('title')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror

@@ -47,11 +47,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="title">Title</label>
                             <div class="col-sm-10">
-                                {!! Form::text('title', isset($media) ? $media->title : @old('title'), [
-                                    'class' => 'form-control',
-                                    'placeholder' => 'Masukkan Title',
-                                    'required' => false,
-                                ]) !!}
+                                {{ html()->text('title', isset($media) ? $media->title : @old('title'))->class('form-control')->placeholder('Masukkan Title')->required(false) }}
                                 @error('title')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -61,11 +57,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="file">File</label>
                             <div class="col-sm-10">
-                                {!! Form::file('file', [
-                                    'class' => 'form-control',
-                                    'id' => 'formFile',
-                                    'required' => true,
-                                ]) !!}
+                                {{ html()->file('file')->class('form-control')->id('formFile')->required(true) }}
                                 @error('file')
                                     <br>
                                     <small class="text-danger">{{ $message }}</small>
