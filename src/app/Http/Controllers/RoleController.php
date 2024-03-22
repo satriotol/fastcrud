@@ -29,7 +29,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $permissions = Permission::all();
+        $permissions = Permission::orderBy('name')->get();
 
         // Mengelompokkan permission berdasarkan prefix
         $permissionsGrouped = $permissions->groupBy(function ($permission) {
@@ -69,7 +69,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $permissions = Permission::all();
+        $permissions = Permission::orderBy('name')->get();
 
         // Mengelompokkan permission berdasarkan prefix
         $permissionsGrouped = $permissions->groupBy(function ($permission) {
