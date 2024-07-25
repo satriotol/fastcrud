@@ -2,7 +2,6 @@
 # LARAVEL FAST CRUD
 
 
-    
 ## Installation
 
 Create Laravel Project
@@ -30,6 +29,15 @@ choose
 ```bash
   Provider: Satriotol\Fastcrud\FastCrudServiceProvider
 ```
+
+## Create User
+
+Open Your Terminal
+```bash
+    php artisan fastcrud:create-user
+```
+
+Follow The Step
 
 
 ## Authors
