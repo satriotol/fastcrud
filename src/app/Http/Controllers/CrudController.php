@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Traits\CrudFunction;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class CrudController extends Controller
@@ -15,7 +14,7 @@ class CrudController extends Controller
     use CrudFunction;
     public function index()
     {
-        return view('backend.crud.index');
+        return redirect(route('crud.create'));
     }
 
     /**
@@ -55,9 +54,10 @@ class CrudController extends Controller
         $this->viewIndex($data);
         $this->viewCreate($data);
         $this->storePermission($data);
-        return back();
+        session()->flash('success', 'CRUD Berhasil Dibuat');
+        return redirect()->route('crud.index');
     }
-    
+
     /**
      * Display the specified resource.
      */
