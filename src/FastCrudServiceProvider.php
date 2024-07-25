@@ -3,7 +3,7 @@
 namespace Satriotol\Fastcrud;
 
 use Illuminate\Support\ServiceProvider;
-use Satriotol\Fastcrud\App\Console\Commands\CreateUserCommand;
+use Satriotol\Fastcrud\Console\Commands\CreateUserCommand;
 
 class FastCrudServiceProvider extends ServiceProvider
 {
