@@ -1,6 +1,6 @@
 <?php
 
-namespace Satriotol\Fastcrud\Console\Commands;
+namespace Satriotol\Fastcrud\App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
