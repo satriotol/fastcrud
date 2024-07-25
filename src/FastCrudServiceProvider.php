@@ -3,6 +3,7 @@
 namespace Satriotol\Fastcrud;
 
 use Illuminate\Support\ServiceProvider;
+use Satriotol\Fastcrud\Console\CreateUserCommand;
 
 class FastCrudServiceProvider extends ServiceProvider
 {
@@ -49,6 +50,9 @@ class FastCrudServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/public' => public_path('/'),
             ], 'fastcrudPublic');
+            $this->commands([
+                CreateUserCommand::class,
+            ]);
         }
     }
 }
