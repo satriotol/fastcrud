@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Traits\CrudFunction;
+use Satriotol\Fastcrud\Traits\CrudFunction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class CrudController extends Controller
 {
+    use CrudFunction;
+
     /**
      * Display a listing of the resource.
      */
-    use CrudFunction;
     public function index()
     {
-        return redirect(route('crud.create'));
+        return redirect()->route('crud.create');
     }
 
     /**
@@ -30,6 +31,7 @@ class CrudController extends Controller
             'boolean' => 'boolean',
             'date' => 'date'
         ];
+
         return view('backend.crud.create', compact('type'));
     }
 
@@ -39,22 +41,36 @@ class CrudController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'model' => 'required',
-            'singular' => 'required',
-            'table' => 'required',
-            'columns.*' => 'required',
-            'sidebarLogo' => 'required',
+            'model' => 'required|string',
+            'singular' => 'required|string',
+            'table' => 'required|string',
+            'columns' => 'required|array',
+            'columns.*.column_name' => 'required|string',
+            'columns.*.column_name_view' => 'required|string',
+            'columns.*.type' => 'required|string|in:string,integer,longText,unsignedBigInteger,boolean,date',
+            'columns.*.nullable' => 'required|boolean',
+            'columns.*.is_file' => 'required|boolean',
+            'sidebarLogo' => 'required|string',
         ]);
+
         $data['plural'] = Str::plural($data['singular']);
-        $this->createMigration($data);
-        $this->generateModel($data);
-        $this->generateController($data);
-        $this->addRoute($data);
-        $this->generateSidebar($data);
-        $this->viewIndex($data);
-        $this->viewCreate($data);
-        $this->storePermission($data);
-        session()->flash('success', 'CRUD Berhasil Dibuat');
+
+        try {
+            $this->createMigration($data);
+            $this->generateModel($data);
+            $this->generateController($data);
+            $this->addRoute($data);
+            $this->generateSidebar($data);
+            $this->viewIndex($data);
+            $this->viewCreate($data);
+            $this->storePermission($data);
+            session()->flash('success', 'CRUD Berhasil Dibuat');
+        } catch (\Exception $e) {
+            // Log error message and flash error to the session
+            \Log::error('CRUD Creation Error: ' . $e->getMessage());
+            session()->flash('error', 'Terjadi kesalahan saat membuat CRUD');
+        }
+
         return redirect()->route('crud.index');
     }
 
@@ -63,7 +79,7 @@ class CrudController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // Implement logic to show a resource
     }
 
     /**
@@ -71,7 +87,7 @@ class CrudController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // Implement logic to show the edit form
     }
 
     /**
@@ -79,7 +95,7 @@ class CrudController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Implement logic to update a resource
     }
 
     /**
@@ -87,6 +103,6 @@ class CrudController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // Implement logic to delete a resource
     }
 }

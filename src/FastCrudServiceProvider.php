@@ -43,7 +43,6 @@ class FastCrudServiceProvider extends ServiceProvider
             ], 'fastcrudStarter');
             $this->publishes([
                 __DIR__ . '/app/Http/Controllers/CrudController.php' => app_path('Http/Controllers/CrudController.php'),
-                __DIR__ . '/app/Traits' => app_path('/Traits'),
                 __DIR__ . '/resources' => resource_path('/'),
                 __DIR__ . '/app' => app_path('/'),
             ], 'fastcrudContinue');
