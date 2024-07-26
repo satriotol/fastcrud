@@ -16,9 +16,10 @@ class {{modelName}}Controller extends Controller
         $this->middleware('permission:{{modelNameSingular}}-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:{{modelNameSingular}}-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
         ${{modelNamePlural}} = {{modelName}}::latest()->paginate();
+        $request->flash();
         return view('backend.{{modelNameSingular}}.index',compact('{{modelNamePlural}}'));
     }
     public function create()
