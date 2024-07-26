@@ -55,21 +55,15 @@ class CrudController extends Controller
 
         $data['plural'] = Str::plural($data['singular']);
 
-        try {
-            $this->createMigration($data);
-            $this->generateModel($data);
-            $this->generateController($data);
-            $this->addRoute($data);
-            $this->generateSidebar($data);
-            $this->viewIndex($data);
-            $this->viewCreate($data);
-            $this->storePermission($data);
-            session()->flash('success', 'CRUD Berhasil Dibuat');
-        } catch (\Exception $e) {
-            // Log error message and flash error to the session
-            \Log::error('CRUD Creation Error: ' . $e->getMessage());
-            session()->flash('error', 'Terjadi kesalahan saat membuat CRUD');
-        }
+        $this->createMigration($data);
+        $this->generateModel($data);
+        $this->generateController($data);
+        $this->addRoute($data);
+        $this->generateSidebar($data);
+        $this->viewIndex($data);
+        $this->viewCreate($data);
+        $this->storePermission($data);
+        session()->flash('success', 'CRUD Berhasil Dibuat');
 
         return redirect()->route('crud.index');
     }

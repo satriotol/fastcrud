@@ -57,7 +57,7 @@ trait CrudFunction
                 $validations,
                 $uploads,
             ],
-            file_get_contents(resource_path("stubs/Controller.stub"))
+            file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/Controller.stub"))
         );
 
         file_put_contents(app_path("/Http/Controllers/{$data['model']}Controller.php"), $controllerTemplate);
@@ -124,7 +124,7 @@ trait CrudFunction
                 $theadRows,
                 $rows,
             ],
-            file_get_contents(resource_path("stubs/viewIndex.stub"))
+            file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/viewIndex.stub"))
         );
         if (!file_exists(resource_path("/views/backend/" . $data['singular']))) {
             mkdir(resource_path("/views/backend/" . $data['singular']));
@@ -250,7 +250,7 @@ trait CrudFunction
                 $data['singular'],
                 $view
             ],
-            file_get_contents(resource_path("stubs/viewCreate.stub"))
+            file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/viewCreate.stub"))
         );
         if (!file_exists(resource_path("/views/backend/" . $data['singular']))) {
             mkdir(resource_path("/views/backend/" . $data['singular']));
@@ -329,7 +329,7 @@ trait CrudFunction
                 $rows,
                 $data['plural'],
             ],
-            file_get_contents(resource_path("stubs/Migration.stub"))
+            file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/Migration.stub"))
         );
         $getDate = Date::now()->format('Y_m_d_His');
         file_put_contents(database_path("/migrations/{$getDate}_create_{$data['plural']}_table.php"), $migrationTemplate);
@@ -349,7 +349,7 @@ trait CrudFunction
         $modelTemplate = str_replace(
             ['{{modelName}}', '{{modelNamePlural}}', 'DummyTable'],
             [$data['model'], $data['plural'], $rows],
-            file_get_contents(resource_path("stubs/Model.stub"))
+            file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/Model.stub"))
         );
         file_put_contents(app_path("/Models/{$data['model']}.php"), $modelTemplate);
     }
