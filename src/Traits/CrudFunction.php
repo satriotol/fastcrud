@@ -5,6 +5,7 @@ namespace Satriotol\Fastcrud\Traits;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 trait CrudFunction
 {
@@ -275,8 +276,10 @@ trait CrudFunction
         $datas = [
             '-index', '-create', '-edit', '-delete'
         ];
+    
+        // Create or update permissions
         foreach ($datas as $d) {
-            Permission::updateOrCreate(
+            $permission = Permission::updateOrCreate(
                 [
                     'name' => $data['singular'] . $d,
                 ],
@@ -285,8 +288,16 @@ trait CrudFunction
                 ]
             );
         }
+    
+        // Assign permissions to the SUPERADMIN role
+        $superAdminRole = Role::findByName('SUPERADMIN');
+        $permissions = Permission::whereIn('name', array_map(function($d) use ($data) {
+            return $data['singular'] . $d;
+        }, $datas))->get();
+    
+        $superAdminRole->syncPermissions($permissions);
     }
-    protected function addRoute($data)
+        protected function addRoute($data)
     {
         $routeFile = base_path('routes/web.php');
         $route = "\nRoute::resource('" . $data['singular'] . "', " . $data['model'] . "Controller::class);";
