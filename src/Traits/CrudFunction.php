@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace Satriotol\Fastcrud\Traits;
 
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\File;
