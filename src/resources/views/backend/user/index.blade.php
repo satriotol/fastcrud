@@ -21,7 +21,7 @@
         <div class="card-header border-bottom">
             <div class="row">
                 <div class="col-md">
-                    <h5 class="card-title mb-3">{Pengguna}</h5>
+                    <h5 class="card-title mb-3">Pengguna</h5>
                 </div>
                 @can('user-create')
                     <div class="col-md">
@@ -67,6 +67,7 @@
                             <th>Nama</th>
                             <th>E-mail</th>
                             <th>Role</th>
+                            <th>Aktivitas</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -80,6 +81,7 @@
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->getRole()->name }}</td>
+                                <td>{{ $user->last_used_sign_in_at }}</td>
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
