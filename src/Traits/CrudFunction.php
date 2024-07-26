@@ -101,7 +101,18 @@ trait CrudFunction
 
     protected function viewIndex($data)
     {
+        $searchForm = '<form action="" method="GET"><div class="row">';
+
         foreach ($data['columns'] as $d) {
+            $columnName = $d['column_name'];
+            $columnLabel = $d['column_name_view'];
+
+            $searchForm .= <<<HTML
+                <div class="col-md-4">
+                    {{ html()->label('$columnLabel')->class('form-label') }}
+                    {{ html()->text('$columnName')->class('form-control')->placeholder('Cari $columnLabel')->value(@old('$columnName')) }}
+                </div>
+            HTML;
             $column = "<td>{{\${$data['singular']}->{$d['column_name']}}}</td>";
             $thead = "<th>{$d['column_name_view']}</th>";
             $rows[] = $column;
@@ -114,6 +125,7 @@ trait CrudFunction
                 '{modelName}',
                 '{modelNamePlural}',
                 '{modelNameSingular}',
+                'SearchForm',
                 'TableHead',
                 'TableBody'
             ],
@@ -121,6 +133,7 @@ trait CrudFunction
                 $data['model'],
                 $data['plural'],
                 $data['singular'],
+                $searchForm,
                 $theadRows,
                 $rows,
             ],
