@@ -1,6 +1,6 @@
 {
   "name": "satriotol/fastcrud",
-  "description": "Laravel Fast Crud Buatan Satrio Tamvan Sekali",
+  "description": "Laravel Fast Crud Buatan Satrio Tamvan",
   "type": "library",
   "license": "MIT",
   "version": "11.0.0",
@@ -10,6 +10,7 @@
       "email": "satriotol69@gmail.com"
     }
   ],
+  "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
     "barryvdh/laravel-debugbar": "^3.9",
