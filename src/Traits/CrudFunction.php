@@ -276,10 +276,11 @@ trait CrudFunction
         $datas = [
             '-index', '-create', '-edit', '-delete'
         ];
-    
+
         // Create or update permissions
+        $superAdminRole = Role::findByName('SUPERADMIN');
         foreach ($datas as $d) {
-            $permission = Permission::updateOrCreate(
+            Permission::updateOrCreate(
                 [
                     'name' => $data['singular'] . $d,
                 ],
@@ -287,17 +288,11 @@ trait CrudFunction
                     'guard_name' => 'web'
                 ]
             );
+
+            $superAdminRole->givePermissionTo($data['singular'] . $d);
         }
-    
-        // Assign permissions to the SUPERADMIN role
-        $superAdminRole = Role::findByName('SUPERADMIN');
-        $permissions = Permission::whereIn('name', array_map(function($d) use ($data) {
-            return $data['singular'] . $d;
-        }, $datas))->get();
-    
-        $superAdminRole->syncPermissions($permissions);
     }
-        protected function addRoute($data)
+    protected function addRoute($data)
     {
         $routeFile = base_path('routes/web.php');
         $route = "\nRoute::resource('" . $data['singular'] . "', " . $data['model'] . "Controller::class);";
