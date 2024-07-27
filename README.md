@@ -1,46 +1,53 @@
 
-# LARAVEL FAST CRUD
+# Laravel Fastcrud By Satrio Tamvan
 
+FastCrud tidak hanya menawarkan fitur dasar pembuatan CRUD, tetapi juga mencakup manajemen hak akses dan audit, menjadikannya alat yang lebih lengkap untuk pengembangan aplikasi Laravel. Berikut adalah tambahan fitur terkait hak akses dan audit:
 
-## Installation
+- **Hak Akses Pengguna:** FastCrud terintegrasi dengan sistem manajemen hak akses Laravel, seperti Spatie's Laravel Permissions, sehingga Anda dapat dengan mudah mengelola izin dan peran pengguna dalam operasi CRUD. Anda dapat menentukan hak akses untuk berbagai operasi (seperti baca, tulis, edit, hapus) dan mengelola siapa yang dapat mengakses atau memodifikasi data.
 
-Create Laravel Project
+- **Audit:** FastCrud juga mendukung fitur audit untuk melacak perubahan yang terjadi pada data Anda. Fitur audit ini membantu Anda mencatat aktivitas CRUD, termasuk siapa yang membuat, memperbarui, atau menghapus data, serta kapan perubahan tersebut terjadi. Ini penting untuk keperluan pelaporan, keamanan, dan kepatuhan.
+
+Dengan fitur-fitur ini, FastCrud memberikan solusi yang komprehensif untuk pengembangan aplikasi Laravel, memungkinkan pengembang untuk menangani hak akses dan audit secara efisien tanpa harus menulis kode secara manual.
+# Instalasi FastCrud
+
+Ikuti langkah-langkah berikut untuk menginstal dan mengonfigurasi FastCrud dalam proyek Laravel Anda:
+
+## 1. Buat Proyek Laravel
+
+Jika Anda belum memiliki proyek Laravel, buat proyek baru dengan perintah berikut:
+
 ```bash
-  laravel new {project_name}
+laravel new {project_name}
 ```
 
-Change Composer minimum-stability, open composer.json on your laravel project
+Gantilah `{project_name}` dengan nama proyek Anda.
 
-```bash
-  "minimum-stability": "stable",
-  "prefer-stable": true
-```
-to 
-```bash
-  "minimum-stability": "dev",
-  "prefer-stable": true
-```
-run your terminal
+## 2. Instal FastCrud
+
+Tambahkan FastCrud ke proyek Laravel Anda menggunakan Composer:
+
 ```bash
 composer require satriotol/fastcrud
+```
+
+## 3. Jalankan Perintah Vendor Publish
+
+Publikasikan file konfigurasi dan stubs FastCrud dengan perintah berikut:
+
+```bash
 php artisan vendor:publish --force
 ```
-choose 
-```bash
-  Provider: Satriotol\Fastcrud\FastCrudServiceProvider
+
+Ketika Anda menjalankan perintah ini, pilih provider berikut:
+
+```
+Provider: Satriotol\Fastcrud\FastCrudServiceProvider
 ```
 
-## Create User
+Ini akan memastikan bahwa semua file yang diperlukan dari FastCrud dipublikasikan ke proyek Anda.
 
-Open Your Terminal
-```bash
-    php artisan fastcrud:create-user
-```
-
-Follow The Step
-
-
+Dengan langkah-langkah ini, FastCrud akan terinstal dan siap digunakan dalam proyek Laravel Anda. Selamat mengembangkan aplikasi!
 ## Authors
 
-- [@satriotol](https://www.github.com/octokatherine)
+- [@satriotol](https://github.com/satriotol)
 
