@@ -46,8 +46,20 @@ Provider: Satriotol\Fastcrud\FastCrudServiceProvider
 
 Ini akan memastikan bahwa semua file yang diperlukan dari FastCrud dipublikasikan ke proyek Anda.
 
+## 4. Buat Pengguna Superadmin
+
+Untuk membuat pengguna superadmin, jalankan perintah berikut di terminal:
+
+```bash
+php artisan fastcrud:create_user
+```
+
+Ikuti langkah-langkah berikut:
+- Masukkan nama pengguna.
+- Masukkan email pengguna.
+- Masukkan password (gunakan password yang aman dan standar).
+
 Dengan langkah-langkah ini, FastCrud akan terinstal dan siap digunakan dalam proyek Laravel Anda. Selamat mengembangkan aplikasi!
 ## Authors
 
 - [@satriotol](https://github.com/satriotol)
-
