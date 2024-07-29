@@ -33,8 +33,7 @@ class {{modelName}}Controller extends Controller
         ]);
         //is_file
         {{modelName}}::create($data);
-        session()->flash('success', '{{modelName}} Berhasil Dibuat');
-        return redirect(route('{{modelNameSingular}}.index'));
+        return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{modelName}} Berhasil Dibuat');
     }
     public function edit($uuid)
     {
@@ -49,14 +48,12 @@ class {{modelName}}Controller extends Controller
         ]);
         //is_file
         ${{modelNameSingular}}->update($data);
-        session()->flash('success', '{{modelName}} Berhasil Diubah');
-        return redirect(route('{{modelNameSingular}}.index'));
+        return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{modelName}} Berhasil Terupdate');
     }
     public function destroy($uuid)
     {
         ${{modelNameSingular}} = {{modelName}}::where('uuid', $uuid)->firstOrFail();
         ${{modelNameSingular}}->delete();
-        session()->flash('success', '{{modelName}} Berhasil Dihapus');
-        return back();
+        return back()->with('success', '{{modelName}} Berhasil Dihapus');
     }
 }
