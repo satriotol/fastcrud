@@ -13,19 +13,17 @@ trait CrudFunction
     {
         $validations = [];
         $uploads = [];
+        $booleans = []; // Array for boolean handling
 
         foreach ($data['columns'] as $d) {
-            if ($d['nullable'] == 0) {
-                $wajib = 'required';
-            } else {
-                $wajib = 'nullable';
-            }
+            // Set validation rule based on nullable
+            $validationRule = $d['nullable'] == 0 ? 'required' : 'nullable';
 
-            $upload = '';
-
+            // Prepare upload logic for file fields
+            $uploadLogic = '';
             if ($d['is_file']) {
-                $upload = <<<HTML
-                    if (\$request->file('{$d['column_name']}')) {
+                $uploadLogic = <<<HTML
+                    if (\$request->hasFile('{$d['column_name']}')) {
                         \${$d['column_name']} = \$request->file('{$d['column_name']}');
                         \${$d['column_name']}Extension = \${$d['column_name']}->getClientOriginalExtension();
                         \${$d['column_name']}Name = 'file/' . date('mdYHis') . '-' . Str::random(8) . '.' . \${$d['column_name']}Extension;
@@ -35,13 +33,23 @@ trait CrudFunction
                 HTML;
             }
 
-            $content = "'{$d['column_name']}' => '$wajib',";
-            $validations[] = $content;
-            $uploads[] = $upload;
+            // Prepare boolean logic
+            if ($d['type'] == 'boolean') {
+                $booleanLogic = <<<HTML
+                    \$data['{$d['column_name']}'] = \$request->has('{$d['column_name']}');
+                HTML;
+                $booleans[] = $booleanLogic;
+            }
+
+            // Add validation rule
+            $validationContent = "'{$d['column_name']}' => '$validationRule',";
+            $validations[] = $validationContent;
+            $uploads[] = $uploadLogic;
         }
 
         $validations = implode("\n", $validations);
         $uploads = implode("\n", $uploads);
+        $booleans = implode("\n", $booleans);
 
         $controllerTemplate = str_replace(
             [
@@ -50,6 +58,7 @@ trait CrudFunction
                 '{{modelNameSingular}}',
                 '{{validations}}',
                 '//is_file',
+                '//boolean'
             ],
             [
                 $data['model'],
@@ -57,12 +66,14 @@ trait CrudFunction
                 $data['singular'],
                 $validations,
                 $uploads,
+                $booleans
             ],
             file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/Controller.stub"))
         );
 
         file_put_contents(app_path("/Http/Controllers/{$data['model']}Controller.php"), $controllerTemplate);
     }
+
     protected function generateSidebar($data)
     {
         $singular = $data['singular'];
@@ -241,7 +252,7 @@ trait CrudFunction
             if ($d['type'] == 'boolean') {
                 $input = <<<HTML
                     <div class="form-check mt-3">
-                        {{html()->checkbox('{$d['column_name']}', true, isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'))->class('form-check-input')->id('{$d['column_name']}')->required({$required})}}
+                        {{html()->checkbox('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'))->class('form-check-input')->id('{$d['column_name']}')}}
                         <label class="form-check-label" for="{$d['column_name']}"> {$d['column_name_view']} </label>     
                     </div>
                 HTML;
@@ -274,7 +285,10 @@ trait CrudFunction
     protected function storePermission($data)
     {
         $datas = [
-            '-index', '-create', '-edit', '-delete'
+            '-index',
+            '-create',
+            '-edit',
+            '-delete'
         ];
 
         // Create or update permissions

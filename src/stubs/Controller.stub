@@ -16,40 +16,58 @@ class {{modelName}}Controller extends Controller
         $this->middleware('permission:{{modelNameSingular}}-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:{{modelNameSingular}}-delete', ['only' => ['destroy']]);
     }
+
     public function index(Request $request)
     {
         ${{modelNamePlural}} = {{modelName}}::latest()->paginate();
         $request->flash();
-        return view('backend.{{modelNameSingular}}.index',compact('{{modelNamePlural}}'));
+        return view('backend.{{modelNameSingular}}.index', compact('{{modelNamePlural}}'));
     }
+
     public function create()
     {
         return view('backend.{{modelNameSingular}}.create');
     }
+
     public function store(Request $request)
     {
         $data = $request->validate([
             {{validations}}
         ]);
+
+        // Handle file uploads
         //is_file
+        
+        // Handle boolean fields
+        //boolean
+
         {{modelName}}::create($data);
         return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{modelName}} Berhasil Dibuat');
     }
+
     public function edit($uuid)
     {
         ${{modelNameSingular}} = {{modelName}}::where('uuid', $uuid)->firstOrFail();
         return view('backend.{{modelNameSingular}}.create', compact('{{modelNameSingular}}'));
     }
+
     public function update(Request $request, $uuid)
     {
         ${{modelNameSingular}} = {{modelName}}::where('uuid', $uuid)->firstOrFail();
         $data = $request->validate([
             {{validations}}
         ]);
+
+        // Handle file uploads
         //is_file
+        
+        // Handle boolean fields
+        //boolean
+
         ${{modelNameSingular}}->update($data);
         return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{modelName}} Berhasil Terupdate');
     }
+
     public function destroy($uuid)
     {
         ${{modelNameSingular}} = {{modelName}}::where('uuid', $uuid)->firstOrFail();
