@@ -334,7 +334,7 @@ trait CrudFunction
             $column = "\$table->{$d['type']}('{$d['column_name']}')";
 
             if ($d['nullable']) {
-                $column .= "->{$d['nullable']}()";
+                $column .= "->nullable()";
             }
             $rows[] = $column . ";\n";
         }
