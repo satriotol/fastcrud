@@ -77,7 +77,7 @@ trait CrudFunction
             @can('{$singular}-index')
                 <li class="menu-item {{ request()->routeIs('{$singular}.*') ? 'active' : '' }}">
                     <a href="{{ route('{$singular}.index') }}" class="menu-link">
-                        <i class="menu-icon {$sidebarLogo}"></i>
+                        <i class="menu-icon tf-icons ti ti-{$sidebarLogo}"></i>
                         <div>{$model}</div>
                     </a>
                 </li>

@@ -71,9 +71,8 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="sidebarLogo">Sidebar Logo</label>
                             <div class="col-sm-10">
-                                {{ html()->text('sidebarLogo', isset($crud) ? $crud->sidebarLogo : @old('sidebarLogo'))->class('form-control')->placeholder('far fa-window-restore')->required(true) }}
-                                <a href="https://fontawesome.com/v5/search?o=r&m=free&s=regular" target="_blank">Font
-                                    Awesome</a>
+                                {{ html()->text('sidebarLogo', isset($crud) ? $crud->sidebarLogo : @old('sidebarLogo'))->class('form-control')->placeholder('device-imac')->required(true) }}
+                                <a href="https://tabler.io/icons" target="_blank">Tabler.io</a>
                                 @error('sidebarLogo')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -101,7 +100,7 @@
                                             </div>
                                             <div class="mb-3 col-md-2">
                                                 <label class="form-label" for="form-repeater-1-3">Nullable</label>
-                                                {{ html()->select('nullable', ['0' => 'Wajib', 'nullable' => 'Tidak Wajib'])->class('form-select')->placeholder('Pilih Tipe Kolom')->required(true) }}
+                                                {{ html()->select('nullable', ['0' => 'Wajib', '1' => 'Tidak Wajib'])->class('form-select')->placeholder('Pilih Tipe Kolom')->required(true) }}
 
 
                                             </div>
