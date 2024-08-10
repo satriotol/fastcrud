@@ -1,3 +1,0 @@
-/*
-  Add custom scripts here
-*/
