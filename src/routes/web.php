@@ -20,6 +20,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AppSpecsController;
 // URL_CRUD_GENERATOR
 
 use App\Http\Controllers\MenuController;
@@ -43,6 +44,7 @@ Route::middleware('guest')->group(function () {
 });
 Route::middleware('auth')->group(function () {
   Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+  Route::get('app-specs', [AppSpecsController::class, 'index'])->name('app-specs.index');
   Route::resource('user', UserController::class);
   Route::resource('permission', PermissionController::class);
   Route::resource('role', RoleController::class);

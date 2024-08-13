@@ -65,6 +65,14 @@
                 </a>
             </li>
         @endcan
+        @role('SUPERADMIN')
+            <li class="menu-item {{ request()->routeIs('app-specs.index') ? 'active' : '' }}">
+                <a href="{{ route('app-specs.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-section"></i>
+                    <div>Spesifikasi</div>
+                </a>
+            </li>
+        @endrole
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Pengguna</span>
         </li>
