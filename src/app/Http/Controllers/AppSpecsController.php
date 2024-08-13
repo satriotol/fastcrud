@@ -8,8 +8,6 @@ class AppSpecsController extends Controller
 {
     public function index()
     {
-        $lastCommit = $this->getLastGitCommit();
-        $lastCommitDate = $this->getLastGitCommitDate();
         $phpVersion = phpversion();
         $phpExtensions = get_loaded_extensions();
         $phpIniSettings = [
@@ -38,22 +36,10 @@ class AppSpecsController extends Controller
             'databaseInfo' => $databaseInfo,
             'appEnv' => config('app.env'),
             'appDebug' => config('app.debug'),
-            'lastCommit' => $lastCommit,
-            'lastCommitDate' => $lastCommitDate,
             'composerPackages' => $composerPackages,
             'serverSoftware' => $serverSoftware,
             'osInfo' => $osInfo,
         ]);
-    }
-
-    private function getLastGitCommit()
-    {
-        return trim(shell_exec('git log -1 --format=%H'));
-    }
-
-    private function getLastGitCommitDate()
-    {
-        return trim(shell_exec('git log -1 --format=%cd'));
     }
 
     private function getComposerPackages()

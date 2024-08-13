@@ -101,14 +101,6 @@
                             <td>{{ $appDebug ? 'Aktif' : 'Nonaktif' }}</td>
                         </tr>
                         <tr>
-                            <td>Commit Terakhir</td>
-                            <td>{{ $lastCommit }}</td>
-                        </tr>
-                        <tr>
-                            <td>Tanggal Commit Terakhir</td>
-                            <td>{{ $lastCommitDate }}</td>
-                        </tr>
-                        <tr>
                             <td>Lingkungan Aplikasi</td>
                             <td>{{ $appEnv }}</td>
                         </tr>
