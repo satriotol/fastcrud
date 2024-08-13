@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\App;
 
 class AppSpecsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:SUPERADMIN');
+    }
     public function index()
     {
         $phpVersion = phpversion();
