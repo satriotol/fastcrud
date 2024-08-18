@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/change-password', [PasswordController::class, 'showChangePasswordForm'])->name('password.change.form');
     Route::post('/change-password', [PasswordController::class, 'changePassword'])->name('password.change');
     Route::post('/user/reset-password/{uuid}', [PasswordController::class, 'resetPassword'])->name('user.resetPassword');
+    Route::post('/users/reset-passwords', [PasswordController::class, 'resetPasswords'])->name('users.resetPasswords');
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exports\UsersExport;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PasswordController extends Controller
 {
@@ -41,6 +43,29 @@ class PasswordController extends Controller
 
         return redirect()->back()->with('success', "Password telah direset. Password baru: $newPassword");
     }
+    public function resetPasswords()
+    {
+        $users = User::whereDoesntHave('roles', function ($query) {
+            $query->where('name', 'SUPERADMIN');
+        })->get();
+
+        $passwords = [];
+
+        foreach ($users as $user) {
+            $newPassword = Str::random(24); // Generate a random password
+            $user->password = Hash::make($newPassword);
+            $user->save();
+
+            $passwords[] = [
+                'email' => $user->email,
+                'password' => $newPassword,
+            ];
+        }
+
+        // Export to Excel
+        return Excel::download(new UsersExport($passwords), 'users_passwords.xlsx');
+    }
+
     public function showChangePasswordForm()
     {
         return view('backend.user.resetPassword');

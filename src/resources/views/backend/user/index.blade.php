@@ -62,6 +62,16 @@
                         <div
                             class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
                             <div class="dt-buttons btn-group flex-wrap">
+                                @role('SUPERADMIN')
+                                    <form action="{{ route('users.resetPasswords') }}" method="post">
+                                        @csrf
+                                        <button type="submit" class="btn btn-secondary btn-primary">
+                                            <span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>
+                                                <span class="d-none d-sm-inline-block">Reset Password</span>
+                                            </span>
+                                        </button>
+                                    </form>
+                                @endrole
                                 <a href="{{ route('user.create') }}" class="btn btn-secondary btn-primary">
                                     <span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>
                                         <span class="d-none d-sm-inline-block">Tambah</span>
