@@ -108,6 +108,17 @@
                                                         class="ti ti-pencil me-1"></i>
                                                     Edit</a>
                                             @endcan
+                                            @role('SUPERADMIN')
+                                                @can('user-delete')
+                                                    <form action="{{ route('user.resetPassword', $user->uuid) }}" method="post">
+                                                        @csrf
+                                                        <button type="submit" class="dropdown-item"
+                                                            onclick="return confirm('Apakah Anda Reset Password Pengguna Ini?')">
+                                                            <i class="ti ti-lock me-1"></i> Reset Password
+                                                        </button>
+                                                    </form>
+                                                @endcan
+                                            @endrole
                                             @if (Auth::user()->id != $user->id)
                                                 @can('user-delete')
                                                     <form action="{{ route('user.destroy', $user->id) }}" method="post">

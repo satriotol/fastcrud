@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Str;
 
 class PasswordController extends Controller
 {
@@ -25,5 +27,56 @@ class PasswordController extends Controller
         ]);
 
         return back()->with('status', 'password-updated');
+    }
+    public function resetPassword($uuid)
+    {
+        $user = User::where('uuid', $uuid)->first();
+        $newPassword = Str::random(8); // Menghasilkan password baru
+        $user->password = Hash::make($newPassword);
+        $user->must_change_password = true;
+        $user->save();
+
+        // Mengirim email atau notifikasi berisi password baru
+        // Mail::to($user->email)->send(new ResetPasswordMail($newPassword));
+
+        return redirect()->back()->with('success', "Password telah direset. Password baru: $newPassword");
+    }
+    public function showChangePasswordForm()
+    {
+        return view('backend.user.resetPassword');
+    }
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/[a-z]/', // Mengandung huruf kecil
+                'regex:/[A-Z]/', // Mengandung huruf besar
+                'regex:/[0-9]/', // Mengandung angka
+                'regex:/[@$!%*#?&_]/', // Mengandung simbol khusus
+            ],
+        ], [
+            'password.required' => 'Password harus diisi.',
+            'password.string' => 'Password harus berupa string.',
+            'password.min' => 'Password harus minimal 8 karakter.',
+            'password.confirmed' => 'Password konfirmasi tidak cocok.',
+            'password.regex' => 'Password harus mengandung huruf kecil, huruf besar, angka, dan simbol khusus.',
+        ]);
+
+        $user = auth()->user();
+
+        if (Hash::check($request->password, $user->password)) {
+            return back()->withErrors(['new_password' => 'Password baru tidak boleh sama dengan password lama.']);
+        }
+
+        // Simpan password baru
+        $user->password = Hash::make($request->password);
+        $user->must_change_password = false;
+        $user->save();
+
+        return redirect()->route('login');
     }
 }

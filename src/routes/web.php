@@ -42,7 +42,7 @@ Route::middleware('guest')->group(function () {
   Route::get('/auth/two-steps-basic', [TwoStepsBasic::class, 'index'])->name('auth-two-steps-basic');
   Route::get('/auth/two-steps-cover', [TwoStepsCover::class, 'index'])->name('auth-two-steps-cover');
 });
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'force.password.change'])->group(function () {
   Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
   Route::get('app-specs', [AppSpecsController::class, 'index'])->name('app-specs.index');
   Route::resource('user', UserController::class);
