@@ -84,6 +84,14 @@
                 </a>
             </li>
         @endcan
+        @can('api_key-index')
+            <li class="menu-item {{ request()->routeIs('api_key.*') ? 'active' : '' }}">
+                <a href="{{ route('api_key.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-key"></i>
+                    <div>ApiKey</div>
+                </a>
+            </li>
+        @endcan
         @can('role-index')
             <li class="menu-item {{ request()->routeIs(['role.*', 'permission.*']) ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
