@@ -29,9 +29,10 @@ class UserController extends Controller
     if ($name) {
       $users->where('name', 'LIKE', '%' . $name . '%');
     }
+    $roles = Role::all();
     $users = $users->latest()->paginate();
     $request->flash();
-    return view('backend.user.index', compact('users'));
+    return view('backend.user.index', compact('users', 'roles'));
   }
 
   /**

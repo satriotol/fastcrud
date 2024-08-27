@@ -63,14 +63,32 @@
                             class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
                             <div class="dt-buttons btn-group flex-wrap">
                                 @role('SUPERADMIN')
-                                    <form action="{{ route('users.resetPasswords') }}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-secondary btn-primary">
-                                            <span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>
-                                                <span class="d-none d-sm-inline-block">Reset Password</span>
-                                            </span>
-                                        </button>
-                                    </form>
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                        aria-hidden="true">
+                                        <form action="{{ route('users.resetPasswords') }}" method="post">
+                                            @csrf
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Reset Password</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body text-start">
+                                                        <div class="form-group">
+                                                            {{ html()->label('Role')->for('role') }}
+                                                            {{ html()->select('role', $roles->pluck('name', 'name'))->class('form-select')->placeholder('Pilih Role')->required(true) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 @endrole
                                 <a href="{{ route('user.create') }}" class="btn btn-secondary btn-primary">
                                     <span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>

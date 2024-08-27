@@ -43,10 +43,13 @@ class PasswordController extends Controller
 
         return redirect()->back()->with('success', "Password telah direset. Password baru: $newPassword");
     }
-    public function resetPasswords()
+    public function resetPasswords(Request $request)
     {
-        $users = User::whereDoesntHave('roles', function ($query) {
-            $query->where('name', 'SUPERADMIN');
+        $data = $request->validate([
+            'role' => 'required'
+        ]);
+        $users = User::whereHas('roles', function ($query) use ($data) {
+            $query->where('name', $data['role']);
         })->get();
 
         $passwords = [];
