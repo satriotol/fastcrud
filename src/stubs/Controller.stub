@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\{{modelName}};
 use Illuminate\Support\Str;
+use Satriotol\Fastcrud\Traits\RemovesFiles;
 
 class {{modelName}}Controller extends Controller
 {
+    use RemovesFiles;
     public function __construct()
     {
         $this->middleware('permission:{{modelNameSingular}}-index|{{modelNameSingular}}-create|{{modelNameSingular}}-edit|{{modelNameSingular}}-delete', ['only' => ['index', 'show']]);
