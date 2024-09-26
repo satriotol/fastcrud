@@ -113,7 +113,7 @@ trait CrudFunction
 
     protected function viewIndex($data)
     {
-        $searchForm = '<form action="" method="GET"><div class="row">';
+        $searchForm = '';
 
         foreach ($data['columns'] as $d) {
             $columnName = $d['column_name'];
