@@ -63,6 +63,11 @@
                             class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
                             <div class="dt-buttons btn-group flex-wrap">
                                 @role('SUPERADMIN')
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal">
+                                        <span><i class="ti ti-lock me-0 me-sm-1 ti-xs"></i>
+                                            Reset Password
+                                    </button>
                                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                         aria-hidden="true">
                                         <form action="{{ route('users.resetPasswords') }}" method="post">
