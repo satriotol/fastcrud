@@ -30,16 +30,18 @@
                 <div class="accordion-body">
                     <form action="">
                         <div class="row">
-                                <div class="col-md-4">
-        {{ html()->label('Deskripsi')->class('form-label') }}
-        {{ html()->text('description')->class('form-control')->placeholder('Cari Deskripsi')->value(@old('description')) }}
-    </div>    <div class="col-md-4">
-        {{ html()->label('Tipe')->class('form-label') }}
-        {{ html()->text('type')->class('form-control')->placeholder('Cari Tipe')->value(@old('type')) }}
-    </div>    <div class="col-md-4">
-        {{ html()->label('Config Value')->class('form-label') }}
-        {{ html()->text('config_value')->class('form-control')->placeholder('Cari Config Value')->value(@old('config_value')) }}
-    </div>
+                            <div class="col-md-4">
+                                {{ html()->label('Deskripsi')->class('form-label') }}
+                                {{ html()->text('description')->class('form-control')->placeholder('Cari Deskripsi')->value(@old('description')) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ html()->label('Tipe')->class('form-label') }}
+                                {{ html()->text('type')->class('form-control')->placeholder('Cari Tipe')->value(@old('type')) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ html()->label('Config Value')->class('form-label') }}
+                                {{ html()->text('config_value')->class('form-control')->placeholder('Cari Config Value')->value(@old('config_value')) }}
+                            </div>
                         </div>
                         <div class="text-end mt-2">
                             <div class="dt-buttons btn-group flex-wrap">
@@ -87,9 +89,10 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Key</th>
                             <th>Deskripsi</th>
-<th>Tipe</th>
-<th>Config Value</th>
+                            <th>Tipe</th>
+                            <th>Config Value</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -100,24 +103,22 @@
                         @foreach ($configs as $config)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{$config->description}}</td>
-<td>{{$config->type}}</td>
-<td>{{$config->config_value}}</td>
+                                <td>{{ $config->uuid }}</td>
+                                <td>{{ $config->description }}</td>
+                                <td>{{ $config->type }}</td>
+                                <td>{{ $config->config_value }}</td>
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                                             data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                                         <div class="dropdown-menu">
                                             @can('config-edit')
-                                                <a class="dropdown-item"
-                                                    href="{{ route('config.edit', $config->uuid) }}"><i
+                                                <a class="dropdown-item" href="{{ route('config.edit', $config->uuid) }}"><i
                                                         class="ti ti-pencil me-1"></i>
                                                     Edit</a>
                                             @endcan
                                             @can('config-delete')
-                                                <form
-                                                    action="{{ route('config.destroy', $config->uuid) }}"
-                                                    method="post">
+                                                <form action="{{ route('config.destroy', $config->uuid) }}" method="post">
                                                     @csrf
                                                     @method('delete')
                                                     <button type="submit" class="dropdown-item"
