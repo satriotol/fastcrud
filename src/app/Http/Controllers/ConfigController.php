@@ -51,6 +51,11 @@ class ConfigController extends Controller
         Config::create($data);
         return redirect(route('config.index'))->with('success', 'Config Berhasil Dibuat');
     }
+    public function getConfig($uuid)
+    {
+        $config = Config::where('uuid', $uuid)->firstOrFail();
+        return redirect($config->config_value);
+    }
 
     public function edit($uuid)
     {

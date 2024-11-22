@@ -8,4 +8,5 @@ use App\Http\Controllers\MinioController;
 Route::resource('api_key', ApiKeyController::class);
 Route::get('getfile', [MinioController::class, 'getfile'])->name('minio.getfile');
 Route::resource('config', ConfigController::class);
+Route::get('getConfig/{uuid}', [ConfigController::class, 'getConfig'])->name('config.getConfig');
 
