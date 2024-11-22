@@ -55,7 +55,8 @@ class ConfigController extends Controller
     public function edit($uuid)
     {
         $config = Config::where('uuid', $uuid)->firstOrFail();
-        return view('backend.config.create', compact('config'));
+        $types = Config::types();
+        return view('backend.config.create', compact('config', 'types'));
     }
 
     public function update(Request $request, $uuid)
