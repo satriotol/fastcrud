@@ -22,7 +22,7 @@
                 var selectedType = $(this).val();
                 var newContent = '';
 
-                if (selectedType === 'string') {
+                if (selectedType === 'string' || selectedType === 'url') {
                     newContent = `
                         <input name="config_value" id="config_value" class="form-control" type="text" placeholder="Masukkan Value" required>
                     `;

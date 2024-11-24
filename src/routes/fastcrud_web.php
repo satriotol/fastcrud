@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiKeyController;
-use App\Http\Controllers\ConfigController;
+use Satriotol\Fastcrud\Controllers\ConfigController;
 use App\Http\Controllers\MinioController;
 
 Route::prefix('admin')->group(function () {

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Satriotol\Fastcrud\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Config;
+use Satriotol\Fastcrud\Models\Config;
 use Illuminate\Support\Str;
 use Satriotol\Fastcrud\Traits\RemovesFiles;
 
