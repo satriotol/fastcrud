@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Satriotol\Fastcrud\Controllers;
 
+use App\Http\Controllers\Controller;
 use Satriotol\Fastcrud\Traits\CrudFunction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;

@@ -15,7 +15,6 @@ use App\Http\Controllers\authentications\ForgotPasswordBasic;
 use App\Http\Controllers\authentications\ForgotPasswordCover;
 use App\Http\Controllers\authentications\TwoStepsBasic;
 use App\Http\Controllers\authentications\TwoStepsCover;
-use App\Http\Controllers\CrudController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
@@ -48,7 +47,6 @@ Route::middleware(['auth', 'force.password.change'])->group(function () {
   Route::resource('user', UserController::class);
   Route::resource('permission', PermissionController::class);
   Route::resource('role', RoleController::class);
-  Route::resource('crud', CrudController::class);
   Route::get('audit', [AuditController::class, 'index'])->name('audit.index');
   Route::get('profile', [UserController::class, 'profile'])->name('user.profile');
   // CRUD_GENERATOR
