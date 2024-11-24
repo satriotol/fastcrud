@@ -54,7 +54,12 @@ class ConfigController extends Controller
     public function getConfig($uuid)
     {
         $config = Config::where('uuid', $uuid)->firstOrFail();
-        return redirect($config->config_value);
+
+        if ($config->type == 'url') {
+            return redirect($config->config_value);
+        } else {
+            return response($config->config_value);  // Tampilkan nilai config_value sebagai teks
+        }
     }
 
     public function edit($uuid)

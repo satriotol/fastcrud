@@ -21,7 +21,8 @@ class Config extends Model implements Auditable
         return [
             "string",
             "int",
-            "boolean"
+            "boolean",
+            "url"
         ];
     }
     protected static function boot()
