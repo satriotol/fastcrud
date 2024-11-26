@@ -84,12 +84,7 @@ class UserController extends Controller
   public function profile()
   {
     $user = Auth::user();
-    if (Auth::user()->getRole()->name == 'SUPERADMIN') {
-      $roles = Role::all();
-    } else {
-      $roles = Role::where('name', '!=', 'SUPERADMIN')->get();
-    }
-    return view('backend.user.create', compact('user', 'roles'));
+    return view('backend.user.profilecreate', compact('user'));
   }
   public function edit($uuid)
   {
@@ -105,33 +100,58 @@ class UserController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, User $user)
+  private function updateUserData($request, $user, $requireRole = false)
   {
-    $data = $request->validate([
+    $rules = [
       'name' => ['required', 'string', 'max:255'],
       'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
       'password' => ['nullable', 'confirmed', Password::defaults()],
-      'role' => ['required'],
-    ]);
-
-    $userData = [
-      'name' => $data['name'],
-      'email' => $data['email'],
     ];
 
-    // Periksa apakah password yang diberikan tidak null sebelum mengupdate password
-    if ($data['password'] !== null) {
-      $userData['password'] = Hash::make($data['password']);
+    // Add role validation if required
+    if ($requireRole) {
+      $rules['role'] = ['required', 'exists:roles,name']; // Validates that the role exists
     }
+
+    $validatedData = $request->validate($rules);
+
+    // Prepare data for update
+    $userData = [
+      'name' => $validatedData['name'],
+      'email' => $validatedData['email'],
+    ];
+
+    // Hash password if provided
+    if (!empty($validatedData['password'])) {
+      $userData['password'] = Hash::make($validatedData['password']);
+    }
+
     $user->update($userData);
-    $user->syncRoles($data['role']);
-    session()->flash('success', 'Pengguna Berhasil Diupdate');
-    if ($request->profile) {
-      return back();
-    }
-    return redirect(route('user.index'));
+
+    return $validatedData;
   }
 
+
+  public function updateProfile(Request $request)
+  {
+    $user = Auth::user();
+    $this->updateUserData($request, $user); // No role validation needed
+    session()->flash('success', 'Profil berhasil diperbarui');
+    return redirect(route('dashboard.index'));
+  }
+
+  public function update(Request $request, User $user)
+  {
+    $validatedData = $this->updateUserData($request, $user, true); // Enable role validation
+
+    // Sync roles if provided
+    if (isset($validatedData['role'])) {
+      $user->syncRoles($validatedData['role']);
+    }
+
+    session()->flash('success', 'Pengguna berhasil diperbarui');
+    return redirect(route('user.index'));
+  }
   /**
    * Remove the specified resource from storage.
    */
