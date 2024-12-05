@@ -65,6 +65,7 @@
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
+                            <th>Jumlah</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -76,6 +77,7 @@
                             <tr>
                                 <td>{{ $no++ }}</td>
                                 <td>{{ $role->name }}</td>
+                                <td>{{ $role->users->count() }}</td>
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
