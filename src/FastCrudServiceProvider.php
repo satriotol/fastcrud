@@ -25,7 +25,7 @@ class FastCrudServiceProvider extends ServiceProvider
     public function boot()
     {
         // Bootstrap any package services.
-
+        $this->loadRoutesFrom(__DIR__ . '/FastcrudRoutes/fastcrud_web.php');
         // Publish configuration file
         if ($this->app->runningInConsole()) {
             $this->publishes([
