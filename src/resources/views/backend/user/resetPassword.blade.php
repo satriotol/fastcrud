@@ -19,7 +19,17 @@
 @section('content')
     <h4 class="py-3 mb-4"><span class="text-muted fw-light">Forms/</span> Reset Password</h4>
 
-    <!-- Basic Layout & Basic with Icons -->
+    <div class="alert alert-danger" role="alert">
+        ⚠️ Harap mengganti password Anda demi keamanan data. 🔒 Password harus memenuhi kriteria berikut:
+        <ul>
+            <li>Minimal 8 karakter.</li>
+            <li>Mengandung setidaknya satu huruf besar (A-Z).</li>
+            <li>Mengandung setidaknya satu huruf kecil (a-z).</li>
+            <li>Mengandung setidaknya satu angka (0-9).</li>
+            <li>Mengandung setidaknya satu simbol khusus (@, $, !, %, *, #, ?, & atau _).</li>
+            <li>Tidak boleh sama dengan password sebelumnya.</li>
+        </ul>
+    </div>
     <div class="row">
         <!-- Basic Layout -->
         <div class="col-xxl">
