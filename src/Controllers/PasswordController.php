@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace Satriotol\Fastcrud\Controllers;
 
 use Satriotol\Fastcrud\Exports\UsersExport;
 use App\Http\Controllers\Controller;
@@ -62,6 +62,7 @@ class PasswordController extends Controller
 
             $passwords[] = [
                 'email' => $user->email,
+                'name' => $user->name,
                 'password' => $newPassword,
             ];
         }
@@ -69,6 +70,7 @@ class PasswordController extends Controller
         // Export to Excel
         return Excel::download(new UsersExport($passwords), 'users_passwords.xlsx');
     }
+
 
     public function showChangePasswordForm()
     {

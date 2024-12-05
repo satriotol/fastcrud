@@ -23,6 +23,7 @@ class UsersExport implements FromArray, WithHeadings
     {
         return [
             'Email',
+            'Name',
             'Password',
         ];
     }
