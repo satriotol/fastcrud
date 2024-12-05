@@ -308,7 +308,7 @@ trait CrudFunction
     }
     protected function addRoute($data)
     {
-        $routeFile = base_path('routes/web.php');
+        $routeFile = base_path('routes/fastcrud_web_generator.php');
         $route = "\nRoute::resource('" . $data['singular'] . "', " . $data['model'] . "Controller::class);";
         $urlRoute = "\n" . 'use App\Http\Controllers\\' . $data['model'] . "Controller;";
         $after = '// CRUD_GENERATOR';
