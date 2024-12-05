@@ -25,9 +25,13 @@ class UserController extends Controller
   public function index(Request $request)
   {
     $name = $request->name;
+    $must_change_password = $request->must_change_password;
     $users = User::getUsers();
     if ($name) {
       $users->where('name', 'LIKE', '%' . $name . '%');
+    }
+    if (isset($must_change_password)) {
+      $users->where('must_change_password', (bool) $must_change_password);
     }
     $roles = Role::all();
     $users = $users->latest()->paginate();

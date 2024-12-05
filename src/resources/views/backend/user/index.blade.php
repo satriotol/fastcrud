@@ -30,9 +30,13 @@
                 <div class="accordion-body">
                     <form action="">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 {{ html()->label('Nama')->class('form-label') }}
                                 {{ html()->text('name')->class('form-control')->placeholder('Cari Nama')->value(@old('name')) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ html()->label('Status Reset Password')->class('form-label') }}
+                                {{ html()->select('must_change_password', ['1' => 'Belum', '0' => 'Sudah'])->class('form-select')->placeholder('Pilih Status Reset Password')->value(@old('must_change_password')) }}
                             </div>
                         </div>
                         <div class="text-end mt-2">
