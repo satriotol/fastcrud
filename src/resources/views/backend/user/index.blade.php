@@ -121,6 +121,7 @@
                             <th>E-mail</th>
                             <th>Role</th>
                             <th>Aktivitas</th>
+                            <th>Reset Password</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -133,8 +134,15 @@
                                 <td>{{ $no++ }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>{{ $user->getRole()->name }}</td>
+                                <td>
+                                    @foreach ($user->roles as $role)
+                                        <div class="badge bg-primary">
+                                            {{ $role->name }}
+                                        </div><br>
+                                    @endforeach
+                                </td>
                                 <td>{{ $user->last_used_sign_in_at }}</td>
+                                <td>{{ $user->must_change_password ? '❌' : '✅' }}</td>
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"

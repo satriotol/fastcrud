@@ -65,7 +65,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="role">Role</label>
                             <div class="col-sm-10">
-                                {{ html()->select('role', $roles->pluck('name', 'name'), isset($user) ? $user->getRole()->name : '')->class('form-control select2')->placeholder('Pilih Role')->required(true) }}
+                                {{ html()->select('role[]', $roles->pluck('name', 'name'), isset($user) ? $user->roles->pluck('name') : [])->class('form-control select2')->placeholder('Pilih Role')->required(true)->multiple() }}
                                 @error('role')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
