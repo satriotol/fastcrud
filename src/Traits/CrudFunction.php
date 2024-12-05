@@ -288,7 +288,8 @@ trait CrudFunction
             '-index',
             '-create',
             '-edit',
-            '-delete'
+            '-delete',
+            '-show',
         ];
 
         // Create or update permissions

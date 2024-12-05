@@ -16,6 +16,7 @@ class {{modelName}}Controller extends Controller
         $this->middleware('permission:{{modelNameSingular}}-index|{{modelNameSingular}}-create|{{modelNameSingular}}-edit|{{modelNameSingular}}-delete', ['only' => ['index', 'show']]);
         $this->middleware('permission:{{modelNameSingular}}-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:{{modelNameSingular}}-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:{{modelNameSingular}}-show', ['only' => ['show']]);
         $this->middleware('permission:{{modelNameSingular}}-delete', ['only' => ['destroy']]);
     }
 
@@ -45,6 +46,12 @@ class {{modelName}}Controller extends Controller
 
         {{modelName}}::create($data);
         return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{modelName}} Berhasil Dibuat');
+    }
+
+    public function show($uuid)
+    {
+        ${{modelNameSingular}} = {{modelName}}::where('uuid', $uuid)->firstOrFail();
+        return view('backend.{{modelNameSingular}}.create', compact('{{modelNameSingular}}'));
     }
 
     public function edit($uuid)
