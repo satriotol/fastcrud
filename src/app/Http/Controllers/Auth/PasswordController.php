@@ -57,6 +57,7 @@ class PasswordController extends Controller
         foreach ($users as $user) {
             $newPassword = Str::random(24); // Generate a random password
             $user->password = Hash::make($newPassword);
+            $user->must_change_password = true;
             $user->save();
 
             $passwords[] = [
