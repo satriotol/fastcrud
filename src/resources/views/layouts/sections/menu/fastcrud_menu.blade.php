@@ -9,6 +9,22 @@
         </a>
     </li>
 @endcan
+@can('menu-index')
+    <li class="menu-item {{ request()->routeIs('menu.*') ? 'active' : '' }}">
+        <a href="{{ route('menu.index') }}" class="menu-link">
+            <i class="menu-icon fas fa-bars"></i>
+            <div>Menu</div>
+        </a>
+    </li>
+@endcan
+@can('media-index')
+    <li class="menu-item {{ request()->routeIs('media.*') ? 'active' : '' }}">
+        <a href="{{ route('media.index') }}" class="menu-link">
+            <i class="menu-icon far fa-images"></i>
+            <div>Media</div>
+        </a>
+    </li>
+@endcan
 @can('config-index')
     <li class="menu-item {{ request()->routeIs('config.*') ? 'active' : '' }}">
         <a href="{{ route('config.index') }}" class="menu-link">
