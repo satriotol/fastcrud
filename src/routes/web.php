@@ -51,5 +51,4 @@ Route::middleware(['auth', 'force.password.change'])->group(function () {
   Route::resource('menu', MenuController::class);
   Route::resource('media', MediaController::class);
 });
-require __DIR__ . '/fastcrud_web.php';
 require __DIR__ . '/auth.php';
