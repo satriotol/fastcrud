@@ -24,7 +24,10 @@ class FastCrudServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__.'/fastcrud_web.php');
+        $this->loadRoutesFrom(__DIR__ . '/fastcrud_web.php');
+        if (!file_exists(__DIR__ . '/fastcrud_web.php')) {
+            dd('Route file not found');
+        }
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/resources' => resource_path('/'),
