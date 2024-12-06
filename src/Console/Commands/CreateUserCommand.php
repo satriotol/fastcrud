@@ -49,6 +49,7 @@ class CreateUserCommand extends Command
             'name' => $name,
             'email' => $email,
             'password' => Hash::make($password),
+            'must_change_password' => false
         ]);
         
         // Assign role to user
