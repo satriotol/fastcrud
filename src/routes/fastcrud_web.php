@@ -7,6 +7,8 @@ use Satriotol\Fastcrud\Controllers\PasswordController;
 use App\Http\Controllers\MinioController;
 use App\Http\Controllers\UserController;
 use Satriotol\Fastcrud\Controllers\ApiKeyController;
+use Satriotol\Fastcrud\Controllers\AppSpecsController;
+use Satriotol\Fastcrud\Controllers\AuditController;
 
 Route::prefix('admin')->group(function () {
     Route::middleware(['auth'])->group(function () {
@@ -14,6 +16,9 @@ Route::prefix('admin')->group(function () {
         Route::post('/change-password', [PasswordController::class, 'changePassword'])->name('password.change');
     });
     Route::middleware(['auth', 'force.password.change'])->group(function () {
+        Route::get('app-specs', [AppSpecsController::class, 'index'])->name('app-specs.index');
+        Route::get('audit', [AuditController::class, 'index'])->name('audit.index');
+        Route::get('profile', [UserController::class, 'profile'])->name('user.profile');      
         Route::put('/updateProfile', [UserController::class, 'updateProfile'])->name('user.updateProfile');
         Route::resource('crud', CrudController::class);
         Route::resource('api_key', ApiKeyController::class);

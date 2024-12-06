@@ -41,12 +41,9 @@ Route::middleware('guest')->group(function () {
 });
 Route::middleware(['auth', 'force.password.change'])->group(function () {
   Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
-  Route::get('app-specs', [AppSpecsController::class, 'index'])->name('app-specs.index');
   Route::resource('user', UserController::class);
   Route::resource('permission', PermissionController::class);
   Route::resource('role', RoleController::class);
-  Route::get('audit', [AuditController::class, 'index'])->name('audit.index');
-  Route::get('profile', [UserController::class, 'profile'])->name('user.profile');
   require __DIR__ . '/fastcrud_web_generator.php';
   Route::resource('menu', MenuController::class);
   Route::resource('media', MediaController::class);

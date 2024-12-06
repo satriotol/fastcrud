@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Satriotol\Fastcrud\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use OwenIt\Auditing\Models\Audit;
 
 class AuditController extends Controller
