@@ -12,7 +12,7 @@
 @can('menu-index')
     <li class="menu-item {{ request()->routeIs('menu.*') ? 'active' : '' }}">
         <a href="{{ route('menu.index') }}" class="menu-link">
-            <i class="menu-icon fas fa-bars"></i>
+            <i class="menu-icon tf-icons ti ti-menu"></i>
             <div>Menu</div>
         </a>
     </li>
@@ -20,7 +20,7 @@
 @can('media-index')
     <li class="menu-item {{ request()->routeIs('media.*') ? 'active' : '' }}">
         <a href="{{ route('media.index') }}" class="menu-link">
-            <i class="menu-icon far fa-images"></i>
+            <i class="menu-icon tf-icons ti ti-photo"></i>
             <div>Media</div>
         </a>
     </li>

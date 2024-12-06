@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\MediaController;
+use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
 use Satriotol\Fastcrud\Controllers\ConfigController;
 use Satriotol\Fastcrud\Controllers\CrudController;
@@ -26,6 +28,8 @@ Route::prefix('admin')->group(function () {
         Route::post('/user/reset-password/{uuid}', [PasswordController::class, 'resetPassword'])->name('user.resetPassword');
         Route::post('/users/reset-passwords', [PasswordController::class, 'resetPasswords'])->name('users.resetPasswords');
         Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+        Route::resource('menu', MenuController::class);
+        Route::resource('media', MediaController::class);      
     });
 });
 
