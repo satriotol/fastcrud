@@ -44,28 +44,19 @@
                             @include('partials.errors')
                         </div>
                         <div class="row mb-3">
-    <label class="col-sm-2 col-form-label" for="key">Key</label>
-    <div class="col-sm-10">
-        {{html()->text('key', isset($api_key) ? $api_key->key : @old('key'))->class('form-control')->placeholder('Masukkan Key')->required(true)}}
-        @error('key')
-            <small class="text-danger">{{ $message }}</small>
-        @enderror
-    </div>
-</div>
-    
-    <div class="form-check mt-3">
-        {{html()->checkbox('is_active', isset($api_key) ? $api_key->is_active : @old('is_active'))->class('form-check-input')->id('is_active')}}
-        <label class="form-check-label" for="is_active"> Aktif </label>     
-    </div>
-<div class="row mb-3">
-    <label class="col-sm-2 col-form-label" for="last_used_at">Terakhir Dipakai</label>
-    <div class="col-sm-10">
-        {{html()->date('last_used_at', isset($api_key) ? $api_key->last_used_at : @old('last_used_at'))->class('form-control')->placeholder('Masukkan Terakhir Dipakai')->required(false)}}
-        @error('last_used_at')
-            <small class="text-danger">{{ $message }}</small>
-        @enderror
-    </div>
-</div>
+                        <label class="col-sm-2 col-form-label" for="note">Catatan</label>
+                            <div class="col-sm-10">
+                                {{ html()->text('note', isset($api_key) ? $api_key->note : @old('note'))->class('form-control')->placeholder('Masukkan Catatan')->required(true) }}
+                                @error('note')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-check mt-3">
+                            {{ html()->checkbox('is_active', isset($api_key) ? $api_key->is_active : @old('is_active'))->class('form-check-input')->id('is_active') }}
+                            <label class="form-check-label" for="is_active"> Aktif </label>
+                        </div>
                         <div class="row justify-content-end text-end">
                             <div class="col-sm-10">
                                 <a href="{{ route('api_key.index') }}" class="btn btn-warning">Kembali</a>

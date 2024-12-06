@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Satriotol\Fastcrud\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +14,7 @@ class ApiKey extends Model implements Auditable
 
     protected $table = 'api_keys';
 
-    protected $fillable = ["key","is_active","last_used_at"];
+    protected $fillable = ["key", "is_active", "last_used_at", "note"];
     protected static function boot()
     {
         parent::boot();

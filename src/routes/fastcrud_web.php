@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ApiKeyController;
 use Satriotol\Fastcrud\Controllers\ConfigController;
 use Satriotol\Fastcrud\Controllers\CrudController;
 use Satriotol\Fastcrud\Controllers\PasswordController;
 use App\Http\Controllers\MinioController;
 use App\Http\Controllers\UserController;
+use Satriotol\Fastcrud\Controllers\ApiKeyController;
 
 Route::prefix('admin')->group(function () {
     Route::middleware(['auth'])->group(function () {

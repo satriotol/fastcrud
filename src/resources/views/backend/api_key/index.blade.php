@@ -16,51 +16,7 @@
 @endsection
 
 @section('content')
-    <div class="accordion" id="accordionPencarian">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                    aria-controls="panelsStayOpen-collapseOne">
-                    Pencarian
-                </button>
-            </h2>
-            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
-                aria-labelledby="panelsStayOpen-headingOne">
-                <div class="accordion-body">
-                    <form action="">
-                        <div class="row">
-                            <form action="" method="GET">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        {{ html()->label('Key')->class('form-label') }}
-                                        {{ html()->text('key')->class('form-control')->placeholder('Cari Key')->value(@old('key')) }}
-                                    </div>
-                                    <div class="col-md-4">
-                                        {{ html()->label('Aktif')->class('form-label') }}
-                                        {{ html()->text('is_active')->class('form-control')->placeholder('Cari Aktif')->value(@old('is_active')) }}
-                                    </div>
-                                    <div class="col-md-4">
-                                        {{ html()->label('Terakhir Dipakai')->class('form-label') }}
-                                        {{ html()->text('last_used_at')->class('form-control')->placeholder('Cari Terakhir Dipakai')->value(@old('last_used_at')) }}
-                                    </div>
-                                </div>
-                                <div class="text-end mt-2">
-                                    <div class="dt-buttons btn-group flex-wrap">
-                                        <button class="btn btn-secondary add-new btn-primary" type="submit">
-                                            <span><i class="ti ti-search me-0 me-sm-1 ti-xs"></i>
-                                                <span class="d-none d-sm-inline-block">Cari</span>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                </div>
-            </div>
-        </div>
         <div class="card mt-2">
-
             <div class="card-header border-bottom">
                 <div class="row">
                     <div class="col-md">
@@ -72,14 +28,6 @@
                                 class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
                                 <div class="dt-buttons btn-group flex-wrap">
                                     @can('api_key-create')
-                                        <form action="{{ route('api_key.store') }}" method="post">
-                                            @csrf
-                                            <button type="submit" class="btn btn-secondary btn-primary">
-                                                <span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>
-                                                    <span class="d-none d-sm-inline-block">Generate Key</span>
-                                                </span>
-                                            </button>
-                                        </form>
                                         <a href="{{ route('api_key.create') }}" class="btn btn-secondary btn-primary">
                                             <span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>
                                                 <span class="d-none d-sm-inline-block">Tambah</span>
@@ -101,6 +49,7 @@
                                 <th>No</th>
                                 <th>Key</th>
                                 <th>Aktif</th>
+                                <th>Catatan</th>
                                 <th>Terakhir Dipakai</th>
                                 <th>Actions</th>
                             </tr>
@@ -114,6 +63,7 @@
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $api_key->key }}</td>
                                     <td>{{ $api_key->is_active }}</td>
+                                    <td>{{ $api_key->note }}</td>
                                     <td>{{ $api_key->last_used_at }}</td>
                                     <td>
                                         <div class="dropdown">

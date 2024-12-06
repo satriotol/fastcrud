@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Satriotol\Fastcrud\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Models\ApiKey;
-use Illuminate\Support\Str;
 
 class ApiKeyController extends Controller
 {
@@ -35,6 +34,7 @@ class ApiKeyController extends Controller
         ApiKey::create([
             'key' => $key,
             'is_active' => true,
+            'note' => $request->note ?? '',
         ]);
         return redirect(route('api_key.index'))->with('success', 'ApiKey Berhasil Tersimpan');
     }
@@ -49,9 +49,9 @@ class ApiKeyController extends Controller
     {
         $api_key = ApiKey::where('uuid', $uuid)->firstOrFail();
         $data = $request->validate([
-            'key' => 'required',
             'is_active' => 'required',
             'last_used_at' => 'nullable',
+            'note' => 'nullable',
         ]);
 
         // Handle file uploads
