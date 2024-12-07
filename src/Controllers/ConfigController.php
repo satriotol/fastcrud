@@ -24,13 +24,13 @@ class ConfigController extends Controller
     {
         $configs = Config::latest()->paginate();
         $request->flash();
-        return view('backend.config.index', compact('configs'));
+        return view('fastcrud::config.index', compact('configs'));
     }
 
     public function create()
     {
         $types = Config::types();
-        return view('backend.config.create', compact('types'));
+        return view('fastcrud::config.create', compact('types'));
     }
 
     public function store(Request $request)
@@ -67,7 +67,7 @@ class ConfigController extends Controller
     {
         $config = Config::where('uuid', $uuid)->firstOrFail();
         $types = Config::types();
-        return view('backend.config.create', compact('config', 'types'));
+        return view('fastcrud::config.create', compact('config', 'types'));
     }
 
     public function update(Request $request, $uuid)

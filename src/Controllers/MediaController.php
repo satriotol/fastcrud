@@ -20,11 +20,11 @@ class MediaController extends Controller
     public function index()
     {
         $medias = Media::latest()->paginate();
-        return view('fascrud::media.index', compact('medias'));
+        return view('fastcrud::media.index', compact('medias'));
     }
     public function create()
     {
-        return view('fascrud::media.create');
+        return view('fastcrud::media.create');
     }
     public function store(Request $request)
     {
@@ -55,7 +55,7 @@ class MediaController extends Controller
     public function edit($uuid)
     {
         $media = Media::where('uuid', $uuid)->firstOrFail();
-        return view('fascrud::media.create', compact('media'));
+        return view('fastcrud::media.create', compact('media'));
     }
     public function update(Request $request, $uuid)
     {
