@@ -20,12 +20,12 @@ class ApiKeyController extends Controller
     {
         $api_keys = ApiKey::latest()->paginate();
         $request->flash();
-        return view('backend.api_key.index', compact('api_keys'));
+        return view('fastcrud::api_key.index', compact('api_keys'));
     }
 
     public function create()
     {
-        return view('backend.api_key.create');
+        return view('fastcrud::api_key.create');
     }
 
     public function store(Request $request)
@@ -42,7 +42,7 @@ class ApiKeyController extends Controller
     public function edit($uuid)
     {
         $api_key = ApiKey::where('uuid', $uuid)->firstOrFail();
-        return view('backend.api_key.create', compact('api_key'));
+        return view('fastcrud::api_key.create', compact('api_key'));
     }
 
     public function update(Request $request, $uuid)

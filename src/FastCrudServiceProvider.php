@@ -24,6 +24,7 @@ class FastCrudServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->loadViewsFrom(__DIR__.'/Views', 'fastcrud');
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/resources' => resource_path('/'),
