@@ -46,5 +46,4 @@ Route::middleware(['auth', 'force.password.change'])->group(function () {
   Route::resource('role', RoleController::class);
   require __DIR__ . '/fastcrud_web_generator.php';
 });
-// require __DIR__ . '/fastcrud_web.php';
 require __DIR__ . '/auth.php';
