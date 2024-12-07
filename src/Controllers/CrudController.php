@@ -33,7 +33,7 @@ class CrudController extends Controller
             'date' => 'date'
         ];
 
-        return view('backend.crud.create', compact('type'));
+        return view('fastcrud::crud.create', compact('type'));
     }
 
     /**
