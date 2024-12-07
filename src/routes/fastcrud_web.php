@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\MediaController;
+use Satriotol\Fastcrud\Controllers\MediaController;
 use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
 use Satriotol\Fastcrud\Controllers\ConfigController;
