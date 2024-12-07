@@ -59,7 +59,7 @@
                                     <button type="button" class="btn btn-outline-primary btn-sm waves-effect waves-light"
                                         data-bs-toggle="modal"
                                         data-bs-target="#paymentMethods{{ $media->uuid }}">Info</button>
-                                    @include('backend.media.partials.modalInfo')
+                                    @include('fastcrud::media.partials.modalInfo')
                                     @can('media-delete')
                                         <form action="{{ route('media.destroy', $media->uuid) }}" method="post">
                                             @csrf

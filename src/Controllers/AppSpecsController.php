@@ -27,7 +27,7 @@ class AppSpecsController extends Controller
         $serverSoftware = $_SERVER['SERVER_SOFTWARE'] ?? 'Unknown';
         $osInfo = php_uname();
 
-        return view('backend.app-specs', [
+        return view('fastcrud::app-specs', [
             'phpVersion' => $phpVersion,
             'phpExtensions' => $phpExtensions,
             'phpIniSettings' => $phpIniSettings,
