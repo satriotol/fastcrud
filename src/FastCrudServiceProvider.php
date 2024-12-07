@@ -25,6 +25,7 @@ class FastCrudServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__.'/Views', 'fastcrud');
+        $this->loadRoutesFrom(__DIR__ . '/fastcrud_web.php');
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/resources' => resource_path('/'),
@@ -32,7 +33,7 @@ class FastCrudServiceProvider extends ServiceProvider
                 __DIR__ . '/routes/auth.php' => base_path('routes/auth.php'),
                 __DIR__ . '/routes/web.php' => base_path('routes/web.php'),
                 __DIR__ . '/routes/fastcrud_web_generator.php' => base_path('routes/fastcrud_web_generator.php'),
-                __DIR__ . '/routes/fastcrud_web.php' => base_path('routes/fastcrud_web.php'),
+                // __DIR__ . '/routes/fastcrud_web.php' => base_path('routes/fastcrud_web.php'),
                 __DIR__ . '/lang' => base_path('lang/'),
                 __DIR__ . '/app' => app_path('/'),
                 __DIR__ . '/bootstrap' => base_path('bootstrap/'),
