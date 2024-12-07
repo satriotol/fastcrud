@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Satriotol\Fastcrud\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Media;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
