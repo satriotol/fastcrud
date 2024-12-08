@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Satriotol\Fastcrud\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -21,7 +22,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::latest()->paginate();
-        return view('backend.role.index', compact('roles'));
+        return view('fastcrud::role.index', compact('roles'));
     }
 
     /**
@@ -36,7 +37,7 @@ class RoleController extends Controller
             return explode('-', $permission->name)[0];
         });
 
-        return view('backend.role.create', compact('permissionsGrouped'));
+        return view('fastcrud::role.create', compact('permissionsGrouped'));
     }
 
     /**
@@ -76,7 +77,7 @@ class RoleController extends Controller
             return explode('-', $permission->name)[0];
         });
 
-        return view('backend.role.create', compact('permissionsGrouped', 'role'));
+        return view('fastcrud::role.create', compact('permissionsGrouped', 'role'));
     }
 
     /**

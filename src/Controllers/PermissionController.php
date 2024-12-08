@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Satriotol\Fastcrud\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 
@@ -17,10 +18,11 @@ class PermissionController extends Controller
         $this->middleware('permission:permission-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:permission-delete', ['only' => ['destroy']]);
     }
+
     public function index()
     {
         $permissions = Permission::latest()->paginate();
-        return view('backend.permission.index', compact('permissions'));
+        return view('fastcrud::permission.index', compact('permissions'));
     }
 
     /**
@@ -28,7 +30,7 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        return view('backend.permission.create');
+        return view('fastcrud::permission.create');
     }
 
     /**
@@ -78,7 +80,7 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
-        return view('backend.permission.create', compact('permission'));
+        return view('fastcrud::permission.create', compact('permission'));
     }
 
     /**

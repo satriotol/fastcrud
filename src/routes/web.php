@@ -42,8 +42,6 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth', 'force.password.change'])->group(function () {
   Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
   Route::resource('user', UserController::class);
-  Route::resource('permission', PermissionController::class);
-  Route::resource('role', RoleController::class);
   require __DIR__ . '/fastcrud_web_generator.php';
 });
 require __DIR__ . '/auth.php';

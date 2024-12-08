@@ -11,6 +11,8 @@ use App\Http\Controllers\UserController;
 use Satriotol\Fastcrud\Controllers\ApiKeyController;
 use Satriotol\Fastcrud\Controllers\AppSpecsController;
 use Satriotol\Fastcrud\Controllers\AuditController;
+use Satriotol\Fastcrud\Controllers\PermissionController;
+use Satriotol\Fastcrud\Controllers\RoleController;
 
 Route::prefix('admin')->group(function () {
     Route::middleware(['web'])->group(function () {
@@ -33,6 +35,8 @@ Route::prefix('admin')->group(function () {
             Route::put('password', [PasswordController::class, 'update'])->name('password.update');
             Route::resource('menu', MenuController::class);
             Route::resource('media', MediaController::class);
+            Route::resource('permission', PermissionController::class);
+            Route::resource('role', RoleController::class);          
         });
     });
 });
