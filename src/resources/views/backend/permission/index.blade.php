@@ -65,6 +65,7 @@
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
+                            <th>Jumlah</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -77,14 +78,55 @@
                                 <td>{{ $no++ }}</td>
                                 <td>{{ $permission->name }}</td>
                                 <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalPermission{{ $permission->id }}">
+                                        {{ $permission->roles->count() }}
+                                    </button>
+                                    <div class="modal fade" id="modalPermission{{ $permission->id }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                                        {{ $permission->name }}</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Role</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($permission->roles as $role)
+                                                                <tr>
+                                                                    <td>{{ $role->name }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                                             data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('permission.edit', $permission->id) }}"><i
+                                            <a class="dropdown-item"
+                                                href="{{ route('permission.edit', $permission->id) }}"><i
                                                     class="ti ti-pencil me-1"></i>
                                                 Edit</a>
-                                            <form action="{{ route('permission.destroy', $permission->id) }}" method="post">
+                                            <form action="{{ route('permission.destroy', $permission->id) }}"
+                                                method="post">
                                                 @csrf
                                                 @method('delete')
                                                 <button type="submit" class="dropdown-item"
