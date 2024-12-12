@@ -1,9 +1,10 @@
 @extends('layouts/layoutMaster')
 
-@section('title', ' Role - Forms')
+@section('title', 'Assign Role - Permissions')
 
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-icons/bootstrap-icons.css') }}" />
 @endsection
 
 @section('vendor-script')
@@ -14,51 +15,46 @@
     <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
     <script>
         $(document).ready(function() {
-            // Inisialisasi plugin Select2 pada elemen dengan class 'select2'
+            // Initialize Select2 plugin
             $('.select2').select2();
 
-            // Handle perubahan pada elemen select dengan class 'prefix-select'
-            $('.prefix-select').on('change', function() {
-                var prefix = $(this).val(); // Dapatkan prefix yang dipilih
-                var checkboxes = $('input[name="permissions[]"]'); // Semua checkbox permissions
-
-                // Uncheck semua checkbox terlebih dahulu
-                checkboxes.prop('checked', false);
-
-                // Cek jika checkbox memiliki prefix yang sesuai dan ubah statusnya
-                checkboxes.each(function() {
-                    if ($(this).data('prefix') === prefix) {
-                        $(this).prop('checked', true);
-                    }
-                });
-            });
-
-            // Handle klik pada elemen dengan class 'check-all'
+            // Handle group checkbox changes
             $('.check-all').on('change', function() {
-                var isChecked = $(this).prop('checked'); // Dapatkan status checkbox 'check-all'
-                var prefix = $(this).data('prefix'); // Dapatkan prefix yang sesuai
+                var isChecked = $(this).prop('checked');
+                var prefix = $(this).data('prefix');
 
-                // Cek semua checkbox dengan prefix yang sesuai
+                // Toggle all checkboxes in the group
                 $('input[name="permissions[]"]').each(function() {
                     if ($(this).data('prefix') === prefix) {
                         $(this).prop('checked', isChecked);
                     }
                 });
             });
+
+            // Handle global check all and clear all
+            $('#checkAll').on('click', function() {
+                $('input[name="permissions[]"]').prop('checked', true);
+            });
+
+            $('#clearAll').on('click', function() {
+                $('input[name="permissions[]"]').prop('checked', false);
+            });
         });
     </script>
 @endsection
 
 @section('content')
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Forms/</span> {Role}</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Forms/</span> Assign Role Permissions</h4>
 
-    <!-- Basic Layout & Basic with Icons -->
     <div class="row">
-        <!-- Basic Layout -->
-        <div class="col-xxl">
-            <div class="card mb-4">
-                <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="mb-0">{Role}</h5>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Assign Permissions to Role</h5>
+                    <div>
+                        <button type="button" id="checkAll" class="btn btn-sm btn-success me-2">Check All</button>
+                        <button type="button" id="clearAll" class="btn btn-sm btn-danger">Clear All</button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <form
@@ -68,65 +64,66 @@
                         @isset($role)
                             @method('PUT')
                         @endisset
-                        <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="name">Nama Role</label>
-                            <div class="col-sm-10">
-                                {{ html()->text('name', isset($role) ? $role->name : @old('name'))->class('form-control')->placeholder('Masukkan Nama Role')->required() }}
-                                @error('name')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
+
+                        <!-- Role Name -->
+                        <div class="mb-4">
+                            <label for="name" class="form-label">Role Name</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                placeholder="Enter role name" value="{{ isset($role) ? $role->name : old('name') }}" required>
+                            @error('name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
-                        <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label">Permission</label>
-                            <div class="col-sm-10">
-                                <table class="table table-bordered">
-                                    <thead>
+
+                        <!-- Permissions -->
+                        <div class="mb-4">
+                            <label class="form-label">Permissions</label>
+                            <table class="table table-striped table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col" style="width: 25%;">Group Prefix</th>
+                                        <th scope="col">Permissions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($permissionsGrouped as $groupedPrefix => $permissions)
                                         <tr>
-                                            <th>Group Prefix</th>
-                                            <th>Permissions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($permissionsGrouped as $groupedPrefix => $permissions)
-                                            <tr>
-                                                <td>{{ $groupedPrefix }}</td>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <h6 class="mb-0">
-                                                            <label class="form-check-label">
-                                                                <input class="form-check-input check-all" type="checkbox"
-                                                                    data-prefix="{{ $groupedPrefix }}">{{ $groupedPrefix }}
-                                                            </label>
-                                                        </h6>
-                                                    </div>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input check-all" data-prefix="{{ $groupedPrefix }}">
+                                                    <label class="form-check-label ms-2">{{ $groupedPrefix }}</label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex flex-wrap">
                                                     @foreach ($permissions as $permission)
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="permissions[]"
-                                                                id="checkPermission{{ $permission->id }}"
+                                                        <div class="form-check me-4 mb-2">
+                                                            <input type="checkbox" class="form-check-input"
+                                                                id="permission{{ $permission->id }}" name="permissions[]"
                                                                 value="{{ $permission->name }}"
-                                                                @isset($role) {{ $role->permissions->contains($permission) ? 'checked' : '' }} @endisset
-                                                                data-prefix="{{ $groupedPrefix }}">
+                                                                data-prefix="{{ $groupedPrefix }}"
+                                                                @isset($role) {{ $role->permissions->contains($permission) ? 'checked' : '' }} @endisset>
                                                             <label class="form-check-label"
-                                                                for="checkPermission{{ $permission->id }}">{{ $permission->name }}</label>
+                                                                for="permission{{ $permission->id }}">
+                                                                {{ $permission->name }}
+                                                            </label>
                                                         </div>
                                                     @endforeach
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                @error('permissions')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            @error('permissions')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
-                        <div class="row justify-content-end text-end">
-                            <div class="col-sm-10">
-                                <a href="{{ route('permission.index') }}" class="btn btn-warning">Kembali</a>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
-                            </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ route('role.index') }}" class="btn btn-secondary me-2">Back</a>
+                            <button type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </form>
                 </div>
