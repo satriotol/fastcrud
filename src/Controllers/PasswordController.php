@@ -33,16 +33,17 @@ class PasswordController extends Controller
     public function resetPassword($uuid)
     {
         $user = User::where('uuid', $uuid)->first();
-        $newPassword = Str::random(8); // Menghasilkan password baru
+    
+        // Menghasilkan password baru yang lebih aman
+        $newPassword = substr(bin2hex(random_bytes(10)), 0, 10);
+    
         $user->password = Hash::make($newPassword);
         $user->must_change_password = true;
         $user->save();
-
-        // Mengirim email atau notifikasi berisi password baru
-        // Mail::to($user->email)->send(new ResetPasswordMail($newPassword));
-
+    
         return redirect()->back()->with('success', "Password telah direset. Password baru: $newPassword");
     }
+    
     public function resetPasswords(Request $request)
     {
         $data = $request->validate([
@@ -74,7 +75,7 @@ class PasswordController extends Controller
 
     public function showChangePasswordForm()
     {
-        return view('backend.user.resetPassword');
+        return view('fastcrud::user.resetPassword');
     }
     public function changePassword(Request $request)
     {
