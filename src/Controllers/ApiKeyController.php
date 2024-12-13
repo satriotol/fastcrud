@@ -4,7 +4,7 @@ namespace Satriotol\Fastcrud\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\ApiKey;
+use Satriotol\Fastcrud\Models\ApiKey;
 
 class ApiKeyController extends Controller
 {
