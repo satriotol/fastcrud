@@ -16,12 +16,7 @@ use App\Http\Controllers\authentications\ForgotPasswordCover;
 use App\Http\Controllers\authentications\TwoStepsBasic;
 use App\Http\Controllers\authentications\TwoStepsCover;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AppSpecsController;
-use App\Http\Controllers\MenuController;
-use App\Http\Controllers\MediaController;
 // Main Page Route
 Route::middleware('guest')->group(function () {
   Route::get('/login', [LoginBasic::class, 'index'])->name('login');
