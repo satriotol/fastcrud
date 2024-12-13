@@ -26,6 +26,11 @@ class MediaController extends Controller
     {
         return view('fastcrud::media.create');
     }
+    public function getMedia($uuid)
+    {
+        $media = Media::where('uuid', $uuid)->firstOrFail();
+        return redirect('storage/' . $media->file);
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -82,7 +87,6 @@ class MediaController extends Controller
             $data['mime_type'] = $file->getMimeType();
             $data['file_size'] = number_format($file->getSize() / 1048576, 2); // Ukuran dalam MB
         }
-
         $data['user_id'] = Auth::id(); // Menggunakan metode otentikasi Auth
 
         $media->update($data);

@@ -1,11 +1,8 @@
-<div class="modal fade" id="paymentMethods{{ $media->uuid }}" tabindex="-1"
-    aria-hidden="true">
-    <div
-        class="modal-dialog modal-lg modal-simple modal-enable-otp modal-dialog-centered">
+<div class="modal fade" id="paymentMethods{{ $media->uuid }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-simple modal-enable-otp modal-dialog-centered">
         <div class="modal-content p-3 p-md-5">
             <div class="modal-body">
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 <div class="text-start">
 
                     <table class="table text-wrap">
@@ -18,6 +15,12 @@
                             <td>Created At</td>
                             <td>:</td>
                             <td>{{ $media->created_at }}</td>
+                        </tr>
+                        <tr>
+                            <td>Url</td>
+                            <td>:</td>
+                            <td>{{ route('media.getMedia', $media->uuid) }}
+                            </td>
                         </tr>
                         <tr>
                             <td>File</td>

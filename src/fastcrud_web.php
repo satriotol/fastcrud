@@ -16,6 +16,7 @@ use Satriotol\Fastcrud\Controllers\RoleController;
 
 Route::prefix('admin')->group(function () {
     Route::middleware(['web'])->group(function () {
+        Route::get('getMedia/media/{uuid}', [MediaController::class, 'getMedia'])->name('media.getMedia');
         Route::get('getfile', [MinioController::class, 'getfile'])->name('minio.getfile');
         Route::get('getConfig/{uuid}', [ConfigController::class, 'getConfig'])->name('config.getConfig');
         Route::middleware(['auth'])->group(function () {
@@ -36,7 +37,7 @@ Route::prefix('admin')->group(function () {
             Route::resource('menu', MenuController::class);
             Route::resource('media', MediaController::class);
             Route::resource('permission', PermissionController::class);
-            Route::resource('role', RoleController::class);          
+            Route::resource('role', RoleController::class);
         });
     });
 });
