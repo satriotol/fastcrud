@@ -26,6 +26,7 @@ class FastCrudServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__.'/Views', 'fastcrud');
         $this->loadRoutesFrom(__DIR__ . '/fastcrud_web.php');
+        $this->loadMigrationsFrom(__DIR__ . '/Migrations');
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/resources' => resource_path('/'),
@@ -38,7 +39,6 @@ class FastCrudServiceProvider extends ServiceProvider
                 __DIR__ . '/app' => app_path('/'),
                 __DIR__ . '/bootstrap' => base_path('bootstrap/'),
                 __DIR__ . '/config' => config_path('/'),
-                __DIR__ . '/database/migrations' => database_path('migrations/'),
                 __DIR__ . '/database/seeders' => database_path('seeders/'),
                 __DIR__ . '/package.json' => base_path('package.json'), // Pastikan path ini benar
             ], 'fastcrudStarter');
