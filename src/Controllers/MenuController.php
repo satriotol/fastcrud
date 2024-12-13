@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use App\Models\Menu;
-use Illuminate\Support\Str;
+use Satriotol\Fastcrud\Models\Menu;
 
 class MenuController extends Controller
 {
@@ -19,19 +17,19 @@ class MenuController extends Controller
     public function index()
     {
         $menus = Menu::latest()->paginate();
-        return view('backend.menu.index',compact('menus'));
+        return view('fastcrud::menu.index', compact('menus'));
     }
     public function create()
     {
-        return view('backend.menu.create');
+        return view('fastcrud::menu.create');
     }
     public function store(Request $request)
     {
         $data = $request->validate([
             'title' => 'required',
-'content' => 'required',
+            'content' => 'required',
         ]);
-        
+
 
         Menu::create($data);
         session()->flash('success', 'Menu Berhasil Dibuat');
@@ -40,16 +38,16 @@ class MenuController extends Controller
     public function edit($uuid)
     {
         $menu = Menu::where('uuid', $uuid)->firstOrFail();
-        return view('backend.menu.create', compact('menu'));
+        return view('fastcrud::menu.create', compact('menu'));
     }
     public function update(Request $request, $uuid)
     {
         $menu = Menu::where('uuid', $uuid)->firstOrFail();
         $data = $request->validate([
             'title' => 'required',
-'content' => 'required',
+            'content' => 'required',
         ]);
-        
+
 
         $menu->update($data);
         session()->flash('success', 'Menu Berhasil Diubah');

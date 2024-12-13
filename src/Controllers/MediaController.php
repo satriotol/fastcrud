@@ -4,9 +4,9 @@ namespace Satriotol\Fastcrud\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Media;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Satriotol\Fastcrud\Models\Media;
 
 class MediaController extends Controller
 {
