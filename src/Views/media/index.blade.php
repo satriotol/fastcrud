@@ -59,6 +59,10 @@
                                     <button type="button" class="btn btn-outline-primary btn-sm waves-effect waves-light"
                                         data-bs-toggle="modal"
                                         data-bs-target="#paymentMethods{{ $media->uuid }}">Info</button>
+                                    <a href="{{ route('media.edit', $media->uuid) }}"
+                                        class="btn btn-outline-warning btn-sm waves-effect waves-light"><i
+                                            class="ti ti-edit me-1"></i> Edit
+                                    </a>
                                     @include('fastcrud::media.partials.modalInfo')
                                     @can('media-delete')
                                         <form action="{{ route('media.destroy', $media->uuid) }}" method="post">

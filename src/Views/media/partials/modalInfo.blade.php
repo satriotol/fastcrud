@@ -23,11 +23,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>File</td>
-                            <td>:</td>
-                            <td>{{ asset('storage/' . $media->file) }}</td>
-                        </tr>
-                        <tr>
                             <td>Original Name</td>
                             <td>:</td>
                             <td>{{ $media->original_name }}</td>
