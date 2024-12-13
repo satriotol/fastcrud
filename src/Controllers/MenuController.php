@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Satriotol\Fastcrud\Controllers;
 
 use Illuminate\Http\Request;
 use Satriotol\Fastcrud\Models\Menu;

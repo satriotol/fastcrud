@@ -1,8 +1,8 @@
 <?php
 
-use Satriotol\Fastcrud\Controllers\MediaController;
-use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
+use Satriotol\Fastcrud\Controllers\MenuController;
+use Satriotol\Fastcrud\Controllers\MediaController;
 use Satriotol\Fastcrud\Controllers\ConfigController;
 use Satriotol\Fastcrud\Controllers\CrudController;
 use Satriotol\Fastcrud\Controllers\PasswordController;
