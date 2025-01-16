@@ -40,6 +40,12 @@
             <div>Spesifikasi</div>
         </a>
     </li>
+    <li class="menu-item {{ request()->routeIs('fastcrud_user.*') ? 'active' : '' }}">
+        <a href="{{ route('fastcrud_user.index') }}" class="menu-link">
+            <i class="menu-icon tf-icons ti ti-user"></i>
+            <div>Fastcrud User</div>
+        </a>
+    </li>
 @endrole
 <li class="menu-header small text-uppercase">
     <span class="menu-header-text">Pengguna</span>

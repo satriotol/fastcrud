@@ -38,6 +38,7 @@ Route::prefix('admin')->group(function () {
             Route::resource('media', MediaController::class);
             Route::resource('permission', PermissionController::class);
             Route::resource('role', RoleController::class);
+            Route::resource('fastcrud_user', FastcrudUserController::class);
         });
     });
 });
