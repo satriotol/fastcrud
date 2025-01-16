@@ -99,7 +99,7 @@
                                         </form>
                                     </div>
                                 @endrole
-                                <a href="{{ route('user.create') }}" class="btn btn-secondary btn-primary">
+                                <a href="{{ route('fastcrud_user.create') }}" class="btn btn-secondary btn-primary">
                                     <span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>
                                         <span class="d-none d-sm-inline-block">Tambah</span>
                                     </span>
