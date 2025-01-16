@@ -37,7 +37,7 @@ class FastcrudUserController extends Controller
     $roles = Role::all();
     $users = $users->latest()->paginate();
     $request->flash();
-    return view('backend.fastcrud_user.index', compact('users', 'roles'));
+    return view('fastcrud::fastcrud_user.index', compact('users', 'roles'));
   }
 
   /**
@@ -50,7 +50,7 @@ class FastcrudUserController extends Controller
     } else {
       $roles = Role::where('name', '!=', 'SUPERADMIN')->get();
     }
-    return view('backend.fastcrud_user.create', compact('roles'));
+    return view('fastcrud::fastcrud_user.create', compact('roles'));
   }
 
   /**
@@ -94,7 +94,7 @@ class FastcrudUserController extends Controller
     } else {
       $roles = Role::where('name', '!=', 'SUPERADMIN')->get();
     }
-    return view('backend.fastcrud_user.create', compact('user', 'roles'));
+    return view('fastcrud::fastcrud_user.create', compact('user', 'roles'));
   }
 
   /**
@@ -142,15 +142,6 @@ class FastcrudUserController extends Controller
     $user->update($userData);
 
     return $validatedData;
-  }
-
-
-  public function updateProfile(Request $request)
-  {
-    $user = Auth::user();
-    $this->updateUserData($request, $user); // No role validation needed
-    session()->flash('success', 'Profil berhasil diperbarui');
-    return redirect(route('dashboard.index'));
   }
 
   public function update(Request $request, User $user)

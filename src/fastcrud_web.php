@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use Satriotol\Fastcrud\Controllers\ApiKeyController;
 use Satriotol\Fastcrud\Controllers\AppSpecsController;
 use Satriotol\Fastcrud\Controllers\AuditController;
+use Satriotol\Fastcrud\Controllers\FastcrudUserController;
 use Satriotol\Fastcrud\Controllers\PermissionController;
 use Satriotol\Fastcrud\Controllers\RoleController;
 

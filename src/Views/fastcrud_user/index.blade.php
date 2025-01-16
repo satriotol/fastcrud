@@ -149,7 +149,7 @@
                                             data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                                         <div class="dropdown-menu">
                                             @can('user-edit')
-                                                <a class="dropdown-item" href="{{ route('user.edit', $user->uuid) }}"><i
+                                                <a class="dropdown-item" href="{{ route('fastcrud_user.edit', $user->uuid) }}"><i
                                                         class="ti ti-pencil me-1"></i>
                                                     Edit</a>
                                             @endcan
@@ -166,7 +166,7 @@
                                             @endrole
                                             @if (Auth::user()->id != $user->id)
                                                 @can('user-delete')
-                                                    <form action="{{ route('user.destroy', $user->id) }}" method="post">
+                                                    <form action="{{ route('fastcrud_user.destroy', $user->id) }}" method="post">
                                                         @csrf
                                                         @method('delete')
                                                         <button type="submit" class="dropdown-item"

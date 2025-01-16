@@ -35,7 +35,7 @@
                 </div>
                 <div class="card-body">
                     <form
-                        action="@isset($user) {{ route('user.update', $user->id) }} @endisset @empty($user) {{ route('user.store') }} @endempty"
+                        action="@isset($user) {{ route('fastcrud_user.update', $user->id) }} @endisset @empty($user) {{ route('fastcrud_user.store') }} @endempty"
                         method="POST" enctype="multipart/form-data">
                         @csrf
                         @isset($user)
