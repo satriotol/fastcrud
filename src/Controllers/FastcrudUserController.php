@@ -108,20 +108,20 @@ class FastcrudUserController extends Controller
       'password' => ['nullable', 'confirmed', Password::defaults()],
       'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:512'],
     ];
-
+    
     // Add role validation if required
     if ($requireRole) {
       $rules['role'] = ['required', 'exists:roles,name']; // Validates that the role exists
     }
-
+    
     $validatedData = $request->validate($rules);
-
+    
     // Prepare data for update
     $userData = [
       'name' => $validatedData['name'],
       'email' => $validatedData['email'],
     ];
-
+    
     // Hash password if provided
     if (!empty($validatedData['password'])) {
       $userData['password'] = Hash::make($validatedData['password']);
@@ -144,8 +144,9 @@ class FastcrudUserController extends Controller
     return $validatedData;
   }
 
-  public function update(Request $request, User $user)
+  public function update(Request $request, $id)
   {
+    $user = User::find($id);
     $validatedData = $this->updateUserData($request, $user, true); // Enable role validation
 
     // Sync roles if provided
@@ -159,8 +160,9 @@ class FastcrudUserController extends Controller
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(User $user)
+  public function destroy($id)
   {
+    $user = User::find($id);
     $user->delete();
     session()->flash('success', 'Pengguna Berhasil Dihapus');
 
