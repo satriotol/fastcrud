@@ -4,13 +4,11 @@ namespace Satriotol\Fastcrud\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use Illuminate\Support\Str;
 
-class ApiKey extends Model implements Auditable
+class ApiKey extends Model
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
 
     protected $table = 'api_keys';
 
