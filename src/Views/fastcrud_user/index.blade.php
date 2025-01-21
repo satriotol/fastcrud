@@ -16,44 +16,70 @@
 @endsection
 
 @section('content')
-    <div class="accordion" id="accordionPencarian">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                    aria-controls="panelsStayOpen-collapseOne">
-                    Pencarian
-                </button>
-            </h2>
-            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
-                aria-labelledby="panelsStayOpen-headingOne">
-                <div class="accordion-body">
-                    <form action="">
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ html()->label('Nama')->class('form-label') }}
-                                {{ html()->text('name')->class('form-control')->placeholder('Cari Nama')->value(@old('name')) }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ html()->label('Status Reset Password')->class('form-label') }}
-                                {{ html()->select('must_change_password', ['1' => 'Belum', '0' => 'Sudah'])->class('form-select')->placeholder('Pilih Status Reset Password')->value(@old('must_change_password')) }}
-                            </div>
-                        </div>
-                        <div class="text-end mt-2">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="accordion" id="accordionPencarian">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                            aria-controls="panelsStayOpen-collapseOne">
+                            Pencarian
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
+                        aria-labelledby="panelsStayOpen-headingOne">
+                        <div class="accordion-body">
+                            <form action="">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        {{ html()->label('Nama')->class('form-label') }}
+                                        {{ html()->text('name')->class('form-control')->placeholder('Cari Nama')->value(@old('name')) }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        {{ html()->label('Status Reset Password')->class('form-label') }}
+                                        {{ html()->select('must_change_password', ['1' => 'Belum', '0' => 'Sudah'])->class('form-select')->placeholder('Pilih Status Reset Password')->value(@old('must_change_password')) }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        {{ html()->label('Role')->class('form-label') }}
+                                        {{ html()->select('role', $roles->pluck('name', 'name'))->class('form-select')->placeholder('Pilih Role')->value(@old('role_id')) }}
+                                    </div>
+                                </div>
+                                <div class="text-end mt-2">
 
-                            <div class="dt-buttons btn-group flex-wrap">
-                                <button class="btn btn-secondary add-new btn-primary" type="submit">
-                                    <span><i class="ti ti-search me-0 me-sm-1 ti-xs"></i>
-                                        <span class="d-none d-sm-inline-block">Cari</span>
-                                    </span>
-                                </button>
-                            </div>
+                                    <div class="dt-buttons btn-group flex-wrap">
+                                        <button class="btn btn-secondary add-new btn-primary" type="submit">
+                                            <span><i class="ti ti-search me-0 me-sm-1 ti-xs"></i>
+                                                <span class="d-none d-sm-inline-block">Cari</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Jumlah</h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <h3 class="card-title text-nowrap mb-0"> {{ $users->count() }} </h3>
+                            Pengguna
+                        </div>
+                        <div class="col-6">
+                            <h3 class="card-title text-nowrap mb-0"> {{ $roles->count() }} </h3>
+                            Role
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="card mt-3">
 
         <div class="card-header border-bottom">
@@ -149,7 +175,8 @@
                                             data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                                         <div class="dropdown-menu">
                                             @can('user-edit')
-                                                <a class="dropdown-item" href="{{ route('fastcrud_user.edit', $user->uuid) }}"><i
+                                                <a class="dropdown-item"
+                                                    href="{{ route('fastcrud_user.edit', $user->uuid) }}"><i
                                                         class="ti ti-pencil me-1"></i>
                                                     Edit</a>
                                             @endcan
@@ -166,7 +193,8 @@
                                             @endrole
                                             @if (Auth::user()->id != $user->id)
                                                 @can('user-delete')
-                                                    <form action="{{ route('fastcrud_user.destroy', $user->id) }}" method="post">
+                                                    <form action="{{ route('fastcrud_user.destroy', $user->id) }}"
+                                                        method="post">
                                                         @csrf
                                                         @method('delete')
                                                         <button type="submit" class="dropdown-item"

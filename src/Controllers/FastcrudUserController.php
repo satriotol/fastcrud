@@ -26,10 +26,16 @@ class FastcrudUserController extends Controller
   public function index(Request $request)
   {
     $name = $request->name;
+    $role = $request->role;
     $must_change_password = $request->must_change_password;
     $users = User::getUsers();
     if ($name) {
-      $users->where('name', 'LIKE', '%' . $name . '%');
+      $users->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+    }
+    if ($role) {
+      $users->whereHas('roles', function ($query) use ($role) {
+        $query->where('name', $role);
+      });
     }
     if (isset($must_change_password)) {
       $users->where('must_change_password', (bool) $must_change_password);
@@ -108,20 +114,20 @@ class FastcrudUserController extends Controller
       'password' => ['nullable', 'confirmed', Password::defaults()],
       'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:512'],
     ];
-    
+
     // Add role validation if required
     if ($requireRole) {
       $rules['role'] = ['required', 'exists:roles,name']; // Validates that the role exists
     }
-    
+
     $validatedData = $request->validate($rules);
-    
+
     // Prepare data for update
     $userData = [
       'name' => $validatedData['name'],
       'email' => $validatedData['email'],
     ];
-    
+
     // Hash password if provided
     if (!empty($validatedData['password'])) {
       $userData['password'] = Hash::make($validatedData['password']);
