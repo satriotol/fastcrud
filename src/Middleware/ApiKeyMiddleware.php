@@ -5,7 +5,7 @@ namespace Satriotol\Fastcrud\Middleware;
 use App\Http\Controllers\Api\ResponseFormatter;
 use Closure;
 use Illuminate\Http\Request;
-use App\Models\ApiKey;
+use Satriotol\Fastcrud\Models\ApiKey;
 
 class ApiKeyMiddleware
 {
