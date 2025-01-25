@@ -16,41 +16,53 @@
     <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $('#type').change(function() {
-                console.log('change');
-
-                var selectedType = $(this).val();
+            // Fungsi untuk memperbarui konten berdasarkan type
+            function updateConfigValueInput(type, oldValue = '') {
                 var newContent = '';
 
-                if (selectedType === 'string' || selectedType === 'url') {
+                if (type === 'string' || type === 'url') {
                     newContent = `
-                        <input name="config_value" id="config_value" class="form-control" type="text" placeholder="Masukkan Value" required>
-                    `;
-                } else if (selectedType == 'text') {
+                <input name="config_value" id="config_value" class="form-control" type="text" placeholder="Masukkan Value" value="${oldValue}" required>
+            `;
+                } else if (type === 'text') {
                     newContent = `
-                        <textarea name="config_value" id="config_value" class="form-control" placeholder="Masukkan Value" required></textarea>
-                    `;
-                } else if (selectedType === 'int') {
+                <textarea name="config_value" id="config_value" class="form-control" placeholder="Masukkan Value" required>${oldValue}</textarea>
+            `;
+                } else if (type === 'int') {
                     newContent = `
-                        <input name="config_value" id="config_value" class="form-control" type="number" placeholder="Masukkan Value" onkeydown="return event.key !== 'e' && event.key !== 'E' && event.key !== '+' && event.key !== '-'" required>
-                    `;
-                } else if (selectedType === 'boolean') {
+                <input name="config_value" id="config_value" class="form-control" type="number" placeholder="Masukkan Value" value="${oldValue}" 
+                onkeydown="return event.key !== 'e' && event.key !== 'E' && event.key !== '+' && event.key !== '-'" required>
+            `;
+                } else if (type === 'boolean') {
                     newContent = `
-                        <div class="form-check">
-                            <input name="config_value" class="form-check-input" type="radio" value="true" id="config_value_true">
-                            <label class="form-check-label" for="config_value_true">True</label>
-                        </div>
-                        <div class="form-check">
-                            <input name="config_value" class="form-check-input" type="radio" value="false" id="config_value_false">
-                            <label class="form-check-label" for="config_value_false">False</label>
-                        </div>
-                    `;
+                <div class="form-check">
+                    <input name="config_value" class="form-check-input" type="radio" value="true" id="config_value_true" ${oldValue === 'true' ? 'checked' : ''}>
+                    <label class="form-check-label" for="config_value_true">True</label>
+                </div>
+                <div class="form-check">
+                    <input name="config_value" class="form-check-input" type="radio" value="false" id="config_value_false" ${oldValue === 'false' ? 'checked' : ''}>
+                    <label class="form-check-label" for="config_value_false">False</label>
+                </div>
+            `;
                 }
 
                 $('#container_value').html(newContent);
+            }
+
+            // Trigger saat type berubah
+            $('#type').change(function() {
+                var selectedType = $(this).val();
+                var oldValue = $('#config_value').val(); // Ambil nilai lama
+                updateConfigValueInput(selectedType, oldValue);
             });
+
+            // Saat halaman pertama kali dimuat
+            var initialType = $('#type').val();
+            var initialValue = "{{ isset($config) ? $config->config_value : old('config_value') }}";
+            updateConfigValueInput(initialType, initialValue);
         });
     </script>
+
 
 
 @endsection
@@ -101,34 +113,32 @@
                             <label class="col-sm-2 col-form-label" for="config_value">Value</label>
                             <div class="col-sm-10">
                                 <div id="container_value">
-
-                                    @if ((isset($config) && $config->type == 'NUMBER') || old('type') == 'NUMBER')
+                                    @if ((isset($config) && $config->type === 'int') || old('type') === 'int')
                                         <input name="config_value" id="config_value" class="form-control" type="number"
+                                            value="{{ isset($config) ? $config->config_value : old('config_value') }}"
                                             placeholder="Masukkan Value"
-                                            value="{{ isset($config) ? $config->config_value : @old('config_value') }}"
                                             onkeydown="return event.key !== 'e' && event.key !== 'E' && event.key !== '+' && event.key !== '-'"
                                             required>
-                                    @elseif ((isset($config) && $config->type == 'BOOLEAN') || old('type') == 'BOOLEAN')
+                                    @elseif ((isset($config) && $config->type === 'boolean') || old('type') === 'boolean')
                                         <div class="form-check">
                                             <input name="config_value" class="form-check-input" type="radio"
                                                 value="true" id="config_value_true"
-                                                {{ (isset($config) && $config->config_value == 'true') || old('type') == 'true' ? 'checked=checked' : '' }}>
+                                                {{ (isset($config) && $config->config_value === 'true') || old('config_value') === 'true' ? 'checked' : '' }}>
                                             <label class="form-check-label" for="config_value_true">True</label>
                                         </div>
                                         <div class="form-check">
                                             <input name="config_value" class="form-check-input" type="radio"
                                                 value="false" id="config_value_false"
-                                                {{ (isset($config) && $config->config_value == 'false') || old('type') == 'false' ? 'checked=checked' : '' }}>
+                                                {{ (isset($config) && $config->config_value === 'false') || old('config_value') === 'false' ? 'checked' : '' }}>
                                             <label class="form-check-label" for="config_value_false">False</label>
                                         </div>
                                     @else
                                         <input name="config_value" id="config_value" class="form-control" type="text"
-                                            placeholder="Masukkan Value"
-                                            value="{{ isset($config) ? $config->config_value : @old('config_value') }}"
-                                            required>
+                                            value="{{ isset($config) ? $config->config_value : old('config_value') }}"
+                                            placeholder="Masukkan Value" required>
                                     @endif
-
                                 </div>
+
                                 @error('config_value')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
