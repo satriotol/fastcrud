@@ -22,7 +22,16 @@ class ConfigController extends Controller
 
     public function index(Request $request)
     {
-        $configs = Config::latest()->paginate();
+        $description = $request->description;
+        $config_value = $request->config_value;
+        $configs = Config::query();
+        if ($description) {
+            $configs = $configs->where('description', 'like', "%$description%");
+        }
+        if ($config_value) {
+            $configs = $configs->where('config_value', 'like', "%$config_value%");
+        }
+        $configs = $configs->latest()->paginate(5);
         $request->flash();
         return view('fastcrud::config.index', compact('configs'));
     }

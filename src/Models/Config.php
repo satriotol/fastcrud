@@ -16,6 +16,13 @@ class Config extends Model implements Auditable
 
     protected $fillable = ["description", "type", "config_value"];
 
+    protected $appends = ['model_config'];
+
+    public function getModelConfigAttribute()
+    {
+        return "Config::where('uuid', '$this->uuid')->first()->config_value";
+    }
+
     public static function types()
     {
         return [

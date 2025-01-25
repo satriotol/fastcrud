@@ -30,15 +30,11 @@
                 <div class="accordion-body">
                     <form action="">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 {{ html()->label('Deskripsi')->class('form-label') }}
                                 {{ html()->text('description')->class('form-control')->placeholder('Cari Deskripsi')->value(@old('description')) }}
                             </div>
-                            <div class="col-md-4">
-                                {{ html()->label('Tipe')->class('form-label') }}
-                                {{ html()->text('type')->class('form-control')->placeholder('Cari Tipe')->value(@old('type')) }}
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 {{ html()->label('Config Value')->class('form-label') }}
                                 {{ html()->text('config_value')->class('form-control')->placeholder('Cari Config Value')->value(@old('config_value')) }}
                             </div>
@@ -90,8 +86,8 @@
                         <tr>
                             <th>No</th>
                             <th>Key</th>
+                            <th>Query</th>
                             <th>Deskripsi</th>
-                            <th>Tipe</th>
                             <th>Config Value</th>
                             <th>Actions</th>
                         </tr>
@@ -104,8 +100,14 @@
                             <tr>
                                 <td>{{ $no++ }}</td>
                                 <td>{{ $config->uuid }}</td>
+                                <td>
+                                    <small>{{ $config->model_config }}
+                                        <br>
+                                        <hr>
+                                        {{ route('config.getConfig', $config->uuid) }}
+                                    </small>
+                                </td>
                                 <td>{{ $config->description }}</td>
-                                <td>{{ $config->type }}</td>
                                 <td>{{ $config->config_value }}</td>
                                 <td>
                                     <div class="dropdown">
