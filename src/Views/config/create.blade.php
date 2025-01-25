@@ -26,6 +26,10 @@
                     newContent = `
                         <input name="config_value" id="config_value" class="form-control" type="text" placeholder="Masukkan Value" required>
                     `;
+                } else if (selectedType == 'text') {
+                    newContent = `
+                        <textarea name="config_value" id="config_value" class="form-control" placeholder="Masukkan Value" required></textarea>
+                    `;
                 } else if (selectedType === 'int') {
                     newContent = `
                         <input name="config_value" id="config_value" class="form-control" type="number" placeholder="Masukkan Value" onkeydown="return event.key !== 'e' && event.key !== 'E' && event.key !== '+' && event.key !== '-'" required>
