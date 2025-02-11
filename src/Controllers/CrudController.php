@@ -10,6 +10,12 @@ use Illuminate\Support\Str;
 class CrudController extends Controller
 {
     use CrudFunction;
+    public function __construct()
+    {
+        if (!config('app.debug')) {
+            abort(403, 'Access denied');
+        }
+    }
 
     /**
      * Display a listing of the resource.
