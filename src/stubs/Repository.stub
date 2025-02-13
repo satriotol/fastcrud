@@ -46,7 +46,7 @@ class {{modelName}}Repository
         $model->delete();
     }
 
-    private function uploadImage($file)
+    private function uploadImage($file,$name)
     {
         return Storage::disk('minio')->put('/semarangkota/{{modelNameSingular}}/'.$name, $file);
     }
