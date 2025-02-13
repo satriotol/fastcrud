@@ -46,9 +46,12 @@ class {{modelName}}Repository
         $model->delete();
     }
 
-    private function uploadImage($file,$name)
+    private function uploadImage($file, $name)
     {
-        return Storage::disk('minio')->put('/semarangkota/{{modelNameSingular}}/'.$name, $file);
+        $envName = env('APP_NAME', 'default');
+        $path = $envName . '/operational_category/' . $name;
+
+        return Storage::disk('minio')->put($path, $file);
     }
 }
 
