@@ -74,6 +74,46 @@ trait CrudFunction
         file_put_contents(app_path("/Http/Controllers/{$data['model']}Controller.php"), $controllerTemplate);
     }
 
+    protected function generateRepository($data)
+    {
+        $uploadLogic = '';
+        $deleteLogic = '';
+
+        foreach ($data['columns'] as $d) {
+            if ($d['is_file']) {
+                $uploadLogic .= "\n        if (isset(\$data['{$d['column_name']}']) && \$data['{$d['column_name']}']->isValid()) {";
+                $uploadLogic .= "\n            if (isset(\$model) && \$model->{$d['column_name']}) {";
+                $uploadLogic .= "\n                \$this->removeFiles(\$model->{$d['column_name']});";
+                $uploadLogic .= "\n            }";
+                $uploadLogic .= "\n            \$data['{$d['column_name']}'] = \$this->uploadImage(\$data['{$d['column_name']}']);";
+                $uploadLogic .= "\n        }";
+
+                $deleteLogic .= "\n        if (isset(\$model) && \$model->{$d['column_name']}) {";
+                $deleteLogic .= "\n            \$this->removeFiles(\$model->{$d['column_name']});";
+                $deleteLogic .= "\n        }";
+            }
+        }
+
+        $repositoryTemplate = str_replace(
+            [
+                '{{modelName}}',
+                '{{modelNameSingular}}',
+                '//UPLOAD_LOGIC',
+                '//DELETE_LOGIC'
+            ],
+            [
+                $data['model'],
+                $data['singular'],
+                $uploadLogic,
+                $deleteLogic
+            ],
+            file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/Repository.stub"))
+        );
+
+        file_put_contents(app_path("/Repositories/{$data['model']}Repository.php"), $repositoryTemplate);
+    }
+
+
     protected function generateSidebar($data)
     {
         $singular = $data['singular'];

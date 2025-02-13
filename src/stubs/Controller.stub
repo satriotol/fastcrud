@@ -5,14 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\{{modelName}};
+use App\Repositories\{{modelName}}Repository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Satriotol\Fastcrud\Traits\RemovesFiles;
 
 class {{modelName}}Controller extends Controller
 {
-    use RemovesFiles;
+    private ${{modelNameSingular}}Repository;
+
     public function __construct()
     {
+        $this->{{modelNameSingular}}Repository = new {{modelName}}Repository();
+
         $this->middleware('permission:{{modelNameSingular}}-index|{{modelNameSingular}}-create|{{modelNameSingular}}-edit|{{modelNameSingular}}-delete', ['only' => ['index', 'show']]);
         $this->middleware('permission:{{modelNameSingular}}-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:{{modelNameSingular}}-edit', ['only' => ['edit', 'update']]);
@@ -22,7 +26,7 @@ class {{modelName}}Controller extends Controller
 
     public function index(Request $request)
     {
-        ${{modelNamePlural}} = {{modelName}}::latest()->paginate();
+        ${{modelNamePlural}} = $this->{{modelNameSingular}}Repository->getAll();
         $request->flash();
         return view('backend.{{modelNameSingular}}.index', compact('{{modelNamePlural}}'));
     }
@@ -38,49 +42,38 @@ class {{modelName}}Controller extends Controller
             {{validations}}
         ]);
 
-        // Handle file uploads
-        //is_file
-        
-        // Handle boolean fields
-        //boolean
+        $this->{{modelNameSingular}}Repository->create($data);
 
-        {{modelName}}::create($data);
         return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{modelName}} Berhasil Dibuat');
     }
 
     public function show($uuid)
     {
-        ${{modelNameSingular}} = {{modelName}}::where('uuid', $uuid)->firstOrFail();
+        ${{modelNameSingular}} = $this->{{modelNameSingular}}Repository->findByUuid($uuid);
         return view('backend.{{modelNameSingular}}.create', compact('{{modelNameSingular}}'));
     }
 
     public function edit($uuid)
     {
-        ${{modelNameSingular}} = {{modelName}}::where('uuid', $uuid)->firstOrFail();
+        ${{modelNameSingular}} = $this->{{modelNameSingular}}Repository->findByUuid($uuid);
         return view('backend.{{modelNameSingular}}.create', compact('{{modelNameSingular}}'));
     }
 
     public function update(Request $request, $uuid)
     {
-        ${{modelNameSingular}} = {{modelName}}::where('uuid', $uuid)->firstOrFail();
         $data = $request->validate([
             {{validations}}
         ]);
 
-        // Handle file uploads
-        //is_file
-        
-        // Handle boolean fields
-        //boolean
+        $data['user_id'] = Auth::user()->id;
+        $this->{{modelNameSingular}}Repository->update($uuid, $data);
 
-        ${{modelNameSingular}}->update($data);
         return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{modelName}} Berhasil Terupdate');
     }
 
     public function destroy($uuid)
     {
-        ${{modelNameSingular}} = {{modelName}}::where('uuid', $uuid)->firstOrFail();
-        ${{modelNameSingular}}->delete();
+        $this->{{modelNameSingular}}Repository->delete($uuid);
         return back()->with('success', '{{modelName}} Berhasil Dihapus');
     }
 }

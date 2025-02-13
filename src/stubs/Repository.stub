@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\{{modelName}};
+use Illuminate\Support\Facades\Storage;
+use Satriotol\Fastcrud\Traits\RemovesFiles;
+
+class {{modelName}}Repository
+{
+    use RemovesFiles;
+
+    public function getAll()
+    {
+        return {{modelName}}::latest()->paginate();
+    }
+
+    public function findByUuid(string $uuid)
+    {
+        return {{modelName}}::where('uuid', $uuid)->firstOrFail();
+    }
+
+    public function create(array $data)
+    {
+        //UPLOAD_LOGIC
+
+        return {{modelName}}::create($data);
+    }
+
+    public function update(string $uuid, array $data)
+    {
+        $model = $this->findByUuid($uuid);
+
+        //UPLOAD_LOGIC
+
+        $model->update($data);
+        return $model;
+    }
+
+    public function delete(string $uuid)
+    {
+        $model = $this->findByUuid($uuid);
+
+        //DELETE_LOGIC
+
+        $model->delete();
+    }
+
+    private function uploadImage($file)
+    {
+        return Storage::disk('minio')->put('/semarangkota/{{modelNameSingular}}', $file);
+    }
+}
+
