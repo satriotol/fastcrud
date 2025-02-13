@@ -48,7 +48,7 @@ class {{modelName}}Repository
 
     private function uploadImage($file)
     {
-        return Storage::disk('minio')->put('/semarangkota/{{modelNameSingular}}', $file);
+        return Storage::disk('minio')->put('/semarangkota/{{modelNameSingular}}/'.$name, $file);
     }
 }
 

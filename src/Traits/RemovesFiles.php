@@ -8,11 +8,8 @@ trait RemovesFiles
 {
     public function removeFiles($uri)
     {
-        $parsedUrl = parse_url($uri);
-        parse_str($parsedUrl['query'], $queryParameters);
-        $parsed_uri = $queryParameters['url'] ?? null;
-        if ($parsed_uri && Storage::disk('minio')->exists($parsed_uri)) {
-            Storage::disk('minio')->delete($parsed_uri);
+        if (Storage::disk('minio')->exists($uri)) {
+            Storage::disk('minio')->delete($uri);
             return true;
         }
 

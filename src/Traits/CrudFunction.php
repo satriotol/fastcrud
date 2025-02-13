@@ -85,7 +85,7 @@ trait CrudFunction
                 $uploadLogic .= "\n            if (isset(\$model) && \$model->{$d['column_name']}) {";
                 $uploadLogic .= "\n                \$this->removeFiles(\$model->{$d['column_name']});";
                 $uploadLogic .= "\n            }";
-                $uploadLogic .= "\n            \$data['{$d['column_name']}'] = \$this->uploadImage(\$data['{$d['column_name']}']);";
+                $uploadLogic .= "\n            \$data['{$d['column_name']}'] = \$this->uploadImage(\$data['{$d['column_name']}'], '{$d['column_name']}');";
                 $uploadLogic .= "\n        }";
 
                 $deleteLogic .= "\n        if (isset(\$model) && \$model->{$d['column_name']}) {";
