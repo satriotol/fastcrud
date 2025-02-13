@@ -70,6 +70,7 @@ class CrudController extends Controller
         $this->viewIndex($data);
         $this->viewCreate($data);
         $this->storePermission($data);
+        $this->generateRepository($data);
         session()->flash('success', 'CRUD Berhasil Dibuat');
 
         return redirect()->route('crud.index');
