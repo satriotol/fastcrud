@@ -26,7 +26,13 @@ class {{modelName}}Controller extends Controller
 
     public function index(Request $request)
     {
-        ${{modelNamePlural}} = $this->{{modelNameSingular}}Repository->getAll();
+        ${{modelNamePlural}} = $this->{{modelNameSingular}}Repository->getAll(
+            [
+                'orderBy' => 'id',
+                'orderDirection' => 'asc',
+                'paginate' => 15,
+            ]
+        );
         $request->flash();
         return view('backend.{{modelNameSingular}}.index', compact('{{modelNamePlural}}'));
     }

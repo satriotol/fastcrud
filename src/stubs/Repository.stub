@@ -10,9 +10,52 @@ class {{modelName}}Repository
 {
     use RemovesFiles;
 
-    public function getAll()
+    public function getAll(array $params = [])
     {
-        return {{modelName}}::latest()->paginate();
+        $query = {{modelName}}::query();
+
+       if (!empty($params['filters'])) {
+            foreach ($params['filters'] as $key => $value) {
+                if ($value) {
+                    if (str_contains($key, '.')) {
+                        [$relation, $column] = explode('.', $key);
+                        $query->whereHas($relation, function ($q) use ($column, $value) {
+                            $q->where($column, 'like', "%$value%");
+                        });
+                    } else {
+                        $query->where($key, 'like', "%$value%");
+                    }
+                }
+            }
+        }
+
+        if (!empty($params['search']) && !empty($params['search_column'])) {
+            $query->where($params['search_column'], 'LIKE', '%' . $params['search'] . '%');
+        }
+
+        if (!empty($params['orderBy']) && !empty($params['orderDirection'])) {
+            $query->orderBy($params['orderBy'], $params['orderDirection']);
+        }
+
+        if (!empty($params['with'])) {
+            $query->with($params['with']);
+        }
+
+        if (!empty($params['scope'])) {
+            foreach ($params['scope'] as $scope) {
+                $query->$scope();
+            }
+        }
+
+        if (!empty($params['limit'])) {
+            return $query->limit($params['limit'])->get();
+        }
+
+        if (!empty($params['paginate'])) {
+            return $query->paginate($params['paginate']);
+        }
+
+        return $query->get();
     }
 
     public function findByUuid(string $uuid)
