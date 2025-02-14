@@ -47,15 +47,7 @@ class {{modelName}}Repository
             }
         }
 
-        if (!empty($params['limit'])) {
-            return $query->limit($params['limit'])->get();
-        }
-
-        if (!empty($params['paginate'])) {
-            return $query->paginate($params['paginate']);
-        }
-
-        return $query->get();
+        return $query;
     }
 
     public function findByUuid(string $uuid)

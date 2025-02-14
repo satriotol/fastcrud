@@ -30,9 +30,8 @@ class {{modelName}}Controller extends Controller
             [
                 'orderBy' => 'id',
                 'orderDirection' => 'asc',
-                'paginate' => 15,
             ]
-        );
+        )->latest()->paginate();
         $request->flash();
         return view('backend.{{modelNameSingular}}.index', compact('{{modelNamePlural}}'));
     }
