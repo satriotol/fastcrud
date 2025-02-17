@@ -10,7 +10,7 @@ class {{modelName}}Repository
 {
     use RemovesFiles;
 
-    public function getAll(array $params = [])
+    public function getAll(array $params = [], $request)
     {
         $query = {{modelName}}::query();
 
