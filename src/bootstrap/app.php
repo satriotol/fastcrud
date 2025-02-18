@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'force.password.change' => \Satriotol\Fastcrud\Middleware\ForcePasswordChange::class,
             'api_key' => \Satriotol\Fastcrud\Middleware\ApiKeyMiddleware::class,
+            'permission.json' => \Satriotol\Fastcrud\Middleware\EnsurePermissionJson::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
