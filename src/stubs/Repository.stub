@@ -84,7 +84,7 @@ class {{modelName}}Repository
     private function uploadImage($file, $name)
     {
         $envName = env('APP_NAME', 'default');
-        $path = $envName . '/operational_category/' . $name;
+        $path = $envName . '/{{modelName}}/' . $name;
 
         return Storage::disk('minio')->put($path, $file);
     }
