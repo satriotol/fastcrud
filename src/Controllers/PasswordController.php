@@ -4,7 +4,7 @@ namespace Satriotol\Fastcrud\Controllers;
 
 use Satriotol\Fastcrud\Exports\UsersExport;
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use Satriotol\Fastcrud\Models\FastcrudUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -32,7 +32,7 @@ class PasswordController extends Controller
     }
     public function resetPassword($uuid)
     {
-        $user = User::where('uuid', $uuid)->first();
+        $user = FastcrudUser::where('uuid', $uuid)->first();
     
         // Menghasilkan password baru yang lebih aman
         $newPassword = substr(bin2hex(random_bytes(10)), 0, 10);
@@ -49,7 +49,7 @@ class PasswordController extends Controller
         $data = $request->validate([
             'role' => 'required'
         ]);
-        $users = User::whereHas('roles', function ($query) use ($data) {
+        $users = FastcrudUser::whereHas('roles', function ($query) use ($data) {
             $query->where('name', $data['role']);
         })->get();
 
@@ -107,6 +107,7 @@ class PasswordController extends Controller
         // Simpan password baru
         $user->password = Hash::make($request->password);
         $user->must_change_password = false;
+        $user->last_password_change = now();
         $user->save();
 
         return redirect()->route('login');
