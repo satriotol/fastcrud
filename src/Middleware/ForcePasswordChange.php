@@ -31,7 +31,7 @@ class ForcePasswordChange
             }
 
 
-            $expiryMonths = env('PASSWORD_EXPIRY_MONTHS');
+            $expiryMonths = (int) env('PASSWORD_EXPIRY_MONTHS', 0);
             if (empty($expiryMonths)) {
                 return $next($request);
             }
@@ -39,7 +39,7 @@ class ForcePasswordChange
                 return redirect()->route('password.change.form')->with('error', 'Anda Harus Mengganti Password Anda, secara berkala setiap ' . $expiryMonths . ' bulan sekali.');
             }
             $lastChange = Carbon::parse($user->last_password_change);
-            if ($lastChange->addMonths($expiryMonths)->isPast()) {
+            if ($expiryMonths > 0 && $lastChange->addMonths($expiryMonths)->isPast()) {
                 return redirect()->route('password.change.form')->with('warning', 'Anda harus mengganti password setiap ' . $expiryMonths . ' bulan.');
             }
         }
