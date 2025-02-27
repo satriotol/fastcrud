@@ -168,7 +168,11 @@
                                     @endforeach
                                 </td>
                                 <td>{{ $user->last_used_sign_in_at }}</td>
-                                <td>{{ $user->must_change_password ? '❌' : '✅' }}</td>
+                                <td>
+                                    <a href="{{route('fastcrud_user.setMustChangePassword', $user->uuid)}}">
+                                        {{ $user->must_change_password ? '❌' : '✅' }}
+                                    </a>
+                                </td>
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"

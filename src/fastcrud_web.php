@@ -40,6 +40,7 @@ Route::prefix('admin')->group(function () {
             Route::resource('permission', PermissionController::class);
             Route::resource('role', RoleController::class);
             Route::resource('fastcrud_user', FastcrudUserController::class);
+            Route::get('setMustChangePassword/fastcrud_user/{uuid}', [FastcrudUserController::class, 'setMustChangePassword'])->name('fastcrud_user.setMustChangePassword');
         });
     });
 });

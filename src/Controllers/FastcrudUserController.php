@@ -45,6 +45,15 @@ class FastcrudUserController extends Controller
     $request->flash();
     return view('fastcrud::fastcrud_user.index', compact('users', 'roles'));
   }
+  public function setMustChangePassword($uuid)
+  {
+    $user = User::where('uuid', $uuid)->first();
+    $user->update([
+      'must_change_password' => !$user->must_change_password,
+    ]);
+    session()->flash('success', 'Password berhasil diubah');
+    return back();
+  }
 
   /**
    * Show the form for creating a new resource.
