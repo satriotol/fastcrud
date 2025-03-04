@@ -20,13 +20,16 @@ class PaginationResource extends JsonResource
     public function toArray(Request $request)
     {
         return [
-            'current_page' => $this->currentPage(),
-            'from' => $this->firstItem(),
-            'last_page' => $this->lastPage(),
-            'path' => $this->path(),
-            'per_page' => $this->perPage(),
-            'to' => $this->lastItem(),
-            'total' => $this->total()
+            'data' => $this->collection,
+            'pagination' => [
+                'current_page' => $this->currentPage(),
+                'from' => $this->firstItem(),
+                'last_page' => $this->lastPage(),
+                'path' => $this->path(),
+                'per_page' => $this->perPage(),
+                'to' => $this->lastItem(),
+                'total' => $this->total(),
+            ],
         ];
     }
 }
