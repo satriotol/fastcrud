@@ -43,9 +43,8 @@ class {{modelName}}Controller extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            {{validations}}
-        ]);
+        $rules = $this->{{modelNameSingular}}Repository->validate();
+        $data = $request->validate($rules);
 
         $this->{{modelNameSingular}}Repository->create($data);
 
@@ -66,9 +65,9 @@ class {{modelName}}Controller extends Controller
 
     public function update(Request $request, $uuid)
     {
-        $data = $request->validate([
-            {{validations}}
-        ]);
+        $rules = $this->{{modelNameSingular}}Repository->validate();
+        $data = $request->validate($rules);
+
 
         $data['user_id'] = Auth::user()->id;
         $this->{{modelNameSingular}}Repository->update($uuid, $data);
