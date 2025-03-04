@@ -49,6 +49,12 @@ class {{modelName}}Repository
 
         return $query;
     }
+    public function validate()
+    {
+        return [
+            {{validations}}
+        ];
+    }
 
     public function findByUuid(string $uuid)
     {

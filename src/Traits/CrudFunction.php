@@ -78,8 +78,10 @@ trait CrudFunction
     {
         $uploadLogic = '';
         $deleteLogic = '';
+        $validations = [];
 
         foreach ($data['columns'] as $d) {
+            $validationRule = $d['nullable'] == 0 ? 'required' : 'nullable';
             if ($d['is_file']) {
                 $uploadLogic .= "\n        if (isset(\$data['{$d['column_name']}']) && \$data['{$d['column_name']}']->isValid()) {";
                 $uploadLogic .= "\n            if (isset(\$model) && \$model->{$d['column_name']}) {";
@@ -92,18 +94,22 @@ trait CrudFunction
                 $deleteLogic .= "\n            \$this->removeFiles(\$model->{$d['column_name']});";
                 $deleteLogic .= "\n        }";
             }
+            $validationContent = "'{$d['column_name']}' => '$validationRule',";
+            $validations[] = $validationContent;
         }
 
         $repositoryTemplate = str_replace(
             [
                 '{{modelName}}',
                 '{{modelNameSingular}}',
+                '{{validations}}',
                 '//UPLOAD_LOGIC',
                 '//DELETE_LOGIC'
             ],
             [
                 $data['model'],
                 $data['singular'],
+                $validations,
                 $uploadLogic,
                 $deleteLogic
             ],
