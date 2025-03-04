@@ -97,6 +97,7 @@ trait CrudFunction
             $validationContent = "'{$d['column_name']}' => '$validationRule',";
             $validations[] = $validationContent;
         }
+        $validations = implode("\n", $validations);
 
         $repositoryTemplate = str_replace(
             [
