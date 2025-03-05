@@ -3,6 +3,7 @@
 namespace Satriotol\Fastcrud\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -11,7 +12,6 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Str;
-use Satriotol\Fastcrud\Models\FastcrudUser;
 
 class FastcrudUserController extends Controller
 {
@@ -27,7 +27,7 @@ class FastcrudUserController extends Controller
     $name = $request->name;
     $role = $request->role;
     $must_change_password = $request->must_change_password;
-    $users = FastcrudUser::getUsers();
+    $users = User::getUsers();
     if ($name) {
       $users->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
     }
@@ -46,7 +46,7 @@ class FastcrudUserController extends Controller
   }
   public function setMustChangePassword($uuid)
   {
-    $user = FastcrudUser::where('uuid', $uuid)->first();
+    $user = User::where('uuid', $uuid)->first();
     $user->update([
       'must_change_password' => !$user->must_change_password,
     ]);
@@ -74,11 +74,11 @@ class FastcrudUserController extends Controller
   {
     $data = $request->validate([
       'name' => ['required', 'string', 'max:255'],
-      'email' => ['required', 'string', 'email', 'max:255', 'unique:' . FastcrudUser::class],
+      'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
       'password' => ['required', 'confirmed', Password::defaults()],
       'role' => ['required'],
     ]);
-    $user = FastcrudUser::create([
+    $user = User::create([
       'name' => $data['name'],
       'email' => $data['email'],
       'password' => Hash::make($data['password']),
@@ -102,7 +102,7 @@ class FastcrudUserController extends Controller
    */
   public function edit($uuid)
   {
-    $user = FastcrudUser::where('uuid', $uuid)->first();
+    $user = User::where('uuid', $uuid)->first();
     if (Auth::user()->getRole()->name == 'SUPERADMIN') {
       $roles = Role::all();
     } else {
@@ -160,7 +160,7 @@ class FastcrudUserController extends Controller
 
   public function update(Request $request, $id)
   {
-    $user = FastcrudUser::find($id);
+    $user = User::find($id);
     $validatedData = $this->updateUserData($request, $user, true); // Enable role validation
 
     // Sync roles if provided
@@ -176,7 +176,7 @@ class FastcrudUserController extends Controller
    */
   public function destroy($id)
   {
-    $user = FastcrudUser::find($id);
+    $user = User::find($id);
     $user->delete();
     session()->flash('success', 'Pengguna Berhasil Dihapus');
 
