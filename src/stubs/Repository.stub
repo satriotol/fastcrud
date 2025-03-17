@@ -51,9 +51,13 @@ class {{modelName}}Repository
     }
     public function validate()
     {
-        return [
+        $rules = [
             {{validations}}
         ];
+        $message = [
+
+        ];
+        return ['rules' => $rules, 'messages' => $messages];
     }
 
     public function findByUuid(string $uuid)

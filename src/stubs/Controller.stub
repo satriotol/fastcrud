@@ -43,8 +43,8 @@ class {{modelName}}Controller extends Controller
 
     public function store(Request $request)
     {
-        $rules = $this->{{modelNameSingular}}Repository->validate();
-        $data = $request->validate($rules);
+        $validation = $this->audience_requestRepository->validate($request);
+        $data = $request->validate($validation['rules'], $validation['messages']);
 
         $this->{{modelNameSingular}}Repository->create($data);
 
