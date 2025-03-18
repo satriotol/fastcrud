@@ -53,23 +53,21 @@
                 <div class="col-md">
                     <h5 class="card-title mb-3">{modelName}</h5>
                 </div>
-                @can('{modelNameSingular}-create')
-                    <div class="col-md">
-                        <div
-                            class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
-                            <div class="dt-buttons btn-group flex-wrap">
-                                @can('{modelNameSingular}-create')
-                                    <a href="{{ route('{modelNameSingular}.create') }}" class="btn btn-secondary btn-primary">
-                                        <span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>
-                                            <span class="d-none d-sm-inline-block">Tambah</span>
-                                        </span>
-                                    </a>
-                                @endcan
+                <div class="col-md">
+                    <div
+                        class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
+                        <div class="dt-buttons btn-group flex-wrap">
+                            @can('{modelNameSingular}-create')
+                                <a href="{{ route('{modelNameSingular}.create') }}" class="btn btn-secondary btn-primary">
+                                    <span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>
+                                        <span class="d-none d-sm-inline-block">Tambah</span>
+                                    </span>
+                                </a>
+                            @endcan
 
-                            </div>
                         </div>
                     </div>
-                @endcan
+                </div>
             </div>
         </div>
         <div class="card-body">
