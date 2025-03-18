@@ -28,8 +28,6 @@ class {{modelName}}Controller extends Controller
     {
         ${{modelNamePlural}} = $this->{{modelNameSingular}}Repository->getAll(
             [
-                'orderBy' => 'id',
-                'orderDirection' => 'asc',
             ], $request
         )->latest()->paginate();
         $request->flash();
