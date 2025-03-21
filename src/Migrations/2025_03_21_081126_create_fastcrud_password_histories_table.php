@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('fastcrud_password_histories', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('password');
             $table->timestamps();
         });
     }
