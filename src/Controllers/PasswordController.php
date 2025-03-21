@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
+use Satriotol\Fastcrud\Models\FastcrudPasswordHistory;
 
 class PasswordController extends Controller
 {
@@ -33,17 +34,17 @@ class PasswordController extends Controller
     public function resetPassword($uuid)
     {
         $user = User::where('uuid', $uuid)->first();
-    
+
         // Menghasilkan password baru yang lebih aman
         $newPassword = substr(bin2hex(random_bytes(10)), 0, 10);
-    
+
         $user->password = Hash::make($newPassword);
         $user->must_change_password = true;
         $user->save();
-    
+
         return redirect()->back()->with('success', "Password telah direset. Password baru: $newPassword");
     }
-    
+
     public function resetPasswords(Request $request)
     {
         $data = $request->validate([
@@ -99,13 +100,32 @@ class PasswordController extends Controller
         ]);
 
         $user = auth()->user();
+        $newPassword = $request->password;
+        $historyPasswords = FastcrudPasswordHistory::where('user_id', $user->id)
+            ->orderByDesc('created_at')
+            ->take(3)
+            ->get();
 
-        if (Hash::check($request->password, $user->password)) {
-            return back()->withErrors(['new_password' => 'Password baru tidak boleh sama dengan password lama.']);
+        foreach ($historyPasswords as $history) {
+            if (Hash::check($newPassword, $history->password)) {
+                return back()->withErrors('Password baru tidak boleh sama dengan 3 password terakhir.');
+            }
+        }
+        FastcrudPasswordHistory::create([
+            'user_id' => $user->id,
+            'password' => $user->password, // simpan dalam kondisi hash
+        ]);
+        $historyCount = FastcrudPasswordHistory::where('user_id', $user->id)->count();
+        if ($historyCount > 3) {
+            FastcrudPasswordHistory::where('user_id', $user->id)
+                ->orderBy('created_at')
+                ->limit($historyCount - 3)
+                ->delete();
         }
 
+
         // Simpan password baru
-        $user->password = Hash::make($request->password);
+        $user->password = Hash::make($newPassword);
         $user->must_change_password = false;
         $user->last_password_change = now();
         $user->save();
