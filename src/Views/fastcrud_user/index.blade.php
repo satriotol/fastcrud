@@ -67,7 +67,7 @@
                     <h5 class="card-title">Jumlah</h5>
                     <div class="row">
                         <div class="col-6">
-                            <h3 class="card-title text-nowrap mb-0"> {{ $users->count() }} </h3>
+                            <h3 class="card-title text-nowrap mb-0"> {{ $users_counts }} </h3>
                             Pengguna
                         </div>
                         <div class="col-6">
