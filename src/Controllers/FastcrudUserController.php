@@ -5,48 +5,35 @@ namespace Satriotol\Fastcrud\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Str;
+use Satriotol\Fastcrud\Repositories\FastcrudRoleRepository;
+use Satriotol\Fastcrud\Repositories\FastcrudUserRepository;
 
 class FastcrudUserController extends Controller
 {
-  /**
-   * Display a listing of the resource.
-   */
+  protected $fastcrudUserRepository;
+  protected $fastcrudRoleRepository;
   public function __construct()
   {
+    $this->fastcrudUserRepository = new FastcrudUserRepository();
+    $this->fastcrudRoleRepository = new FastcrudRoleRepository();
     $this->middleware('role:SUPERADMIN');
   }
   public function index(Request $request)
   {
-    $name = $request->name;
-    $role = $request->role;
-    $must_change_password = $request->must_change_password;
-    $users = User::getUsers();
-    if ($name) {
-      $users->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
-    }
-    if ($role) {
-      $users->whereHas('roles', function ($query) use ($role) {
-        $query->where('name', $role);
-      });
-    }
-    if (isset($must_change_password)) {
-      $users->where('must_change_password', (bool) $must_change_password);
-    }
-    $roles = Role::all();
-    $users = $users->latest()->paginate();
+    $users = $this->fastcrudUserRepository->getAll([], $request)->latest()->paginate(10);
+    $users_counts = $this->fastcrudUserRepository->getAll([], $request)->count();
+    $roles = $this->fastcrudRoleRepository->getAll([], $request)->get();
     $request->flash();
-    return view('fastcrud::fastcrud_user.index', compact('users', 'roles'));
+    return view('fastcrud::fastcrud_user.index', compact('users', 'roles', 'users_counts'));
   }
   public function setMustChangePassword($uuid)
   {
-    $user = User::where('uuid', $uuid)->first();
+    $user = $this->fastcrudUserRepository->findByUuid($uuid);
     $user->update([
       'must_change_password' => !$user->must_change_password,
     ]);
@@ -57,13 +44,9 @@ class FastcrudUserController extends Controller
   /**
    * Show the form for creating a new resource.
    */
-  public function create()
+  public function create(Request $request)
   {
-    if (Auth::user()->getRole()->name == 'SUPERADMIN') {
-      $roles = Role::all();
-    } else {
-      $roles = Role::where('name', '!=', 'SUPERADMIN')->get();
-    }
+    $roles = $this->fastcrudRoleRepository->getAll([], $request)->get();
     return view('fastcrud::fastcrud_user.create', compact('roles'));
   }
 
@@ -72,19 +55,9 @@ class FastcrudUserController extends Controller
    */
   public function store(Request $request)
   {
-    $data = $request->validate([
-      'name' => ['required', 'string', 'max:255'],
-      'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
-      'password' => ['required', 'confirmed', Password::defaults()],
-      'role' => ['required'],
-    ]);
-    $user = User::create([
-      'name' => $data['name'],
-      'email' => $data['email'],
-      'password' => Hash::make($data['password']),
-    ]);
-    $user->assignRole($data['role']);
-
+    $validate = $this->fastcrudUserRepository->validate();
+    $data = $request->validate($validate['rules'], $validate['messages']);
+    $this->fastcrudUserRepository->create($data);
     session()->flash('success', 'Pengguna Berhasil Dibuat');
     return redirect(route('fastcrud_user.index'));
   }
@@ -100,14 +73,10 @@ class FastcrudUserController extends Controller
   /**
    * Show the form for editing the specified resource.
    */
-  public function edit($uuid)
+  public function edit($uuid, Request $request)
   {
-    $user = User::where('uuid', $uuid)->first();
-    if (Auth::user()->getRole()->name == 'SUPERADMIN') {
-      $roles = Role::all();
-    } else {
-      $roles = Role::where('name', '!=', 'SUPERADMIN')->get();
-    }
+    $user = $this->fastcrudUserRepository->findByUuid($uuid);
+    $roles = $this->fastcrudRoleRepository->getAll([], $request)->get();
     return view('fastcrud::fastcrud_user.create', compact('user', 'roles'));
   }
 
