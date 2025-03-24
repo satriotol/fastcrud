@@ -80,19 +80,39 @@ trait CrudFunction
         $deleteLogic = '';
         $validations = [];
 
+
         foreach ($data['columns'] as $d) {
             $validationRule = $d['nullable'] == 0 ? 'required' : 'nullable';
             if ($d['is_file']) {
-                $uploadLogic .= "\n        if (isset(\$data['{$d['column_name']}']) && \$data['{$d['column_name']}']->isValid()) {";
-                $uploadLogic .= "\n            if (isset(\$model) && \$model->{$d['column_name']}) {";
-                $uploadLogic .= "\n                \$this->removeFiles(\$model->{$d['column_name']});";
-                $uploadLogic .= "\n            }";
-                $uploadLogic .= "\n            \$data['{$d['column_name']}'] = \$this->uploadImage(\$data['{$d['column_name']}'], '{$d['column_name']}');";
-                $uploadLogic .= "\n        }";
+                if ($d['is_minio']) {
+                    $uploadLogic .= "\n        if (isset(\$data['{$d['column_name']}']) && \$data['{$d['column_name']}']->isValid()) {";
+                    $uploadLogic .= "\n            if (isset(\$model) && \$model->{$d['column_name']}) {";
+                    $uploadLogic .= "\n                \$this->removeFiles(\$model->{$d['column_name']});";
+                    $uploadLogic .= "\n            }";
+                    $uploadLogic .= "\n            \$data['{$d['column_name']}'] = \$this->uploadImage(\$data['{$d['column_name']}'], '{$d['column_name']}');";
+                    $uploadLogic .= "\n        }";
 
-                $deleteLogic .= "\n        if (isset(\$model) && \$model->{$d['column_name']}) {";
-                $deleteLogic .= "\n            \$this->removeFiles(\$model->{$d['column_name']});";
-                $deleteLogic .= "\n        }";
+                    $deleteLogic .= "\n        if (isset(\$model) && \$model->{$d['column_name']}) {";
+                    $deleteLogic .= "\n            \$this->removeFiles(\$model->{$d['column_name']});";
+                    $deleteLogic .= "\n        }";
+                } else {
+                    $uploadLogic .= "\n        if (isset(\$data['{$d['column_name']}']) && \$data['{$d['column_name']}']->isValid()) {";
+                    $uploadLogic .= "\n            if (isset(\$model) && \$model->{$d['column_name']}) {";
+                    $uploadLogic .= "\n                Storage::disk('public')->delete(\$model->{$d['column_name']});";
+                    $uploadLogic .= "\n            }";
+                    $uploadLogic .= "\n            \$uploadedFile_{$d['column_name']} = \$data['{$d['column_name']}'];";
+                    $uploadLogic .= "\n            \$fileExtension_{$d['column_name']} = \$uploadedFile_{$d['column_name']}->getClientOriginalExtension();";
+                    $uploadLogic .= "\n            \$fileName_{$d['column_name']} = date('mdYHis') . '-' . Str::random(8) . '.' . \$fileExtension_{$d['column_name']};";
+                    $uploadLogic .= "\n            \$directory_{$d['column_name']} = '{$d['column_name']}/' . date('Y/m/d');";
+                    $uploadLogic .= "\n            \$filePath_{$d['column_name']} = \$uploadedFile_{$d['column_name']}->storeAs(\$directory_{$d['column_name']}, \$fileName_{$d['column_name']}, 'public');";
+                    $uploadLogic .= "\n            \$data['{$d['column_name']}'] = \$filePath_{$d['column_name']};";
+                    $uploadLogic .= "\n        }";
+
+
+                    $deleteLogic .= "\n        if (isset(\$model->{$d['column_name']})) {";
+                    $deleteLogic .= "\n            Storage::disk('public')->delete(\$model->{$d['column_name']});";
+                    $deleteLogic .= "\n        }";
+                }
             }
             $validationContent = "'{$d['column_name']}' => '$validationRule',";
             $validations[] = $validationContent;

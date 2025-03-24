@@ -96,7 +96,6 @@
                                             <div class="mb-3 col-md-2">
                                                 <label class="form-label" for="form-repeater-1-3">Is File</label>
                                                 {{ html()->select('is_file', [false => 'Tidak', true => 'Ya'])->class('form-select')->placeholder('Apakah Format Upload')->required(true) }}
-                                                <br>
                                                 {{ html()->select('is_minio', [false => 'Tidak', true => 'Ya'])->class('form-select')->placeholder('Minio Storage')->required(true) }}
                                             </div>
                                             <div class="mb-3 col-md-2">

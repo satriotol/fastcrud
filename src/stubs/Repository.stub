@@ -54,7 +54,7 @@ class {{modelName}}Repository
         $rules = [
             {{validations}}
         ];
-        $message = [
+        $messages = [
 
         ];
         return ['rules' => $rules, 'messages' => $messages];
