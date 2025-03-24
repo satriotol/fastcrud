@@ -96,13 +96,12 @@
                                             <div class="mb-3 col-md-2">
                                                 <label class="form-label" for="form-repeater-1-3">Is File</label>
                                                 {{ html()->select('is_file', [false => 'Tidak', true => 'Ya'])->class('form-select')->placeholder('Apakah Format Upload')->required(true) }}
-
+                                                <br>
+                                                {{ html()->select('is_minio', [false => 'Tidak', true => 'Ya'])->class('form-select')->placeholder('Minio Storage')->required(true) }}
                                             </div>
                                             <div class="mb-3 col-md-2">
                                                 <label class="form-label" for="form-repeater-1-3">Nullable</label>
                                                 {{ html()->select('nullable', ['0' => 'Wajib', '1' => 'Tidak Wajib'])->class('form-select')->placeholder('Pilih Tipe Kolom')->required(true) }}
-
-
                                             </div>
                                             <div class="mb-3 col-md-2 d-flex align-items-center mb-0">
                                                 <button class="btn btn-label-danger mt-4" data-repeater-delete

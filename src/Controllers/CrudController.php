@@ -57,6 +57,7 @@ class CrudController extends Controller
             'columns.*.type' => 'required|string|in:string,integer,longText,unsignedBigInteger,boolean,date',
             'columns.*.nullable' => 'required|boolean',
             'columns.*.is_file' => 'required|boolean',
+            'columns.*.is_minio' => 'required|boolean',
             'sidebarLogo' => 'required|string',
         ]);
 
