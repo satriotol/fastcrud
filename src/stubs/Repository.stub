@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\{{modelName}};
 use Illuminate\Support\Facades\Storage;
 use Satriotol\Fastcrud\Traits\RemovesFiles;
+use Illuminate\Support\Str;
 
 class {{modelName}}Repository
 {
