@@ -20,6 +20,8 @@ class ForcePasswordChange
         if (auth()->check()) {
             $user = auth()->user();
 
+
+
             // Jika user mencoba mengakses password.change.form tanpa must_change_password = 1
             if ($request->route()->getName() === 'password.change.form' && !$user->must_change_password) {
                 return redirect('/')->withErrors('Anda tidak diizinkan mengakses halaman ini.');
@@ -29,18 +31,28 @@ class ForcePasswordChange
             if ($user->must_change_password && $request->route()->getName() !== 'password.change.form') {
                 return redirect()->route('password.change.form');
             }
-
-
-            $expiryMonths = (int) env('PASSWORD_EXPIRY_MONTHS', 0);
-            if (empty($expiryMonths)) {
+            // Jika user adalah SUPERADMIN, lewati pemeriksaan perubahan password
+            if ($user->hasRole('SUPERADMIN')) {
                 return $next($request);
             }
-            if (!$user->last_password_change) {
-                return redirect()->route('password.change.form')->with('error', 'Anda Harus Mengganti Password Anda, secara berkala setiap ' . $expiryMonths . ' bulan sekali.');
+            
+            // Ambil nilai jumlah bulan dari konfigurasi ENV
+            $expiryMonths = (int) env('PASSWORD_EXPIRY_MONTHS', 0);
+            if ($expiryMonths <= 0) {
+                return $next($request);
             }
+
+            // Jika user belum pernah mengganti password, paksa untuk mengganti
+            if (!$user->last_password_change) {
+                return redirect()->route('password.change.form')
+                    ->with('error', 'Anda harus mengganti password setiap ' . $expiryMonths . ' bulan.');
+            }
+
+            // Cek apakah password sudah kedaluwarsa
             $lastChange = Carbon::parse($user->last_password_change);
-            if ($expiryMonths > 0 && $lastChange->addMonths($expiryMonths)->isPast()) {
-                return redirect()->route('password.change.form')->with('warning', 'Anda harus mengganti password setiap ' . $expiryMonths . ' bulan.');
+            if ($lastChange->addMonths($expiryMonths)->isPast()) {
+                return redirect()->route('password.change.form')
+                    ->with('warning', 'Anda harus mengganti password setiap ' . $expiryMonths . ' bulan.');
             }
         }
 
