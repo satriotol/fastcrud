@@ -50,7 +50,8 @@ class FastCrudServiceProvider extends ServiceProvider
                 __DIR__ . '/public' => public_path('/'),
             ], 'fastcrudPublic');
             $this->commands([
-                CreateUserCommand::class,
+                \Satriotol\Fastcrud\Console\Commands\MakeRepository::class,
+                \Satriotol\Fastcrud\Console\Commands\CreateUserCommand::class,
             ]);
         }
     }
