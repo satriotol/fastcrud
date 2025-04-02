@@ -24,7 +24,6 @@
             <div class="row">
                 <div class="col-md-4 text-center">
                     <h5>Scan QR Code</h5>
-                    <h5>Scan QR Code</h5>
                     @if (!$user->google2fa_verified)
                         {!! $google2fa_url !!}
                     @else
