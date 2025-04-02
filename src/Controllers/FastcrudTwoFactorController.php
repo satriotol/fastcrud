@@ -13,11 +13,9 @@ class FastcrudTwoFactorController extends Controller
         $google2fa = app('pragmarx.google2fa');
 
         $user = FastcrudUser::find(auth()->id());
-        if (!$user->google2fa_secret) {
-            $user->generateGoogle2FASecret();
-        }
         $google2fa_url = null;
         if (!$user->google2fa_secret) {
+            $user->generateGoogle2FASecret();
             $google2fa_url = $google2fa->getQRCodeInline(
                 env('APP_NAME'),
                 $user->email,
