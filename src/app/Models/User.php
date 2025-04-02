@@ -31,15 +31,13 @@ class User extends Authenticatable implements Auditable
             $model->uuid = Str::uuid()->toString();
         });
     }
-    protected $fillable = array_merge(
+    protected $fillable =
         [
             'name',
             'email',
             'password',
             'must_change_password',
-        ],
-        (new FastcrudUser())->getFillable(),
-    );
+        ];
 
     public function getFillable()
     {

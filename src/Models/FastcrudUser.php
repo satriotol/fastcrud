@@ -2,25 +2,18 @@
 
 namespace Satriotol\Fastcrud\Models;
 
-use App\Models\User;
+namespace App\Models;
 
 class FastcrudUser extends User
 {
     protected $table = 'users'; // Menggunakan tabel yang sama
 
-    protected $fillable = array_merge(
-        (new User())->getFillable(),
-        [
-            'last_password_change',
-            'google2fa_secret',
-            'google2fa_verified'
-        ],
-    );
-
-    public function getFillable()
-    {
-        return $this->fillable;
-    }
+    protected $fillable =
+    [
+        'last_password_change',
+        'google2fa_secret',
+        'google2fa_verified'
+    ];
 
 
     public function generateGoogle2FASecret()

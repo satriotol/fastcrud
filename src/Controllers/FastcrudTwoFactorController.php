@@ -33,7 +33,7 @@ class FastcrudTwoFactorController extends Controller
         $request->validate(['otp' => 'required|digits:6']);
 
         $google2fa = app('pragmarx.google2fa');
-        $user = auth()->user();
+        $user = FastcrudUser::find(auth()->id());
 
         if ($google2fa->verifyKey($user->google2fa_secret, $request->otp)) {
             $user->update(['google2fa_verified' => true]);
