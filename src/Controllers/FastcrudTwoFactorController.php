@@ -2,7 +2,9 @@
 
 namespace Satriotol\Fastcrud\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Satriotol\Fastcrud\Models\FastcrudUser;
 
 class FastcrudTwoFactorController extends Controller
 {
@@ -10,15 +12,18 @@ class FastcrudTwoFactorController extends Controller
     {
         $google2fa = app('pragmarx.google2fa');
 
-        $user = auth()->user();
+        $user = FastcrudUser::find(auth()->id());
         if (!$user->google2fa_secret) {
             $user->generateGoogle2FASecret();
         }
-        $google2fa_url = $google2fa->getQRCodeInline(
-            env('APP_NAME'),
-            $user->email,
-            $user->google2fa_secret
-        );
+        $google2fa_url = null;
+        if (!$user->google2fa_secret) {
+            $google2fa_url = $google2fa->getQRCodeInline(
+                env('APP_NAME'),
+                $user->email,
+                $user->google2fa_secret
+            );
+        }
 
         return view('fastcrud::fastcrud_user.2fa', compact('user', 'google2fa_url'));
     }

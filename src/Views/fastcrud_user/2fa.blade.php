@@ -24,7 +24,14 @@
             <div class="row">
                 <div class="col-md-4 text-center">
                     <h5>Scan QR Code</h5>
-                    {!! $google2fa_url !!}
+                    @if (!empty($google2fa_url))
+                        {!! $google2fa_url !!}
+                    @else
+                        <div class="alert alert-warning">
+                            QR Code tidak tersedia. Kemungkinan akun Anda sudah tertaut pada perangkat lain.  
+                            Jika Anda mengalami kesulitan, silakan hubungi administrator untuk mereset 2FA Anda.
+                        </div>
+                    @endif
                 </div>
                 <div class="col-md-8">
                     <p>Silakan scan QR Code dengan aplikasi Google Authenticator atau Authy, lalu masukkan kode OTP yang muncul.</p>
