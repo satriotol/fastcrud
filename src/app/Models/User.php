@@ -11,7 +11,6 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
 use OwenIt\Auditing\Auditable as AuditingAuditable;
 use OwenIt\Auditing\Contracts\Auditable;
-use Satriotol\Fastcrud\Models\FastcrudUser;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements Auditable
@@ -31,19 +30,12 @@ class User extends Authenticatable implements Auditable
             $model->uuid = Str::uuid()->toString();
         });
     }
-    protected $fillable =
-        [
-            'name',
-            'email',
-            'password',
-            'must_change_password',
-        ];
-
-    public function getFillable()
-    {
-        return $this->fillable;
-    }
-
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'must_change_password',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -79,7 +71,8 @@ class User extends Authenticatable implements Auditable
                 $query->whereNot('name', 'SUPERADMIN');
             });
         }
-
+    
         return $users;
     }
+    
 }
