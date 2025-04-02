@@ -3,6 +3,7 @@
 namespace Satriotol\Fastcrud\Models;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Crypt;
 
 class FastcrudUser extends User
 {
@@ -15,6 +16,15 @@ class FastcrudUser extends User
         'google2fa_verified'
     ];
 
+    public function setGoogle2faSecretAttribute($value)
+    {
+        $this->attributes['google2fa_secret'] = Crypt::encrypt($value);
+    }
+
+    public function getGoogle2faSecretAttribute($value)
+    {
+        return Crypt::decrypt($value);
+    }
 
     public function generateGoogle2FASecret()
     {
