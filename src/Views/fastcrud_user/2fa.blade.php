@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-md-4 text-center">
                     <h5>Scan QR Code</h5>
-                    @if (!empty($google2fa_url))
+                    @if ($google2fa_url !== null)
                         {!! $google2fa_url !!}
                     @else
                         <div class="alert alert-warning">
