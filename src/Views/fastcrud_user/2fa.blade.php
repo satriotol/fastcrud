@@ -72,13 +72,13 @@
                 aplikasi.<br>
                 4. Aplikasi akan menambahkan akun dan menampilkan kode OTP (One-Time Password) yang berubah setiap
                 beberapa detik.</p>
-            <h5>5. Verifikasi OTP</h5>
+            <h5>3. Verifikasi OTP</h5>
             <p>1. Masukkan kode OTP yang muncul di aplikasi autentikasi ke dalam kolom <strong>Kode OTP</strong> pada
                 formulir verifikasi.<br>
                 2. Klik tombol <strong>Verifikasi</strong>.<br>
                 3. Jika kode yang dimasukkan benar, maka 2FA akan berhasil diaktifkan.<br>
                 4. Anda akan melihat notifikasi bahwa 2FA telah diaktifkan.</p>
-            <h5>5. Jika Kehilangan Akses ke 2FA</h5>
+            <h5>4. Jika Kehilangan Akses ke 2FA</h5>
             <p>Jika Anda kehilangan akses ke aplikasi autentikator:</p>
             <ul>
                 <li>Hubungi administrator untuk melakukan reset 2FA.</li>
