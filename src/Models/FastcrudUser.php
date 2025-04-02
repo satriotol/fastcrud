@@ -38,7 +38,8 @@ class FastcrudUser extends Authenticatable implements Auditable
         'password',
         'must_change_password',
         'last_password_change',
-        'google2fa_secret'
+        'google2fa_secret',
+        'google2fa_verified',
     ];
 
     /**

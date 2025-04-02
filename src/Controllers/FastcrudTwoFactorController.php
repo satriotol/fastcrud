@@ -14,8 +14,11 @@ class FastcrudTwoFactorController extends Controller
 
         $user = FastcrudUser::find(auth()->id());
         $google2fa_url = null;
-        if (!$user->google2fa_secret) {
-            $user->generateGoogle2FASecret();
+        if (!$user->google2fa_secret || !$user->google2fa_verified) {
+            if (!$user->google2fa_secret) {
+                $user->generateGoogle2FASecret();
+            }
+
             $google2fa_url = $google2fa->getQRCodeInline(
                 env('APP_NAME'),
                 $user->email,
@@ -33,6 +36,7 @@ class FastcrudTwoFactorController extends Controller
         $user = auth()->user();
 
         if ($google2fa->verifyKey($user->google2fa_secret, $request->otp)) {
+            $user->update(['google2fa_verified' => true]);
             session(['2fa_verified' => true]);
             return redirect()->route('dashboard.index');
         }
