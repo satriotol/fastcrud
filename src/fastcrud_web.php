@@ -27,7 +27,7 @@ Route::prefix('admin')->group(function () {
         });
         Route::middleware(['auth', 'force.password.change'])->group(function () {
             Route::prefix('2fa')->group(function () {
-                Route::get('test', [FastcrudTwoFactorController::class, 'show2FASetup'])->name('2fa.setup');
+                Route::get('/', [FastcrudTwoFactorController::class, 'show2FASetup'])->name('2fa.setup');
                 Route::post('verify', [FastcrudTwoFactorController::class, 'verify2FA'])->name('2fa.verify');
             });
             Route::get('app-specs', [AppSpecsController::class, 'index'])->name('app-specs.index');
