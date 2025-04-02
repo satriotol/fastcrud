@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use Satriotol\Fastcrud\Controllers\ApiKeyController;
 use Satriotol\Fastcrud\Controllers\AppSpecsController;
 use Satriotol\Fastcrud\Controllers\AuditController;
+use Satriotol\Fastcrud\Controllers\FastcrudTwoFactorController;
 use Satriotol\Fastcrud\Controllers\FastcrudUserController;
 use Satriotol\Fastcrud\Controllers\PermissionController;
 use Satriotol\Fastcrud\Controllers\RoleController;
@@ -25,6 +26,10 @@ Route::prefix('admin')->group(function () {
             Route::post('/change-password', [PasswordController::class, 'changePassword'])->name('password.change');
         });
         Route::middleware(['auth', 'force.password.change'])->group(function () {
+            Route::prefix('2fa')->group(function () {
+                Route::get('test', [FastcrudTwoFactorController::class, 'show2FASetup'])->name('2fa.setup');
+                Route::post('verify', [FastcrudTwoFactorController::class, 'verify2FA'])->name('2fa.verify');
+            });
             Route::get('app-specs', [AppSpecsController::class, 'index'])->name('app-specs.index');
             Route::get('audit', [AuditController::class, 'index'])->name('audit.index');
             Route::get('profile', [UserController::class, 'profile'])->name('user.profile');

@@ -3,7 +3,7 @@
   "description": "Laravel Fast Crud Buatan Satrio Tamvan",
   "type": "library",
   "license": "MIT",
-  "version": "11.2.100",
+  "version": "11.3.0",
   "authors": [
     {
       "name": "satriotol",
@@ -21,7 +21,9 @@
     "spatie/laravel-html": "^3.6",
     "league/flysystem-aws-s3-v3": "^3.28",
     "spatie/laravel-permission": "^6.0",
-    "maatwebsite/excel": "^3.1"
+    "maatwebsite/excel": "^3.1",
+    "bacon/bacon-qr-code": "^3.0",
+    "pragmarx/google2fa-laravel": "^2.3"
   },
   "autoload": {
     "psr-4": {

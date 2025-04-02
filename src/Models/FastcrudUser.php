@@ -37,7 +37,8 @@ class FastcrudUser extends Authenticatable implements Auditable
         'email',
         'password',
         'must_change_password',
-        'last_password_change'
+        'last_password_change',
+        'google2fa_secret'
     ];
 
     /**
@@ -59,6 +60,12 @@ class FastcrudUser extends Authenticatable implements Auditable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function generateGoogle2FASecret()
+    {
+        $google2fa = app('pragmarx.google2fa');
+        $this->google2fa_secret = $google2fa->generateSecretKey();
+        $this->save();
+    }
     public function getRole()
     {
         return $this->roles[0];
@@ -74,8 +81,7 @@ class FastcrudUser extends Authenticatable implements Auditable
                 $query->whereNot('name', 'SUPERADMIN');
             });
         }
-    
+
         return $users;
     }
-    
 }
