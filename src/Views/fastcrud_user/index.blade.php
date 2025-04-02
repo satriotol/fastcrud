@@ -148,6 +148,7 @@
                             <th>Role</th>
                             <th>Aktivitas</th>
                             <th>Reset Password</th>
+                            <th>2fa</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -171,6 +172,11 @@
                                 <td>
                                     <a href="{{route('fastcrud_user.setMustChangePassword', $user->uuid)}}">
                                         {{ $user->must_change_password ? '❌' : '✅' }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{route('fastcrud_user.reset2Fa', $user->uuid)}}">
+                                        {{ $user->google2fa_secret ? '✅' : '❌' }}
                                     </a>
                                 </td>
                                 <td>

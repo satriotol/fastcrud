@@ -45,6 +45,9 @@ Route::prefix('admin')->group(function () {
             Route::resource('permission', PermissionController::class);
             Route::resource('role', RoleController::class);
             Route::resource('fastcrud_user', FastcrudUserController::class);
+            Route::prefix('fastcrud_user')->group(function () {
+                Route::get('reset2Fa/{uuid}', [FastcrudUserController::class, 'reset2Fa'])->name('fastcrud_user.reset2Fa'); 
+            });
             Route::get('setMustChangePassword/fastcrud_user/{uuid}', [FastcrudUserController::class, 'setMustChangePassword'])->name('fastcrud_user.setMustChangePassword');
         });
     });

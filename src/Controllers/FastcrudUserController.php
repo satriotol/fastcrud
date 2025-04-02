@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Str;
+use Satriotol\Fastcrud\Models\FastcrudUser;
 use Satriotol\Fastcrud\Repositories\FastcrudRoleRepository;
 use Satriotol\Fastcrud\Repositories\FastcrudUserRepository;
 
@@ -68,6 +69,13 @@ class FastcrudUserController extends Controller
   public function show(string $id)
   {
     //
+  }
+  public function reset2Fa($uuid){
+    $fastcrud_user = FastcrudUser::where('uuid', $uuid)->first();
+    $fastcrud_user->google2fa_secret = null;
+    $fastcrud_user->save();
+    session()->flash('success', '2FA berhasil direset');
+    return back();
   }
 
   /**
