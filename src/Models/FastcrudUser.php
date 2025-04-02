@@ -2,8 +2,6 @@
 
 namespace Satriotol\Fastcrud\Models;
 
-namespace App\Models;
-
 class FastcrudUser extends User
 {
     protected $table = 'users'; // Menggunakan tabel yang sama
