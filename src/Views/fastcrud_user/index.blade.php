@@ -42,7 +42,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         {{ html()->label('Role')->class('form-label') }}
-                                        {{ html()->select('role', $roles->pluck('name', 'name'))->class('form-select')->placeholder('Pilih Role')->value(@old('role_id')) }}
+                                        {{ html()->select('role', $roles->pluck('name', 'name'))->class('form-select')->placeholder('Pilih Role')->value(@old('role')) }}
                                     </div>
                                 </div>
                                 <div class="text-end mt-2">
