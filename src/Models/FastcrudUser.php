@@ -8,18 +8,12 @@ class FastcrudUser extends User
 {
     protected $table = 'users'; // Menggunakan tabel yang sama
 
-    protected $fillable;
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->fillable = array_merge(
-            (new User())->getFillable(),
-            ['last_password_change', 'google2fa_secret', 'google2fa_verified']
-        );
-    }
-
+    protected $fillable =
+    [
+        'last_password_change',
+        'google2fa_secret',
+        'google2fa_verified'
+    ];
 
     public function generateGoogle2FASecret()
     {
