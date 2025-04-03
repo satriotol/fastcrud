@@ -4,6 +4,7 @@ namespace Satriotol\Fastcrud;
 
 use Illuminate\Support\ServiceProvider;
 use Satriotol\Fastcrud\Console\Commands\CreateUserCommand;
+use Illuminate\Routing\Router;
 
 class FastCrudServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,14 @@ class FastCrudServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/Views', 'fastcrud');
         $this->loadRoutesFrom(__DIR__ . '/fastcrud_web.php');
         $this->loadMigrationsFrom(__DIR__ . '/Migrations');
+        $router = $this->app->make(Router::class);
+
+        // Registrasi middleware
+        $router->aliasMiddleware('force.password.change', \Satriotol\Fastcrud\Middleware\ForcePasswordChange::class);
+        $router->aliasMiddleware('api_key', \Satriotol\Fastcrud\Middleware\ApiKeyMiddleware::class);
+        $router->aliasMiddleware('permission.json', \Satriotol\Fastcrud\Middleware\EnsurePermissionJson::class);
+        $router->aliasMiddleware('2fa', \Satriotol\Fastcrud\Middleware\Google2FAMiddleware::class);
+
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/resources' => resource_path('/'),
