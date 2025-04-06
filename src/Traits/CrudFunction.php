@@ -318,9 +318,19 @@ trait CrudFunction
             }
             if ($d['type'] == 'boolean') {
                 $input = <<<HTML
-                    <div class="form-check mt-3">
-                        {{html()->checkbox('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'))->class('form-check-input')->id('{$d['column_name']}')}}
-                        <label class="form-check-label" for="{$d['column_name']}"> {$d['column_name_view']} </label>     
+                    <div class="row mb-3 align-items-center">
+                        <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
+                        <div class="col-sm-10">
+                            <div class="form-check form-switch">
+                            {{html()->checkbox('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'))->class('form-check-input')->id('{$d['column_name']}')}}
+                            <label class="form-check-label" for="{$d['column_name']}">
+                                    Tandai jika persyaratan ini {$d['column_name_view']} dipenuhi
+                                </label>
+                            </div>
+                            @error('{$d['column_name']}')
+                                <small class="text-danger">{{ \$message }}</small>
+                            @enderror
+                        </div>
                     </div>
                 HTML;
             }
