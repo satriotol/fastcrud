@@ -14,6 +14,9 @@ class {{modelName}}Repository
     public function getAll(array $params = [], $request)
     {
         $query = {{modelName}}::query();
+        if ($request) {
+            
+        }
 
        if (!empty($params['filters'])) {
             foreach ($params['filters'] as $key => $value) {
