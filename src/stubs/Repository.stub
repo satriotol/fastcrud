@@ -53,11 +53,14 @@ class {{modelName}}Repository
 
         return $query;
     }
-    public function validate()
+    public function validate($isUpdate = false)
     {
         $rules = [
             {{validations}}
         ];
+        if($isUpdate){
+            
+        }
         $messages = [
 
         ];
