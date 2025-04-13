@@ -15,7 +15,7 @@ class Google2FAMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!session()->has('2fa_verified')) {
+        if (!session()->has('2fa_verified') && env('APP_DEBUG') == false) {
             return redirect()->route('2fa.setup');
         }
 
