@@ -53,6 +53,9 @@ class {{modelName}}Repository
 
         return $query;
     }
+    public function search(){
+        return {{modelName}}::all();
+    }
     public function validate($isUpdate = false)
     {
         $rules = [
