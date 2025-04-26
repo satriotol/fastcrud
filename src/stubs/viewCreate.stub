@@ -21,13 +21,15 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('activityForm');
-            const btnSubmit = document.getElementById('btnSubmit');
-
-            form.addEventListener('submit', function() {
-                btnSubmit.disabled = true;
-                btnSubmit.innerHTML =
-                    `<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...`;
+            document.querySelectorAll('form').forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    const btnSubmit = form.querySelector('button[type="submit"]');
+                    if (btnSubmit) {
+                        btnSubmit.disabled = true;
+                        btnSubmit.innerHTML =
+                            `<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Memproses...`;
+                    }
+                });
             });
         });
     </script>
@@ -45,7 +47,7 @@
                     <h5 class="mb-0">{modelName}</h5>
                 </div>
                 <div class="card-body">
-                    <form id="activityForm" action="@isset(${modelNameSingular}) {{ route('{modelNameSingular}.update', ${modelNameSingular}->uuid) }} @endisset @empty(${modelNameSingular}) {{ route('{modelNameSingular}.store') }} @endempty"
+                    <form action="@isset(${modelNameSingular}) {{ route('{modelNameSingular}.update', ${modelNameSingular}->uuid) }} @endisset @empty(${modelNameSingular}) {{ route('{modelNameSingular}.store') }} @endempty"
                         method="POST" enctype="multipart/form-data">
                         @csrf
                         @isset(${modelNameSingular})
@@ -58,7 +60,7 @@
                         <div class="row justify-content-end text-end">
                             <div class="col-sm-10">
                                 <a href="{{ route('{modelNameSingular}.index') }}" class="btn btn-warning">Kembali</a>
-                                <button type="submit" class="btn btn-primary" id="btnSubmit">
+                                <button type="submit" class="btn btn-primary">
                                     Simpan
                                 </button>
                             </div>
