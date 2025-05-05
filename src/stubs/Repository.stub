@@ -11,7 +11,7 @@ class {{modelName}}Repository
 {
     use RemovesFiles;
 
-    public function getAll(array $params = [], $request)
+    public function getAll(array $params = [], $request = null)
     {
         $query = {{modelName}}::query();
         if ($request) {
@@ -54,7 +54,8 @@ class {{modelName}}Repository
         return $query;
     }
     public function search(){
-        return {{modelName}}::all();
+        $query = {{modelName}}::query();
+        return $query;
     }
     public function validate($isUpdate = false)
     {

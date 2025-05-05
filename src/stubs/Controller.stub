@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class {{modelName}}Controller extends Controller
 {
-    private ${{modelNameSingular}}Repository;
+    protected ${{modelNameSingular}}Repository;
 
     public function __construct()
     {
