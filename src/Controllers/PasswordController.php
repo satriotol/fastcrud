@@ -55,10 +55,10 @@ class PasswordController extends Controller
 
     public function resetPasswords(Request $request, $users = null)
     {
-        $data = $request->validate([
-            'role' => 'required'
-        ]);
         if (!$users) {
+            $data = $request->validate([
+                'role' => 'required'
+            ]);
             $users = $this->fastcrudUserRepository->getAll([], $request)
                 ->whereHas('roles', function ($query) use ($data) {
                     $query->where('name', $data['role']);
