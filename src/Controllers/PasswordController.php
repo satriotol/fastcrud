@@ -12,9 +12,16 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use Satriotol\Fastcrud\Models\FastcrudPasswordHistory;
+use Satriotol\Fastcrud\Repositories\FastcrudUserRepository;
 
 class PasswordController extends Controller
 {
+    protected $fastcrudUserRepository;
+    public function __construct()
+    {
+        $this->fastcrudUserRepository = new FastcrudUserRepository();
+        $this->middleware('permission:fastcrud_user_reset_password-create', ['only' => ['resetPassword', 'resetPasswords']]);
+    }
     /**
      * Update the user's password.
      */
@@ -33,7 +40,7 @@ class PasswordController extends Controller
     }
     public function resetPassword($uuid)
     {
-        $user = User::where('uuid', $uuid)->first();
+        $user = $this->fastcrudUserRepository->findByUuid($uuid);
 
         // Menghasilkan password baru yang lebih aman
         $newPassword = substr(bin2hex(random_bytes(10)), 0, 10);
@@ -50,9 +57,11 @@ class PasswordController extends Controller
         $data = $request->validate([
             'role' => 'required'
         ]);
-        $users = User::whereHas('roles', function ($query) use ($data) {
-            $query->where('name', $data['role']);
-        })->get();
+        $users = $this->fastcrudUserRepository->getAll([], $request)
+            ->whereHas('roles', function ($query) use ($data) {
+                $query->where('name', $data['role']);
+            })
+            ->get();
 
         $passwords = [];
 

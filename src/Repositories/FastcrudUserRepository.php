@@ -15,7 +15,7 @@ class FastcrudUserRepository
     public function __construct() {}
     use RemovesFiles;
 
-    public function getAll(array $params = [], $request)
+    public function getAll(array $params = [], $request = null)
     {
         if (Auth::user()->hasRole('SUPERADMIN')) {
             $query = User::query();
@@ -24,19 +24,21 @@ class FastcrudUserRepository
                 $query->whereNot('name', 'SUPERADMIN');
             });
         }
-        $name = $request->name;
-        $must_change_password = $request->must_change_password;
-        $role = $request->role;
-        if ($name) {
-            $query->where('name', 'LIKE', '%' . $name . '%');
-        }
-        if (isset($must_change_password)) {
-            $query->where('must_change_password', (bool) $must_change_password);
-        }
-        if ($role) {
-            $query->whereHas('roles', function ($query) use ($role) {
-                $query->where('name', $role);
-            });
+        if ($request) {
+            $name = $request->name;
+            $must_change_password = $request->must_change_password;
+            $role = $request->role;
+            if ($name) {
+                $query->where('name', 'LIKE', '%' . $name . '%');
+            }
+            if (isset($must_change_password)) {
+                $query->where('must_change_password', (bool) $must_change_password);
+            }
+            if ($role) {
+                $query->whereHas('roles', function ($query) use ($role) {
+                    $query->where('name', $role);
+                });
+            }
         }
 
         return $query;

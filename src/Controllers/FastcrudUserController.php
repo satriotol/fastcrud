@@ -71,7 +71,7 @@ class FastcrudUserController extends Controller
     //
   }
   public function reset2Fa($uuid){
-    $fastcrud_user = FastcrudUser::where('uuid', $uuid)->first();
+    $fastcrud_user = $this->fastcrudUserRepository->findByUuid($uuid);
     $fastcrud_user->google2fa_secret = null;
     $fastcrud_user->google2fa_verified = false;
     $fastcrud_user->save();
