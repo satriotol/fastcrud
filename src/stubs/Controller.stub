@@ -66,7 +66,6 @@ class {{modelName}}Controller extends Controller
         $validation = $this->{{modelNameSingular}}Repository->validate(true);
         $data = $request->validate($validation['rules'], $validation['messages']);
 
-        $data['user_id'] = Auth::user()->id;
         $this->{{modelNameSingular}}Repository->update($uuid, $data);
 
         return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{modelName}} Berhasil Terupdate');

@@ -9,16 +9,10 @@
 
 @section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
-    <script src="https://cdn.ckeditor.com/4.17.0/full/ckeditor.js"></script>
 @endsection
 
 @section('page-script')
     <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            CKEDITOR.replaceClass = 'ckeditor';
-        });
-    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('form').forEach(function(form) {

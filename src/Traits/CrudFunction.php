@@ -280,7 +280,7 @@ trait CrudFunction
                 <div class="row mb-3">
                     <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
                     <div class="col-sm-10">
-                        {{html()->textarea('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'))->class('form-control ckeditor')->placeholder('Masukkan {$d['column_name_view']}')->required({$required})}}
+                        {{html()->textarea('{$d['column_name']}', isset(\${$data['singular']}) ? \${$data['singular']}->{$d['column_name']} : @old('{$d['column_name']}'))->class('form-control')->placeholder('Masukkan {$d['column_name_view']}')->required({$required})}}
                         @error('{$d['column_name']}')
                             <small class="text-danger">{{ \$message }}</small>
                         @enderror

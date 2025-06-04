@@ -88,6 +88,7 @@ FastCrud mendukung sistem reset password berkala berdasarkan batas waktu yang An
 | Variabel                 | Deskripsi                                                                                                                                                       |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `PASSWORD_EXPIRY_MONTHS` | Menentukan jumlah bulan masa berlaku password. Setelah periode ini, pengguna akan diminta untuk mengganti password. <br> **Contoh:** `PASSWORD_EXPIRY_MONTHS=6` |
+| `GOOGLE2FA_EXCEPT_ROLES` | Mengaktifkan 2fa pada akun tertentu. <br> **Contoh:** `GOOGLE2FA_EXCEPT_ROLES=SUPERADMIN` |
 
 ## Authors
 
