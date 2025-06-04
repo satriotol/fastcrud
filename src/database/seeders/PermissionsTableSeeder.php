@@ -275,6 +275,14 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-10-23 02:39:23',
                 'updated_at' => '2023-10-23 02:39:23',
             ),
+            31 =>
+            array(
+                'id' => 42,
+                'name' => 'fastcrud_user_reset_password',
+                'guard_name' => 'web',
+                'created_at' => '2023-10-23 02:39:23',
+                'updated_at' => '2023-10-23 02:39:23',
+            ),
         ));
     }
 }

@@ -20,7 +20,7 @@ class PasswordController extends Controller
     public function __construct()
     {
         $this->fastcrudUserRepository = new FastcrudUserRepository();
-        $this->middleware('permission:fastcrud_user_reset_password-create', ['only' => ['resetPassword', 'resetPasswords']]);
+        $this->middleware('permission:fastcrud_user_reset_password', ['only' => ['resetPassword', 'resetPasswords']]);
     }
     /**
      * Update the user's password.
