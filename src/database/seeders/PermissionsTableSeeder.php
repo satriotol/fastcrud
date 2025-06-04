@@ -275,10 +275,18 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2023-10-23 02:39:23',
                 'updated_at' => '2023-10-23 02:39:23',
             ),
-            31 =>
+            32 =>
             array(
                 'id' => 42,
-                'name' => 'fastcrud_user_reset_password',
+                'name' => 'fastcrud_user_reset_password-multiple',
+                'guard_name' => 'web',
+                'created_at' => '2023-10-23 02:39:23',
+                'updated_at' => '2023-10-23 02:39:23',
+            ),
+            33 =>
+            array(
+                'id' => 43,
+                'name' => 'fastcrud_user_reset_password-single',
                 'guard_name' => 'web',
                 'created_at' => '2023-10-23 02:39:23',
                 'updated_at' => '2023-10-23 02:39:23',

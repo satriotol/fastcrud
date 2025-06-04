@@ -92,7 +92,7 @@
                         <div
                             class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
                             <div class="dt-buttons btn-group flex-wrap">
-                                @role('SUPERADMIN')
+                                @can('fastcrud_user_reset_password-multiple')
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal">
                                         <span><i class="ti ti-lock me-0 me-sm-1 ti-xs"></i>
@@ -124,7 +124,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                @endrole
+                                @endcan
                                 <a href="{{ route('fastcrud_user.create') }}" class="btn btn-secondary btn-primary">
                                     <span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>
                                         <span class="d-none d-sm-inline-block">Tambah</span>
@@ -170,12 +170,12 @@
                                 </td>
                                 <td>{{ $user->last_used_sign_in_at }}</td>
                                 <td>
-                                    <a href="{{route('fastcrud_user.setMustChangePassword', $user->uuid)}}">
+                                    <a href="{{ route('fastcrud_user.setMustChangePassword', $user->uuid) }}">
                                         {{ $user->must_change_password ? '❌' : '✅' }}
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{route('fastcrud_user.reset2Fa', $user->uuid)}}">
+                                    <a href="{{ route('fastcrud_user.reset2Fa', $user->uuid) }}">
                                         {{ $user->google2fa_secret ? '✅' : '❌' }}
                                     </a>
                                 </td>
@@ -190,17 +190,15 @@
                                                         class="ti ti-pencil me-1"></i>
                                                     Edit</a>
                                             @endcan
-                                            @role('SUPERADMIN')
-                                                @can('user-delete')
-                                                    <form action="{{ route('user.resetPassword', $user->uuid) }}" method="post">
-                                                        @csrf
-                                                        <button type="submit" class="dropdown-item"
-                                                            onclick="return confirm('Apakah Anda Reset Password Pengguna Ini?')">
-                                                            <i class="ti ti-lock me-1"></i> Reset Password
-                                                        </button>
-                                                    </form>
-                                                @endcan
-                                            @endrole
+                                            @can('fastcrud_user_reset_password-single')
+                                                <form action="{{ route('user.resetPassword', $user->uuid) }}" method="post">
+                                                    @csrf
+                                                    <button type="submit" class="dropdown-item"
+                                                        onclick="return confirm('Apakah Anda Reset Password Pengguna Ini?')">
+                                                        <i class="ti ti-lock me-1"></i> Reset Password
+                                                    </button>
+                                                </form>
+                                            @endcan
                                             @if (Auth::user()->id != $user->id)
                                                 @can('user-delete')
                                                     <form action="{{ route('fastcrud_user.destroy', $user->id) }}"
