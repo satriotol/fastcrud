@@ -53,16 +53,18 @@ class PasswordController extends Controller
         return redirect()->back()->with('success', "Password telah direset. Password baru: $newPassword");
     }
 
-    public function resetPasswords(Request $request)
+    public function resetPasswords(Request $request, $users = null)
     {
         $data = $request->validate([
             'role' => 'required'
         ]);
-        $users = $this->fastcrudUserRepository->getAll([], $request)
-            ->whereHas('roles', function ($query) use ($data) {
-                $query->where('name', $data['role']);
-            })
-            ->get();
+        if (!$users) {
+            $users = $this->fastcrudUserRepository->getAll([], $request)
+                ->whereHas('roles', function ($query) use ($data) {
+                    $query->where('name', $data['role']);
+                })
+                ->get();
+        }
 
         $passwords = [];
 
