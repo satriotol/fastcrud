@@ -12,14 +12,21 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use Satriotol\Fastcrud\Models\FastcrudPasswordHistory;
+use Satriotol\Fastcrud\Repositories\FastcrudPasswordHistoryRepository;
+use Satriotol\Fastcrud\Repositories\FastcrudPasswordRepository;
 use Satriotol\Fastcrud\Repositories\FastcrudUserRepository;
 
 class PasswordController extends Controller
 {
     protected $fastcrudUserRepository;
+    protected $fastcrudPasswordHistoryRepository;
+    protected $fastcrudPasswordRepository;
+
     public function __construct()
     {
         $this->fastcrudUserRepository = new FastcrudUserRepository();
+        $this->fastcrudPasswordHistoryRepository = new FastcrudPasswordHistoryRepository();
+        $this->fastcrudPasswordRepository = new FastcrudPasswordRepository();
         $this->middleware('permission:fastcrud_user_reset_password-single', ['only' => ['resetPassword']]);
         $this->middleware('permission:fastcrud_user_reset_password-multiple', ['only' => ['resetPasswords']]);
     }
@@ -43,7 +50,10 @@ class PasswordController extends Controller
     {
         $user = $this->fastcrudUserRepository->findByUuid($uuid);
 
-        // Menghasilkan password baru yang lebih aman
+        $fastcrudPasswordHistory = $this->fastcrudPasswordHistoryRepository->create([
+            'user_id' => $user->id,
+            'password' => $user->password
+        ]);
         $newPassword = substr(bin2hex(random_bytes(10)), 0, 10);
 
         $user->password = Hash::make($newPassword);
@@ -69,6 +79,10 @@ class PasswordController extends Controller
         $passwords = [];
 
         foreach ($users as $user) {
+            $fastcrudPasswordHistory = $this->fastcrudPasswordHistoryRepository->create([
+                'user_id' => $user->id,
+                'password' => $user->password
+            ]);
             $newPassword = Str::random(8); // Generate a random password
             $user->password = Hash::make($newPassword);
             $user->must_change_password = true;
@@ -92,46 +106,31 @@ class PasswordController extends Controller
     }
     public function changePassword(Request $request)
     {
-        $request->validate([
-            'password' => [
-                'required',
-                'string',
-                'min:8',
-                'confirmed',
-                'regex:/[a-z]/', // Mengandung huruf kecil
-                'regex:/[A-Z]/', // Mengandung huruf besar
-                'regex:/[0-9]/', // Mengandung angka
-                'regex:/[@$!%*#?&_]/', // Mengandung simbol khusus
-            ],
-        ], [
-            'password.required' => 'Password harus diisi.',
-            'password.string' => 'Password harus berupa string.',
-            'password.min' => 'Password harus minimal 8 karakter.',
-            'password.confirmed' => 'Password konfirmasi tidak cocok.',
-            'password.regex' => 'Password harus mengandung huruf kecil, huruf besar, angka, dan simbol khusus.',
-        ]);
+        $request->validate($this->fastcrudPasswordRepository->validate()['rules'], $this->fastcrudPasswordRepository->validate()['messages']);
 
         $user = auth()->user();
         $newPassword = $request->password;
-        $historyPasswords = FastcrudPasswordHistory::where('user_id', $user->id)
+        $historyPasswords = $this->fastcrudPasswordHistoryRepository->getAll([], null)->where('user_id', $user->id)
             ->orderByDesc('created_at')
-            ->take(3)
+            ->take(5)
             ->get();
 
         foreach ($historyPasswords as $history) {
             if (Hash::check($newPassword, $history->password)) {
-                return back()->withErrors('Password baru tidak boleh sama dengan 3 password terakhir.');
+                return back()->withErrors('Password baru tidak boleh sama dengan 5 password terakhir.');
             }
         }
-        FastcrudPasswordHistory::create([
+        $data = [
             'user_id' => $user->id,
-            'password' => $user->password, // simpan dalam kondisi hash
-        ]);
-        $historyCount = FastcrudPasswordHistory::where('user_id', $user->id)->count();
-        if ($historyCount > 3) {
-            FastcrudPasswordHistory::where('user_id', $user->id)
+            'password' => $user->password,
+        ];
+        $this->fastcrudPasswordHistoryRepository->create($data);
+        $historyCount = $this->fastcrudPasswordHistoryRepository->getAll([], null)->where('user_id', $user->id)->count();
+        if ($historyCount > 5) {
+            $this->fastcrudPasswordHistoryRepository->getAll([], null)
+                ->where('user_id', $user->id)
                 ->orderBy('created_at')
-                ->limit($historyCount - 3)
+                ->limit($historyCount - 5)
                 ->delete();
         }
 
