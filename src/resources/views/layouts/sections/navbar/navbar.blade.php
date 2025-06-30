@@ -1,5 +1,8 @@
 @php
-    $containerNav = isset($configData['contentLayout']) && $configData['contentLayout'] === 'compact' ? 'container-xxl' : 'container-fluid';
+    $containerNav =
+        isset($configData['contentLayout']) && $configData['contentLayout'] === 'compact'
+            ? 'container-xxl'
+            : 'container-fluid';
     $navbarDetached = $navbarDetached ?? '';
 @endphp
 
@@ -61,7 +64,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
                 <li>
-                    <a class="dropdown-item" href="{{ route('user.profile') }}">
+                    <a class="dropdown-item" href="#">
                         <div class="d-flex">
                             <div class="flex-shrink-0 me-3">
                                 <div class="avatar avatar-online">
@@ -89,6 +92,12 @@
                     <div class="dropdown-divider"></div>
                 </li>
                 @if (Auth::check())
+                    <li>
+                        <a class="dropdown-item" href="{{ route('password.change.form') }}">
+                            <i class='ti ti-key me-2'></i>
+                            <span class="align-middle">Ganti Password</span>
+                        </a>
+                    </li>
                     <li>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
