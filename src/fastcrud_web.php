@@ -27,7 +27,12 @@ Route::prefix('admin')->group(function () {
             Route::get('/change-password', [PasswordController::class, 'showChangePasswordForm'])->name('password.change.form');
             Route::post('/change-password', [PasswordController::class, 'changePassword'])->name('password.change');
         });
+        Route::get('/login-back', [FastcrudImpersonateController::class, 'loginBack'])->name('fastcrud_user.impersonate.login_back');
         Route::middleware(['auth', 'force.password.change'])->group(function () {
+            Route::prefix('fastcrud_user')->group(function () {
+                Route::get('reset2Fa/{uuid}', [FastcrudUserController::class, 'reset2Fa'])->name('fastcrud_user.reset2Fa');
+                Route::get('/login-as/{id}', [FastcrudImpersonateController::class, 'loginAs'])->name('fastcrud_user.impersonate.login_as');
+            });
             Route::prefix('2fa')->group(function () {
                 Route::get('/', [FastcrudTwoFactorController::class, 'show2FASetup'])->name('2fa.setup');
                 Route::post('verify', [FastcrudTwoFactorController::class, 'verify2FA'])->name('2fa.verify');
@@ -47,11 +52,6 @@ Route::prefix('admin')->group(function () {
             Route::resource('permission', PermissionController::class);
             Route::resource('role', RoleController::class);
             Route::resource('fastcrud_user', FastcrudUserController::class);
-            Route::prefix('fastcrud_user')->group(function () {
-                Route::get('reset2Fa/{uuid}', [FastcrudUserController::class, 'reset2Fa'])->name('fastcrud_user.reset2Fa');
-                Route::get('/login-as/{id}', [FastcrudImpersonateController::class, 'loginAs'])->name('fastcrud_user.impersonate.login_as');
-                Route::get('/login-back', [FastcrudImpersonateController::class, 'loginBack'])->name('fastcrud_user.impersonate.login_back');
-            });
             Route::get('setMustChangePassword/fastcrud_user/{uuid}', [FastcrudUserController::class, 'setMustChangePassword'])->name('fastcrud_user.setMustChangePassword');
         });
     });
