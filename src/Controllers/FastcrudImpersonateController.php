@@ -36,7 +36,7 @@ class FastcrudImpersonateController extends Controller
     if ($adminId && $admin = User::find($adminId)) {
       Auth::login($admin);
 
-      return redirect()->route('dashboard.index')
+      return redirect()->route('fastcrud_user.index')
         ->with('success', 'Kembali sebagai admin');
     }
 
