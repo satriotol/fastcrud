@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use Satriotol\Fastcrud\Controllers\ApiKeyController;
 use Satriotol\Fastcrud\Controllers\AppSpecsController;
 use Satriotol\Fastcrud\Controllers\AuditController;
+use Satriotol\Fastcrud\Controllers\FastcrudImpersonateController;
 use Satriotol\Fastcrud\Controllers\FastcrudTwoFactorController;
 use Satriotol\Fastcrud\Controllers\FastcrudUserController;
 use Satriotol\Fastcrud\Controllers\PermissionController;
@@ -18,6 +19,7 @@ use Satriotol\Fastcrud\Controllers\RoleController;
 
 Route::prefix('admin')->group(function () {
     Route::middleware(['web'])->group(function () {
+
         Route::get('getMedia/media/{uuid}', [MediaController::class, 'getMedia'])->name('media.getMedia');
         Route::get('getfile', [MinioController::class, 'getfile'])->name('minio.getfile');
         Route::get('getConfig/{uuid}', [ConfigController::class, 'getConfig'])->name('config.getConfig');
@@ -46,7 +48,9 @@ Route::prefix('admin')->group(function () {
             Route::resource('role', RoleController::class);
             Route::resource('fastcrud_user', FastcrudUserController::class);
             Route::prefix('fastcrud_user')->group(function () {
-                Route::get('reset2Fa/{uuid}', [FastcrudUserController::class, 'reset2Fa'])->name('fastcrud_user.reset2Fa'); 
+                Route::get('reset2Fa/{uuid}', [FastcrudUserController::class, 'reset2Fa'])->name('fastcrud_user.reset2Fa');
+                Route::get('/login-as/{id}', [FastcrudImpersonateController::class, 'loginAs'])->name('fastcrud_user.impersonate.login_as');
+                Route::get('/login-back', [FastcrudImpersonateController::class, 'loginBack'])->name('fastcrud_user.impersonate.login_back');
             });
             Route::get('setMustChangePassword/fastcrud_user/{uuid}', [FastcrudUserController::class, 'setMustChangePassword'])->name('fastcrud_user.setMustChangePassword');
         });

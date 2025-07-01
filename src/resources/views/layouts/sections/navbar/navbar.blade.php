@@ -98,6 +98,14 @@
                             <span class="align-middle">Ganti Password</span>
                         </a>
                     </li>
+                    @if (session()->has('admin_id'))
+                        <li>
+                            <a class="dropdown-item" href="{{ route('fastcrud_user.impersonate.login_back') }}">
+                                <i class='ti ti-login me-2'></i>
+                                <span class="align-middle">Kembali Ke Admin</span>
+                            </a>
+                        </li>
+                    @endif
                     <li>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
