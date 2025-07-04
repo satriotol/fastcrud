@@ -63,7 +63,8 @@ class {{modelName}}Controller extends Controller
 
     public function update(Request $request, $uuid)
     {
-        $validation = $this->{{modelNameSingular}}Repository->validate(true);
+        $model = $this->{{modelNameSingular}}Repository->findByUuid($uuid); 
+        $validation = $this->{{modelNameSingular}}Repository->validate(true, $model->id);
         $data = $request->validate($validation['rules'], $validation['messages']);
 
         $result =$this->{{modelNameSingular}}Repository->update($uuid, $data);

@@ -58,13 +58,15 @@ class {{modelName}}Repository
         $query = {{modelName}}::query();
         return $query;
     }
-    public function validate($isUpdate = false)
+    public function validate($isUpdate = false, $id = null)
     {
         $rules = [
             {{validations}}
         ];
         if($isUpdate){
-            
+            if ($id) {
+                
+            }
         }
         $messages = [
 
@@ -82,6 +84,8 @@ class {{modelName}}Repository
         DB::beginTransaction();
 
         try {
+            //UPLOAD_LOGIC
+
             {{modelName}}::create($data);
 
             DB::commit();
