@@ -143,6 +143,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Id</th>
                             <th>Nama</th>
                             <th>E-mail</th>
                             <th>Role</th>
@@ -159,6 +160,7 @@
                         @foreach ($users as $user)
                             <tr>
                                 <td>{{ $no++ }}</td>
+                                <td>{{ $user->id }}</td>
                                 <td>{{ $user->name }} <br>
                                     <a href="{{ route('fastcrud_user.impersonate.login_as', $user->id) }}"
                                         class="btn btn-sm btn-primary">Impersonate</a>
