@@ -8,6 +8,7 @@ use App\Models\{{modelName}};
 use App\Repositories\{{modelName}}Repository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class {{modelName}}Controller extends Controller
 {
@@ -43,10 +44,15 @@ class {{modelName}}Controller extends Controller
     {
         $validation = $this->{{modelNameSingular}}Repository->validate();
         $data = $request->validate($validation['rules'], $validation['messages']);
-
-        $result = $this->{{modelNameSingular}}Repository->create($data);
-
-        return redirect(route('{{modelNameSingular}}.index'))->with($result['status'], $result['message']);
+        DB::beginTransaction();
+        try {
+            $this->{{modelNameSingular}}Repository->create($data);
+            DB::commit();
+            return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{modelName}} Berhasil Tersimpan');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
+        }
     }
 
     public function show($uuid)
@@ -66,10 +72,15 @@ class {{modelName}}Controller extends Controller
         $model = $this->{{modelNameSingular}}Repository->findByUuid($uuid); 
         $validation = $this->{{modelNameSingular}}Repository->validate(true, $model->id);
         $data = $request->validate($validation['rules'], $validation['messages']);
-
-        $result =$this->{{modelNameSingular}}Repository->update($uuid, $data);
-
-        return redirect(route('{{modelNameSingular}}.index'))->with($result['status'], $result['message']);
+        DB::beginTransaction();
+        try {
+            $this->{{modelNameSingular}}Repository->update($uuid, $data);
+            DB::commit();
+            return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{modelName}} Berhasil Terupdate');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
+        }
     }
 
     public function destroy($uuid)

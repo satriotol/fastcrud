@@ -6,7 +6,6 @@ use App\Models\{{modelName}};
 use Illuminate\Support\Facades\Storage;
 use Satriotol\Fastcrud\Traits\RemovesFiles;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 
 class {{modelName}}Repository
 {
@@ -81,55 +80,19 @@ class {{modelName}}Repository
 
     public function create(array $data)
     {
-        DB::beginTransaction();
-
-        try {
-            //UPLOAD_LOGIC
-
-            {{modelName}}::create($data);
-
-            DB::commit();
-
-            return [
-                "status" => "success",
-                "message" => "{{modelName}} Sukses Dibuat"
-            ];
-        } catch (\Throwable $th) {
-            DB::rollBack();
-
-            return [
-                "status" => "error",
-                "message" => $th->getMessage()
-            ];
-        }
+        //UPLOAD_LOGIC
+        return {{modelName}}::create($data);
     }
 
 
     public function update(string $uuid, array $data)
     {
-        DB::beginTransaction();
+        $model = $this->findByUuid($uuid);
 
-        try {
-            $model = $this->findByUuid($uuid);
+        //UPLOAD_LOGIC
 
-            //UPLOAD_LOGIC
+        return $model->update($data);
 
-            $model->update($data);
-
-            DB::commit();
-
-            return [
-                "status" => "success",
-                "message" => "{{modelName}} Sukses Terupdate"
-            ];
-        } catch (\Throwable $th) {
-            DB::rollBack();
-
-            return [
-                "status" => "error",
-                "message" => $th->getMessage()
-            ];
-        }
     }
 
     public function delete(string $uuid)

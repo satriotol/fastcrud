@@ -99,7 +99,6 @@ class PasswordController extends Controller
         return Excel::download(new UsersExport($passwords), 'users_passwords.xlsx');
     }
 
-
     public function showChangePasswordForm()
     {
         return view('fastcrud::user.resetPassword');
