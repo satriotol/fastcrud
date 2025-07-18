@@ -29,6 +29,9 @@
                     <div class="col-md-4">
                         {{ html()->text('user_id')->class('form-control')->placeholder('Cari User ID')->value(@old('user_id')) }}
                     </div>
+                    <div class="col-md-4">
+                        {{ html()->text('auditable_type')->class('form-control')->placeholder('Cari Tipe Auditable')->value(@old('auditable_type')) }}
+                    </div>
                 </div>
                 <div
                     class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
@@ -71,7 +74,11 @@
                                 <td>{{ $audit->event }}</td>
                                 <td>{{ $audit->auditable_type }}</td>
                                 <td>{{ $audit->auditable_id }}</td>
-                                <td>{{ $audit->user ? $audit->user->name : 'System' }}</td>
+                                <td>{{ $audit->user ? $audit->user->name : 'System' }} <br>
+                                    <small class="text-muted">
+                                        {{ $audit->user ? $audit->user_id : 'N/A' }}
+                                    </small>
+                                </td>
                                 <td>
                                     <ul>
                                         @foreach ($audit->old_values as $key => $old_value)

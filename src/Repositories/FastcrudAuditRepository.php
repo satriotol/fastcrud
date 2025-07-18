@@ -18,8 +18,12 @@ class FastcrudAuditRepository
         if ($request) {
             $user_id = $request->user_id;
             $event = $request->event;
+            $auditable_type = $request->auditable_type;
             if ($user_id) {
                 $query->where('user_id', $user_id);
+            }
+            if ($auditable_type) {
+                $query->where('auditable_type', $auditable_type);
             }
             if ($event) {
                 $query->where('event', $event);
