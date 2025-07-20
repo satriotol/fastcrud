@@ -28,7 +28,7 @@ class FastcrudUserController extends Controller
   {
     $users = $this->fastcrudUserRepository->getAll([], $request)->latest()->paginate(10);
     $users_counts = $this->fastcrudUserRepository->getAll([], $request)->count();
-    $roles = $this->fastcrudRoleRepository->getAll([], $request)->get();
+    $roles = $this->fastcrudRoleRepository->search()->get();
     $request->flash();
     return view('fastcrud::fastcrud_user.index', compact('users', 'roles', 'users_counts'));
   }
@@ -70,7 +70,8 @@ class FastcrudUserController extends Controller
   {
     //
   }
-  public function reset2Fa($uuid){
+  public function reset2Fa($uuid)
+  {
     $fastcrud_user = $this->fastcrudUserRepository->findByUuid($uuid);
     $fastcrud_user->google2fa_secret = null;
     $fastcrud_user->google2fa_verified = false;

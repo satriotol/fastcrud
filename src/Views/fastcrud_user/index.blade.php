@@ -165,7 +165,9 @@
                                     <a href="{{ route('fastcrud_user.impersonate.login_as', $user->id) }}"
                                         class="btn btn-sm btn-primary">Impersonate</a>
                                 </td>
-                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->email }} <br>
+                                    {{ $user->created_at }}
+                                </td>
                                 <td>
                                     @foreach ($user->roles as $role)
                                         <div class="badge bg-primary">

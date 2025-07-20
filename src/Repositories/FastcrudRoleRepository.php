@@ -26,4 +26,12 @@ class FastcrudRoleRepository
 
         return $query;
     }
+    public function search(){
+        $query = Role::orderBy('name');
+        if (Auth::user()->name != 'SUPERADMIN') {
+            $query->where('name', '!=', 'SUPERADMIN');
+        }
+        return $query;
+
+    }
 }
