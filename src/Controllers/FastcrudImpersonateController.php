@@ -13,7 +13,7 @@ class FastcrudImpersonateController extends Controller
 {
   public function __construct()
   {
-    $this->middleware('role:SUPERADMIN', ['only' => ['loginAs']]);
+    $this->middleware('role:SUPERADMIN|IMPERSONATE', ['only' => ['loginAs']]);
   }
   public function loginAs($id)
   {
