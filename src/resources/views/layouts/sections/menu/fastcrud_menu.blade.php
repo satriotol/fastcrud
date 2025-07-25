@@ -33,7 +33,7 @@
         </a>
     </li>
 @endcan
-@role('SUPERADMIN')
+@role(['SUPERADMIN', 'IMPERSONATE'])
     <li class="menu-item {{ request()->routeIs('app-specs.index') ? 'active' : '' }}">
         <a href="{{ route('app-specs.index') }}" class="menu-link">
             <i class="menu-icon tf-icons ti ti-section"></i>
