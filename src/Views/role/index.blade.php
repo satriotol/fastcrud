@@ -38,57 +38,52 @@
 @endsection
 
 @section('content')
-    <div class="card">
-
-        <div class="card-header border-bottom">
-            <div class="row">
-                <div class="col-md">
-                    <h5 class="card-title mb-3">{Role}</h5>
+    <div class="card shadow-lg border-0">
+        <div class="card-header border-bottom bg-primary text-white rounded-top">
+            <div class="row align-items-center">
+                <div class="col-md-6 col-12 mb-2 mb-md-0">
+                    <h5 class="card-title mb-0 text-white"><i class="bi bi-people-fill me-2"></i> Daftar Role & Hak Akses
+                    </h5>
                 </div>
-                <div class="col-md">
-                    <div
-                        class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
-                        <div class="dt-buttons btn-group flex-wrap">
-                            <a href="{{ route('role.create') }}" class="btn btn-secondary btn-primary">
-                                <span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>
-                                    <span class="d-none d-sm-inline-block">Tambah</span>
-                                </span>
-                            </a>
-                        </div>
-                    </div>
+                <div class="col-md-6 col-12 text-md-end text-start">
+                    <a href="{{ route('role.create') }}" class="btn btn-success btn-sm px-3">
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Role
+                    </a>
                 </div>
             </div>
-            <form action="">
-
-                <div class="d-flex justify-content-between align-items-center row pb-2 gap-3 gap-md-0 mt-3">
-                    <div class="col-md-4">
-                        {{ html()->text('name')->class('form-control')->placeholder('Cari Nama')->value(@old('name')) }}
+            <form action="" class="mt-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-4 col-12">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-search"></i></span>
+                            {{ html()->text('name')->class('form-control')->placeholder('Cari Nama Role')->value(@old('name')) }}
+                        </div>
                     </div>
-                </div>
-                <div
-                    class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
-                    <div class="dt-buttons btn-group flex-wrap">
-                        <button class="btn btn-secondary add-new btn-primary" type="submit">
-                            <span><i class="ti ti-search me-0 me-sm-1 ti-xs"></i>
-                                <span class="d-none d-sm-inline-block">Cari</span>
-                            </span>
+                    <div class="col-auto">
+                        <button class="btn btn-light btn-sm" type="submit">
+                            <i class="ti ti-search me-1"></i> Cari
                         </button>
                     </div>
                 </div>
             </form>
-
         </div>
         <div class="card-body">
+            <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+                <i class="bi bi-info-circle me-2 fs-5"></i>
+                <div>
+                    <strong>Tips:</strong> Klik jumlah user untuk melihat detail anggota role. Gunakan tombol <b>Tambah
+                        Role</b> untuk menambah role baru.
+                </div>
+            </div>
             @include('partials.success')
-
             <div class="table-responsive text-nowrap">
-                <table class="table">
-                    <thead>
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Jumlah</th>
-                            <th>Actions</th>
+                            <th style="width: 5%;"><i class="bi bi-hash"></i> No</th>
+                            <th><i class="bi bi-person-badge"></i> Nama Role</th>
+                            <th style="width: 12%;"><i class="bi bi-people"></i> User</th>
+                            <th style="width: 10%;"><i class="bi bi-gear"></i> Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -97,36 +92,54 @@
                         @endphp
                         @foreach ($roles as $role)
                             <tr>
-                                <td>{{ $no++ }}</td>
-                                <td>{{ $role->name }}</td>
+                                <td class="text-center fw-bold">{{ $no++ }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#modalRole{{ $role->id }}">
-                                        {{ $role->users->count() }}
+                                    <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 fs-6">
+                                        <i class="bi bi-person-badge me-1"></i> {{ $role->name }}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-outline-primary btn-sm px-2 py-1"
+                                        data-bs-toggle="modal" data-bs-target="#modalRole{{ $role->id }}"
+                                        title="Lihat anggota role">
+                                        <i class="bi bi-people-fill me-1"></i> {{ $role->users->count() }}
                                     </button>
                                     <div class="modal fade" id="modalRole{{ $role->id }}" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-xl">
+                                        aria-labelledby="modalRoleLabel{{ $role->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                                        {{ $role->name }}</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                                <div class="modal-header bg-primary text-white">
+                                                    <h5 class="modal-title" id="modalRoleLabel{{ $role->id }}">
+                                                        <i class="bi bi-people me-2"></i> Anggota Role: <span
+                                                            class="fw-bold">{{ $role->name }}</span>
+                                                    </h5>
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <table class="table" id="datatableRole{{ $role->id }}">
+                                                    <table class="table table-striped"
+                                                        id="datatableRole{{ $role->id }}">
                                                         <thead>
                                                             <tr>
-                                                                <th>User</th>
-                                                                <th>Reset Password</th>
+                                                                <th><i class="bi bi-person"></i> User</th>
+                                                                <th><i class="bi bi-key"></i> Reset Password</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             @foreach ($role->users as $user)
                                                                 <tr>
-                                                                    <td>{{ $user->name }}</td>
-                                                                    <td>{{ $user->must_change_password ? '❌' : '✅' }}
+                                                                    <td><i class="bi bi-person-circle me-1"></i>
+                                                                        {{ $user->name }}</td>
+                                                                    <td>
+                                                                        @if ($user->must_change_password)
+                                                                            <span class="badge bg-danger"><i
+                                                                                    class="bi bi-x-circle"></i> Harus
+                                                                                Reset</span>
+                                                                        @else
+                                                                            <span class="badge bg-success"><i
+                                                                                    class="bi bi-check-circle"></i>
+                                                                                Aman</span>
+                                                                        @endif
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -135,13 +148,13 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Close</button>
+                                                        data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Tutup</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                                             data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
@@ -157,18 +170,49 @@
                                                     <i class="ti ti-trash me-1"></i> Delete
                                                 </button>
                                             </form>
-
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                         @endforeach
-
                     </tbody>
                 </table>
             </div>
             {{ $roles->appends($_GET)->links('pagination::bootstrap-5')->withClass('pagination-container') }}
         </div>
-
     </div>
+    <style>
+        .badge.bg-primary.bg-opacity-10 {
+            background-color: #e7f1ff !important;
+            color: #0d6efd !important;
+            font-weight: 500;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle !important;
+        }
+
+        .modal-header.bg-primary {
+            background: linear-gradient(90deg, #0d6efd 60%, #4e9cff 100%);
+        }
+
+        .btn-outline-primary.btn-sm {
+            font-size: 0.98rem;
+        }
+
+        .dropdown-menu .dropdown-item i {
+            min-width: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 1.2rem;
+            }
+
+            .table-responsive {
+                font-size: 0.97rem;
+            }
+        }
+    </style>
 @endsection
