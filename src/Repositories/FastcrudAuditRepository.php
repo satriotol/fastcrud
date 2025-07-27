@@ -19,6 +19,7 @@ class FastcrudAuditRepository
             $user_id = $request->user_id;
             $event = $request->event;
             $auditable_type = $request->auditable_type;
+            $ip_address = $request->ip_address;
             if ($user_id) {
                 $query->where('user_id', $user_id);
             }
@@ -27,6 +28,9 @@ class FastcrudAuditRepository
             }
             if ($event) {
                 $query->where('event', $event);
+            }
+            if ($ip_address) {
+                $query->where('ip_address', $ip_address);
             }
         }
 
