@@ -54,7 +54,7 @@ class PasswordController extends Controller
             'user_id' => $user->id,
             'password' => $user->password
         ]);
-        $newPassword = substr(bin2hex(random_bytes(10)), 0, 10);
+        $newPassword = str_pad(random_int(0, 9999999999), 10, '0', STR_PAD_LEFT);
 
         $user->password = Hash::make($newPassword);
         $user->must_change_password = true;
@@ -83,7 +83,7 @@ class PasswordController extends Controller
                 'user_id' => $user->id,
                 'password' => $user->password
             ]);
-            $newPassword = Str::random(8); // Generate a random password
+            $newPassword = str_pad(random_int(0, 9999999999), 10, '0', STR_PAD_LEFT);
             $user->password = Hash::make($newPassword);
             $user->must_change_password = true;
             $user->save();
