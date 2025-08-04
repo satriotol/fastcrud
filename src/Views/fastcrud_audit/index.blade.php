@@ -330,206 +330,220 @@
                         Filter Audit Log
                     </h5>
                 </div>
-                </div>
             </div>
         </div>
+    </div>
 
-        <div class="card-body pb-0">
-            <form action="" class="filter-section">
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">
-                            <i class="ti ti-activity me-1"></i>Event/Action
-                        </label>
-                        {{ html()->text('event')->class('form-control')->placeholder('Contoh: created, updated, deleted')->value(@old('event')) }}
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">
-                            <i class="ti ti-user me-1"></i>User ID
-                        </label>
-                        {{ html()->text('user_id')->class('form-control')->placeholder('Masukkan ID atau nama user')->value(@old('user_id')) }}
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">
-                            <i class="ti ti-database me-1"></i>Tipe Model
-                        </label>
-                        {{ html()->text('auditable_type')->class('form-control')->placeholder('Contoh: User, Operational')->value(@old('auditable_type')) }}
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">
-                            <i class="ti ti-world me-1"></i>IP Address
-                        </label>
-                        {{ html()->text('ip_address')->class('form-control')->placeholder('Masukkan IP Address')->value(@old('ip_address')) }}
-                    </div>
+    <div class="card-body pb-0">
+        <form action="" class="filter-section">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">
+                        <i class="ti ti-activity me-1"></i>Event/Action
+                    </label>
+                    {{ html()->text('event')->class('form-control')->placeholder('Contoh: created, updated, deleted')->value(@old('event')) }}
                 </div>
-
-                <div class="row mt-3">
-                    <div class="col-12 text-end">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="ti ti-search me-1"></i>
-                            Cari Data
-                        </button>
-                    </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">
+                        <i class="ti ti-user me-1"></i>User ID
+                    </label>
+                    {{ html()->text('user_id')->class('form-control')->placeholder('Masukkan ID atau nama user')->value(@old('user_id')) }}
                 </div>
-            </form>
-            <div class="alert alert-info mt-3">
-                <i class="ti ti-info-circle me-2"></i>
-                <b>Tips:</b> Gunakan filter di atas untuk mencari log tertentu. Kolom <b>Nilai Lama</b> dan <b>Nilai Baru</b> dapat di-klik untuk melihat detail lebih banyak jika datanya panjang.
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">
+                        <i class="ti ti-id me-1"></i>ID Model
+                    </label>
+                    {{ html()->text('auditable_id')->class('form-control')->placeholder('Masukkan ID Model')->value(@old('auditable_id')) }}
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">
+                        <i class="ti ti-database me-1"></i>Tipe Model
+                    </label>
+                    {{ html()->text('auditable_type')->class('form-control')->placeholder('Contoh: User, Operational')->value(@old('auditable_type')) }}
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">
+                        <i class="ti ti-world me-1"></i>IP Address
+                    </label>
+                    {{ html()->text('ip_address')->class('form-control')->placeholder('Masukkan IP Address')->value(@old('ip_address')) }}
+                </div>
             </div>
-        </div>
 
-        <!-- Table Section -->
-        <div class="card-body pt-0">
-            @if ($audits->count() > 0)
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
+            <div class="row mt-3">
+                <div class="col-12 text-end">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="ti ti-search me-1"></i>
+                        Cari Data
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div class="alert alert-info mt-3">
+            <i class="ti ti-info-circle me-2"></i>
+            <b>Tips:</b> Gunakan filter di atas untuk mencari log tertentu. Kolom <b>Nilai Lama</b> dan <b>Nilai Baru</b>
+            dapat di-klik untuk melihat detail lebih banyak jika datanya panjang.
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="card-body pt-0">
+        @if ($audits->count() > 0)
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="border-0 fw-semibold">No</th>
+                            <th class="border-0 fw-semibold">IP Address <br><span class="text-muted fw-normal small">Alamat
+                                    IP pengguna</span></th>
+                            <th class="border-0 fw-semibold">Action <br><span class="text-muted fw-normal small">Jenis aksi
+                                    (created, updated, dst)</span></th>
+                            <th class="border-0 fw-semibold">Model Info <br><span class="text-muted fw-normal small">Tipe &
+                                    ID data</span></th>
+                            <th class="border-0 fw-semibold">User <br><span class="text-muted fw-normal small">Nama &
+                                    ID</span></th>
+                            <th class="border-0 fw-semibold">Nilai Lama <br><span class="text-muted fw-normal small">Data
+                                    sebelum perubahan</span></th>
+                            <th class="border-0 fw-semibold">Nilai Baru <br><span class="text-muted fw-normal small">Data
+                                    setelah perubahan</span></th>
+                            <th class="border-0 fw-semibold">Waktu <br><span class="text-muted fw-normal small">Tanggal,
+                                    jam, & selisih waktu</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $no = ($audits->currentPage() - 1) * $audits->perPage() + 1;
+                        @endphp
+                        @foreach ($audits as $audit)
                             <tr>
-                                <th class="border-0 fw-semibold">No</th>
-                                <th class="border-0 fw-semibold">IP Address <br><span class="text-muted fw-normal small">Alamat IP pengguna</span></th>
-                                <th class="border-0 fw-semibold">Action <br><span class="text-muted fw-normal small">Jenis aksi (created, updated, dst)</span></th>
-                                <th class="border-0 fw-semibold">Model Info <br><span class="text-muted fw-normal small">Tipe & ID data</span></th>
-                                <th class="border-0 fw-semibold">User <br><span class="text-muted fw-normal small">Nama & ID</span></th>
-                                <th class="border-0 fw-semibold">Nilai Lama <br><span class="text-muted fw-normal small">Data sebelum perubahan</span></th>
-                                <th class="border-0 fw-semibold">Nilai Baru <br><span class="text-muted fw-normal small">Data setelah perubahan</span></th>
-                                <th class="border-0 fw-semibold">Waktu <br><span class="text-muted fw-normal small">Tanggal, jam, & selisih waktu</span></th>
+                                <td class="fw-semibold">{{ $no++ }}</td>
+
+                                <!-- IP Address -->
+                                <td>
+                                    <span class="ip-address" data-bs-toggle="tooltip" title="IP Address pengguna">
+                                        {{ $audit->ip_address }}
+                                    </span>
+                                </td>
+
+                                <!-- Action/Event -->
+                                <td>
+                                    <span class="audit-event {{ strtolower($audit->event) }}">
+                                        {{ $audit->event }}
+                                    </span>
+                                </td>
+
+                                <!-- Model Info -->
+                                <td>
+                                    <div class="auditable-info">
+                                        <div class="auditable-type mb-1">
+                                            {{ $audit->auditable_type }}
+                                        </div>
+                                        <div class="auditable-id">
+                                            ID: {{ $audit->auditable_id }}
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- User Info -->
+                                <td>
+                                    <div class="user-info">
+                                        @if ($audit->user)
+                                            <div class="user-avatar">
+                                                {{ substr($audit->user->name, 0, 1) }}
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">{{ $audit->user->name }}</div>
+                                                <small class="text-muted">ID: {{ $audit->user_id }}</small>
+                                            </div>
+                                        @else
+                                            <div class="user-avatar bg-secondary">
+                                                <i class="ti ti-robot"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">System</div>
+                                                <small class="text-muted">Automated</small>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </td>
+
+                                <!-- Old Values -->
+                                <td>
+                                    @if (!empty($audit->old_values))
+                                        <div class="audit-values" data-bs-toggle="tooltip" title="Klik untuk expand">
+                                            <ul class="mb-0">
+                                                @foreach ($audit->old_values as $key => $old_value)
+                                                    <li>
+                                                        <strong>{{ $key }}:</strong>
+                                                        <span class="text-muted">
+                                                            {{ is_string($old_value) ? Str::limit($old_value, 50) : $old_value }}
+                                                        </span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @else
+                                        <span class="text-muted fst-italic">
+                                            <i class="ti ti-minus"></i> Tidak ada
+                                        </span>
+                                    @endif
+                                </td>
+
+                                <!-- New Values -->
+                                <td>
+                                    @if (!empty($audit->new_values))
+                                        <div class="audit-values" data-bs-toggle="tooltip" title="Klik untuk expand">
+                                            <ul class="mb-0">
+                                                @foreach ($audit->new_values as $key => $new_value)
+                                                    <li>
+                                                        <strong>{{ $key }}:</strong>
+                                                        <span class="text-success">
+                                                            {{ is_string($new_value) ? Str::limit($new_value, 50) : $new_value }}
+                                                        </span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @else
+                                        <span class="text-muted fst-italic">
+                                            <i class="ti ti-minus"></i> Tidak ada
+                                        </span>
+                                    @endif
+                                </td>
+
+                                <!-- Date Time -->
+                                <td>
+                                    <div class="datetime-info">
+                                        <div class="datetime-date">
+                                            {{ $audit->created_at->format('d M Y') }}
+                                        </div>
+                                        <small class="text-muted">
+                                            {{ $audit->created_at->format('H:i:s') }}
+                                        </small>
+                                        <br>
+                                        <small class="text-muted">
+                                            {{ $audit->created_at->diffForHumans() }}
+                                        </small>
+                                    </div>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $no = ($audits->currentPage() - 1) * $audits->perPage() + 1;
-                            @endphp
-                            @foreach ($audits as $audit)
-                                <tr>
-                                    <td class="fw-semibold">{{ $no++ }}</td>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
-                                    <!-- IP Address -->
-                                    <td>
-                                        <span class="ip-address" data-bs-toggle="tooltip" title="IP Address pengguna">
-                                            {{ $audit->ip_address }}
-                                        </span>
-                                    </td>
-
-                                    <!-- Action/Event -->
-                                    <td>
-                                        <span class="audit-event {{ strtolower($audit->event) }}">
-                                            {{ $audit->event }}
-                                        </span>
-                                    </td>
-
-                                    <!-- Model Info -->
-                                    <td>
-                                        <div class="auditable-info">
-                                            <div class="auditable-type mb-1">
-                                                {{ class_basename($audit->auditable_type) }}
-                                            </div>
-                                            <div class="auditable-id">
-                                                ID: {{ $audit->auditable_id }}
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <!-- User Info -->
-                                    <td>
-                                        <div class="user-info">
-                                            @if ($audit->user)
-                                                <div class="user-avatar">
-                                                    {{ substr($audit->user->name, 0, 1) }}
-                                                </div>
-                                                <div>
-                                                    <div class="fw-semibold">{{ $audit->user->name }}</div>
-                                                    <small class="text-muted">ID: {{ $audit->user_id }}</small>
-                                                </div>
-                                            @else
-                                                <div class="user-avatar bg-secondary">
-                                                    <i class="ti ti-robot"></i>
-                                                </div>
-                                                <div>
-                                                    <div class="fw-semibold">System</div>
-                                                    <small class="text-muted">Automated</small>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </td>
-
-                                    <!-- Old Values -->
-                                    <td>
-                                        @if (!empty($audit->old_values))
-                                            <div class="audit-values" data-bs-toggle="tooltip" title="Klik untuk expand">
-                                                <ul class="mb-0">
-                                                    @foreach ($audit->old_values as $key => $old_value)
-                                                        <li>
-                                                            <strong>{{ $key }}:</strong>
-                                                            <span class="text-muted">
-                                                                {{ is_string($old_value) ? Str::limit($old_value, 50) : $old_value }}
-                                                            </span>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        @else
-                                            <span class="text-muted fst-italic">
-                                                <i class="ti ti-minus"></i> Tidak ada
-                                            </span>
-                                        @endif
-                                    </td>
-
-                                    <!-- New Values -->
-                                    <td>
-                                        @if (!empty($audit->new_values))
-                                            <div class="audit-values" data-bs-toggle="tooltip" title="Klik untuk expand">
-                                                <ul class="mb-0">
-                                                    @foreach ($audit->new_values as $key => $new_value)
-                                                        <li>
-                                                            <strong>{{ $key }}:</strong>
-                                                            <span class="text-success">
-                                                                {{ is_string($new_value) ? Str::limit($new_value, 50) : $new_value }}
-                                                            </span>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        @else
-                                            <span class="text-muted fst-italic">
-                                                <i class="ti ti-minus"></i> Tidak ada
-                                            </span>
-                                        @endif
-                                    </td>
-
-                                    <!-- Date Time -->
-                                    <td>
-                                        <div class="datetime-info">
-                                            <div class="datetime-date">
-                                                {{ $audit->created_at->format('d M Y') }}
-                                            </div>
-                                            <small class="text-muted">
-                                                {{ $audit->created_at->format('H:i:s') }}
-                                            </small>
-                                            <br>
-                                            <small class="text-muted">
-                                                {{ $audit->created_at->diffForHumans() }}
-                                            </small>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Pagination -->
-                <div class="d-flex justify-content-center mt-4">
-                    {{ $audits->appends($_GET)->links('pagination::bootstrap-5')->withClass('pagination-container') }}
-                </div>
-            @else
-                <div class="empty-state">
-                    <i class="ti ti-search-off"></i>
-                    <h5 class="mb-2">Tidak Ada Data Audit</h5>
-                    <p class="text-muted mb-0">
-                        Belum ada log audit yang ditemukan atau sesuai dengan filter yang diterapkan.
-                    </p>
-                </div>
-            @endif
-        </div>
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-4">
+                {{ $audits->appends($_GET)->links('pagination::bootstrap-5')->withClass('pagination-container') }}
+            </div>
+        @else
+            <div class="empty-state">
+                <i class="ti ti-search-off"></i>
+                <h5 class="mb-2">Tidak Ada Data Audit</h5>
+                <p class="text-muted mb-0">
+                    Belum ada log audit yang ditemukan atau sesuai dengan filter yang diterapkan.
+                </p>
+            </div>
+        @endif
+    </div>
     </div>
 @endsection
