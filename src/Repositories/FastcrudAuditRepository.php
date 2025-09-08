@@ -21,6 +21,7 @@ class FastcrudAuditRepository
             $auditable_type = $request->auditable_type;
             $ip_address = $request->ip_address;
             $auditable_id = $request->auditable_id;
+            $created_at = $request->created_at;
 
             if ($auditable_id) {
                 $query->where('auditable_id', $auditable_id);
@@ -36,6 +37,9 @@ class FastcrudAuditRepository
             }
             if ($ip_address) {
                 $query->where('ip_address', $ip_address);
+            }
+            if ($created_at) {
+                $query->whereDate('created_at', $created_at);
             }
         }
 

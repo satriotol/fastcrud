@@ -337,11 +337,17 @@
     <div class="card-body pb-0">
         <form action="" class="filter-section">
             <div class="row g-3">
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <label class="form-label fw-semibold">
                         <i class="ti ti-activity me-1"></i>Event/Action
                     </label>
                     {{ html()->text('event')->class('form-control')->placeholder('Contoh: created, updated, deleted')->value(@old('event')) }}
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">
+                        <i class="ti ti-calendar me-1"></i>Tanggal
+                    </label>
+                    {{ html()->date('created_at')->class('form-control')->placeholder('Pilih tanggal')->value(@old('created_at')) }}
                 </div>
                 <div class="col-md-2">
                     <label class="form-label fw-semibold">
