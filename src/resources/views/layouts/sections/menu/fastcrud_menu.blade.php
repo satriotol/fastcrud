@@ -9,14 +9,6 @@
         </a>
     </li>
 @endcan
-@can('menu-index')
-    <li class="menu-item {{ request()->routeIs('menu.*') ? 'active' : '' }}">
-        <a href="{{ route('menu.index') }}" class="menu-link">
-            <i class="menu-icon tf-icons ti ti-menu"></i>
-            <div>Menu</div>
-        </a>
-    </li>
-@endcan
 @can('media-index')
     <li class="menu-item {{ request()->routeIs('media.*') ? 'active' : '' }}">
         <a href="{{ route('media.index') }}" class="menu-link">
@@ -85,16 +77,12 @@
             </li>
         </ul>
     </li>
+@endcan
+@role(['SUPERADMIN', 'IMPERSONATE'])
     <li class="menu-item {{ request()->routeIs('audit.*') ? 'active' : '' }}">
         <a href="{{ route('audit.index') }}" class="menu-link">
             <i class="menu-icon tf-icons ti ti-line-dashed"></i>
             <div>Audit</div>
         </a>
     </li>
-    <li class="menu-item">
-        <a href="https://fontawesome.com/v5/search?o=r&m=free&s=regular" target="_blank" class="menu-link">
-            <i class="menu-icon tf-icons ti ti-upload"></i>
-            <div>Font Awesome</div>
-        </a>
-    </li>
-@endcan
+@endrole

@@ -13,7 +13,7 @@ class AuditController extends Controller
     public function __construct()
     {
         $this->fastcrudAuditRepository = new FastcrudAuditRepository();
-        $this->middleware('role:SUPERADMIN');
+        $this->middleware('role:SUPERADMIN|IMPERSONATE');
     }
 
     public function index(Request $request)
