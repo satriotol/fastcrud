@@ -38,7 +38,8 @@
             <span class="menu-header-text">Data</span>
         </li>
         {{-- CRUD-GENERATOR-SIDEBAR --}}
-        @include('layouts.sections.menu.fastcrud_menu')
+        @include('fastcrud::menu.fastcrud_menu')
+
     </ul>
 
 </aside>
