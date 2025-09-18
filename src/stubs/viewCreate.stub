@@ -1,6 +1,6 @@
 @extends('layouts/layoutMaster')
 
-@section('title', ' {modelName} - Forms')
+@section('title', ' {indonesian_name} - Forms')
 
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
@@ -31,7 +31,7 @@
 @endsection
 
 @section('content')
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Forms/</span> {modelName}</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Forms/</span> {indonesian_name}</h4>
 
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
@@ -39,7 +39,7 @@
         <div class="col-xxl">
             <div class="card mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="mb-0">{modelName}</h5>
+                    <h5 class="mb-0">{indonesian_name}</h5>
                 </div>
                 <div class="card-body">
                     <form action="@isset(${modelNameSingular}) {{ route('{modelNameSingular}.update', ${modelNameSingular}->uuid) }} @endisset @empty(${modelNameSingular}) {{ route('{modelNameSingular}.store') }} @endempty"

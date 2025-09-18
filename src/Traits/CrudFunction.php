@@ -58,7 +58,8 @@ trait CrudFunction
                 '{{modelNameSingular}}',
                 '{{validations}}',
                 '//is_file',
-                '//boolean'
+                '//boolean',
+                '{{indonesian_name}}'
             ],
             [
                 $data['model'],
@@ -66,7 +67,8 @@ trait CrudFunction
                 $data['singular'],
                 $validations,
                 $uploads,
-                $booleans
+                $booleans,
+                $data['indonesian_name']
             ],
             file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/Controller.stub"))
         );
@@ -145,6 +147,7 @@ trait CrudFunction
     {
         $singular = $data['singular'];
         $model = $data['model'];
+        $indonesianName = $data['indonesian_name'];
         $sidebarLogo = $data['sidebarLogo'];
         $verticalMenuFile = resource_path('views/layouts/sections/menu/verticalMenu.blade.php');
         $marker = '{{-- CRUD-GENERATOR-SIDEBAR --}}';
@@ -156,7 +159,7 @@ trait CrudFunction
                 <li class="menu-item {{ request()->routeIs('{$singular}.*') ? 'active' : '' }}">
                     <a href="{{ route('{$singular}.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-{$sidebarLogo}"></i>
-                        <div>{$model}</div>
+                        <div>{$indonesianName}</div>
                     </a>
                 </li>
             @endcan
@@ -206,7 +209,8 @@ trait CrudFunction
                 '{modelNameSingular}',
                 'SearchForm',
                 'TableHead',
-                'TableBody'
+                'TableBody',
+                '{indonesian_name}'
             ],
             [
                 $data['model'],
@@ -215,6 +219,7 @@ trait CrudFunction
                 $searchForm,
                 $theadRows,
                 $rows,
+                $data['indonesian_name']
             ],
             file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/viewIndex.stub"))
         );
@@ -344,13 +349,15 @@ trait CrudFunction
                 '{modelNamePlural}',
                 '{modelNameSingular}',
                 '{createForm}',
+                '{indonesian_name}'
 
             ],
             [
                 $data['model'],
                 $data['plural'],
                 $data['singular'],
-                $view
+                $view,
+                $data['indonesian_name']
             ],
             file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/viewCreate.stub"))
         );

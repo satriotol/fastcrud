@@ -1,6 +1,6 @@
 @extends('layouts/layoutMaster')
 
-@section('title', '{modelName} List - Pages')
+@section('title', '{indonesian_name} List - Pages')
 
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
@@ -52,7 +52,7 @@
         <div class="card-header border-bottom">
             <div class="row">
                 <div class="col-md">
-                    <h5 class="card-title mb-3">{modelName}</h5>
+                    <h5 class="card-title mb-3">{indonesian_name}</h5>
                 </div>
                 <div class="col-md">
                     <div
@@ -107,7 +107,7 @@
                                                     @csrf
                                                     @method('delete')
                                                     <button type="submit" class="dropdown-item"
-                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus {modelName} ini?')">
+                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus {indonesian_name} ini?')">
                                                         <i class="ti ti-trash me-1"></i> Delete
                                                     </button>
                                                 </form>

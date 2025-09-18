@@ -48,7 +48,7 @@ class {{modelName}}Controller extends Controller
         try {
             $this->{{modelNameSingular}}Repository->create($data);
             DB::commit();
-            return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{modelName}} Berhasil Tersimpan');
+            return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{indonesian_name}} Berhasil Tersimpan');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());
@@ -76,7 +76,7 @@ class {{modelName}}Controller extends Controller
         try {
             $this->{{modelNameSingular}}Repository->update($uuid, $data);
             DB::commit();
-            return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{modelName}} Berhasil Terupdate');
+            return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{indonesian_name}} Berhasil Terupdate');
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());
@@ -86,6 +86,6 @@ class {{modelName}}Controller extends Controller
     public function destroy($uuid)
     {
         $this->{{modelNameSingular}}Repository->delete($uuid);
-        return back()->with('success', '{{modelName}} Berhasil Dihapus');
+        return back()->with('success', '{{indonesian_name}} Berhasil Dihapus');
     }
 }
