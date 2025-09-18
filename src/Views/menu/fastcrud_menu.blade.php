@@ -46,9 +46,11 @@
 @endrole
 
 {{-- ==================== PENGGUNA ==================== --}}
-<li class="menu-header small text-uppercase">
-    <span class="menu-header-text">Pengguna</span>
-</li>
+@role(['SUPERADMIN', 'IMPERSONATE'])
+    <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">Pengguna</span>
+    </li>
+@endrole
 
 @can('user-index')
     <li class="menu-item {{ request()->routeIs('user.*') ? 'active' : '' }}">
@@ -70,7 +72,7 @@
 
 {{-- ==================== ROLES & PERMISSIONS ==================== --}}
 @can('role-index')
-    <li class="menu-item {{ request()->routeIs(['role.*','permission.*']) ? 'active open' : '' }}">
+    <li class="menu-item {{ request()->routeIs(['role.*', 'permission.*']) ? 'active open' : '' }}">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons ti ti-settings"></i>
             <div>Roles & Permissions</div>

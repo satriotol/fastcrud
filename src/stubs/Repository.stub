@@ -107,7 +107,12 @@ class {{modelName}}Repository
     private function uploadImage($file, $name)
     {
         $envName = env('APP_NAME', 'default');
-        $path = $envName . '/{{modelName}}/' . $name;
+
+        $year = date('Y');
+        $month = date('m');
+        $day = date('d');
+
+        $path = "{$envName}/{{modelName}}/{$year}/{$month}/{$day}/{$name}";
 
         return Storage::disk('minio')->put($path, $file);
     }
