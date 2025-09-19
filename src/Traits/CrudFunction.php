@@ -192,45 +192,45 @@ trait CrudFunction
             $columnType = $d['type'];
             $columnNullable = $d['nullable'];
             $columnIsFile = $d['is_file'];
-            if ($columnIsFile) {
-                continue;
-            }
+
             $inputField = '';
 
-            switch ($columnType) {
-                case 'string':
-                case 'longText':
-                    $inputField = "{{ html()->text('$columnName', old('$columnName'))->class('form-control')->placeholder('Cari $columnLabel') }}";
-                    break;
+            if (!$columnIsFile) {
+                switch ($columnType) {
+                    case 'string':
+                    case 'longText':
+                        $inputField = "{{ html()->text('$columnName', old('$columnName'))->class('form-control')->placeholder('Cari $columnLabel') }}";
+                        break;
 
-                case 'integer':
-                    $inputField = "{{ html()->number('$columnName', old('$columnName'))->class('form-control')->placeholder('Cari $columnLabel') }}";
-                    break;
+                    case 'integer':
+                        $inputField = "{{ html()->number('$columnName', old('$columnName'))->class('form-control')->placeholder('Cari $columnLabel') }}";
+                        break;
 
-                case 'unsignedBigInteger':
-                    $inputField = "{{ html()->select('$columnName', [], old('$columnName'))->class('form-select') }}";
-                    break;
-                case 'boolean':
-                    $inputField = "{{ html()->select('$columnName', ['1' => 'Ya', '0' => 'Tidak'], old('$columnName'))->class('form-select') }}";
-                    break;
+                    case 'unsignedBigInteger':
+                        $inputField = "{{ html()->select('$columnName', [], old('$columnName'))->class('form-select') }}";
+                        break;
 
-                case 'date':
-                    $inputField = "{{ html()->date('$columnName', old('$columnName'))->class('form-control') }}";
-                    break;
+                    case 'boolean':
+                        $inputField = "{{ html()->select('$columnName', ['1' => 'Ya', '0' => 'Tidak'], old('$columnName'))->class('form-select') }}";
+                        break;
 
-                default:
-                    // fallback kalau ada type baru
-                    $inputField = "{{ html()->text('$columnName', old('$columnName'))->class('form-control')->placeholder('Cari $columnLabel') }}";
-                    break;
-            }
+                    case 'date':
+                        $inputField = "{{ html()->date('$columnName', old('$columnName'))->class('form-control') }}";
+                        break;
 
+                    default:
+                        $inputField = "{{ html()->text('$columnName', old('$columnName'))->class('form-control')->placeholder('Cari $columnLabel') }}";
+                        break;
+                }
 
-            $searchForm .= <<<HTML
+                $searchForm .= <<<HTML
                 <div class="col-md-4 mb-3">
                     {{ html()->label('$columnLabel')->class('form-label') }}
                     $inputField
                 </div>
             HTML;
+            }
+
             $column = "<td>{{\${$data['singular']}->{$d['column_name']}}}</td>";
             $thead = "<th>{$d['column_name_view']}</th>";
             $rows[] = $column;
@@ -277,13 +277,13 @@ trait CrudFunction
                 <div class="row mb-3">
                     <label class="col-sm-2 col-form-label" for="{$d['column_name']}">{$d['column_name_view']}</label>
                     <div class="col-sm-10">
-                        {{html()->file('{$d['column_name']}')->class('form-control')->id('formFile')->required(isset(\${$data['singular']}) ? false : true)}}
+                        {{ html()->file('{$d['column_name']}')->class('form-control')->id('formFile')->required(isset(\${$data['singular']}) ? false : true) }}
                         @error('{$d['column_name']}')
                             <br>
                             <small class="text-danger">{{ \$message }}</small>
                         @enderror
                         @isset(\${$data['singular']})
-                            <a href="{{asset('storage/'. \${$data['singular']}->{$d['column_name']})}}" target="_blank">Buka File</a>
+                            <a href="{{ \${$data['singular']}->{$d['column_name']}_url }}" target="_blank">Buka File</a>
                         @endisset
                     </div>
                 </div>
@@ -534,5 +534,4 @@ trait CrudFunction
 
         file_put_contents(app_path("/Models/{$data['model']}.php"), $modelTemplate);
     }
-
 }
