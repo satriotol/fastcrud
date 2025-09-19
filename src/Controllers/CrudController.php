@@ -93,9 +93,8 @@ class CrudController extends Controller
         $this->viewCreate($data);
         $this->storePermission($data);
         $this->generateRepository($data);
-        session()->flash('success', 'CRUD Berhasil Dibuat');
 
-        return redirect()->route('crud.index');
+        return back()->with('success', 'CRUD Berhasil Dibuat, silahkan jalankan command <code>php artisan migrate</code> untuk membuat tabel baru.');
     }
 
     /**
