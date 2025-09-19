@@ -15,6 +15,9 @@ class {{modelName}} extends Model implements Auditable
     protected $table = '{{modelNamePlural}}';
 
     protected $fillable = [DummyTable];
+
+    DummyAppends
+
     protected static function boot()
     {
         parent::boot();
@@ -23,4 +26,6 @@ class {{modelName}} extends Model implements Auditable
             $model->uuid = Str::uuid()->toString();
         });
     }
+
+    DummyAccessors
 }

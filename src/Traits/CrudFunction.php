@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 trait CrudFunction
 {
@@ -188,11 +189,46 @@ trait CrudFunction
         foreach ($data['columns'] as $d) {
             $columnName = $d['column_name'];
             $columnLabel = $d['column_name_view'];
+            $columnType = $d['type'];
+            $columnNullable = $d['nullable'];
+            $columnIsFile = $d['is_file'];
+            if ($columnIsFile) {
+                continue;
+            }
+            $inputField = '';
+
+            switch ($columnType) {
+                case 'string':
+                case 'longText':
+                    $inputField = "{{ html()->text('$columnName', old('$columnName'))->class('form-control')->placeholder('Cari $columnLabel') }}";
+                    break;
+
+                case 'integer':
+                    $inputField = "{{ html()->number('$columnName', old('$columnName'))->class('form-control')->placeholder('Cari $columnLabel') }}";
+                    break;
+
+                case 'unsignedBigInteger':
+                    $inputField = "{{ html()->select('$columnName', [], old('$columnName'))->class('form-select') }}";
+                    break;
+                case 'boolean':
+                    $inputField = "{{ html()->select('$columnName', ['1' => 'Ya', '0' => 'Tidak'], old('$columnName'))->class('form-select') }}";
+                    break;
+
+                case 'date':
+                    $inputField = "{{ html()->date('$columnName', old('$columnName'))->class('form-control') }}";
+                    break;
+
+                default:
+                    // fallback kalau ada type baru
+                    $inputField = "{{ html()->text('$columnName', old('$columnName'))->class('form-control')->placeholder('Cari $columnLabel') }}";
+                    break;
+            }
+
 
             $searchForm .= <<<HTML
-                <div class="col-md-4">
+                <div class="col-md-4 mb-3">
                     {{ html()->label('$columnLabel')->class('form-label') }}
-                    {{ html()->text('$columnName')->class('form-control')->placeholder('Cari $columnLabel')->value(@old('$columnName')) }}
+                    $inputField
                 </div>
             HTML;
             $column = "<td>{{\${$data['singular']}->{$d['column_name']}}}</td>";
@@ -454,21 +490,49 @@ trait CrudFunction
     }
     protected function generateModel($data)
     {
+        $fillable = ['"uuid"']; // tambahkan uuid default
+        $appends = [];
+        $accessors = [];
+
         foreach ($data['columns'] as $d) {
             $column = $d['column_name'];
-            $array = explode(" ", $d['column_name']);
-            $array_quoted = array_map(function ($word) {
-                return '"' . $word . '"';
-            }, $array);
-            $string_with_quotes = implode(",", $array_quoted);
-            $rows[] = $string_with_quotes;
+            $fillable[] = '"' . $column . '"';
+
+            if ($d['is_file']) {
+                $studly = Str::studly($column);
+                $appends[] = '"' . $column . '_url"';
+
+                if ($d['is_minio']) {
+                    // file di minio
+                    $accessors[] = <<<PHP
+        public function get{$studly}UrlAttribute()
+        {
+            return \$this->$column ? route('minio.file', ['url' => \$this->$column]) : null;
         }
-        $rows = trim(implode(",", $rows));
+    PHP;
+                } else {
+                    // default pakai public/storage
+                    $accessors[] = <<<PHP
+        public function get{$studly}UrlAttribute()
+        {
+            return \$this->$column ? asset('storage/' . \$this->$column) : null;
+        }
+    PHP;
+                }
+            }
+        }
+
+        $rows = implode(', ', $fillable);
+        $appendsRows = !empty($appends) ? 'protected $appends = [' . implode(', ', $appends) . '];' : '';
+        $accessorsCode = implode("\n\n", $accessors);
+
         $modelTemplate = str_replace(
-            ['{{modelName}}', '{{modelNamePlural}}', 'DummyTable'],
-            [$data['model'], $data['plural'], $rows],
+            ['{{modelName}}', '{{modelNamePlural}}', 'DummyTable', 'DummyAppends', 'DummyAccessors'],
+            [$data['model'], $data['plural'], $rows, $appendsRows, $accessorsCode],
             file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/Model.stub"))
         );
+
         file_put_contents(app_path("/Models/{$data['model']}.php"), $modelTemplate);
     }
+
 }
