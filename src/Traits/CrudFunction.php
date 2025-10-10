@@ -207,11 +207,11 @@ trait CrudFunction
                         break;
 
                     case 'unsignedBigInteger':
-                        $inputField = "{{ html()->select('$columnName', [], old('$columnName'))->class('form-select') }}";
+                        $inputField = "{{ html()->select('$columnName', [], old('$columnName'))->class('select2')->placeholder('Pilih $columnLabel') }}";
                         break;
 
                     case 'boolean':
-                        $inputField = "{{ html()->select('$columnName', ['1' => 'Ya', '0' => 'Tidak'], old('$columnName'))->class('form-select') }}";
+                        $inputField = "{{ html()->select('$columnName', ['1' => 'Ya', '0' => 'Tidak'], old('$columnName'))->class('select2')->placeholder('Pilih $columnLabel') }}";
                         break;
 
                     case 'date':
@@ -246,7 +246,8 @@ trait CrudFunction
                 'SearchForm',
                 'TableHead',
                 'TableBody',
-                '{indonesian_name}'
+                '{indonesian_name}',
+                '{indonesian_description}'
             ],
             [
                 $data['model'],
@@ -255,7 +256,8 @@ trait CrudFunction
                 $searchForm,
                 $theadRows,
                 $rows,
-                $data['indonesian_name']
+                $data['indonesian_name'],
+                $data['indonesian_description']
             ],
             file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/viewIndex.stub"))
         );
