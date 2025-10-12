@@ -207,11 +207,11 @@ trait CrudFunction
                         break;
 
                     case 'unsignedBigInteger':
-                        $inputField = "{{ html()->select('$columnName', [], old('$columnName'))->class('select2')->placeholder('Pilih $columnLabel') }}";
+                        $inputField = "{{ html()->select('$columnName', [], old('$columnName'))->class('form-select select2')->placeholder('Pilih $columnLabel') }}";
                         break;
 
                     case 'boolean':
-                        $inputField = "{{ html()->select('$columnName', ['1' => 'Ya', '0' => 'Tidak'], old('$columnName'))->class('select2')->placeholder('Pilih $columnLabel') }}";
+                        $inputField = "{{ html()->select('$columnName', ['1' => 'Ya', '0' => 'Tidak'], old('$columnName'))->class('form-select select2')->placeholder('Pilih $columnLabel') }}";
                         break;
 
                     case 'date':
