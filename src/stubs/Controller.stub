@@ -85,7 +85,14 @@ class {{modelName}}Controller extends Controller
 
     public function destroy($uuid)
     {
-        $this->{{modelNameSingular}}Repository->delete($uuid);
-        return back()->with('success', '{{indonesian_name}} Berhasil Dihapus');
+        DB::beginTransaction();
+        try{
+            $this->{{modelNameSingular}}Repository->delete($uuid);
+            DB::commit();
+            return back()->with('success', '{{indonesian_name}} Berhasil Dihapus');
+        }catch(\Throwable $th){
+            DB::rollBack();
+            return back()->with('error, $th->getMessage());
+        }
     }
 }

@@ -101,7 +101,7 @@ class {{modelName}}Repository
 
         //DELETE_LOGIC
 
-        $model->delete();
+        return $model->delete();
     }
 
     private function uploadImage($file, $name)
