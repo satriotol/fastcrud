@@ -92,7 +92,7 @@ class {{modelName}}Controller extends Controller
             return back()->with('success', '{{indonesian_name}} Berhasil Dihapus');
         }catch(\Throwable $th){
             DB::rollBack();
-            return back()->with('error', $th->getMessage());
+            return back()->with('error, $th->getMessage());
         }
     }
 }
