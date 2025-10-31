@@ -15,12 +15,7 @@ class FastCrudServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (env('BETA_MODE', true)) {
-            $this->app->singleton(
-                \Illuminate\Contracts\Debug\ExceptionHandler::class,
-                \Satriotol\Fastcrud\Handlers\BetaExceptionHandler::class
-            );
-        }
+        //
     }
 
     /**

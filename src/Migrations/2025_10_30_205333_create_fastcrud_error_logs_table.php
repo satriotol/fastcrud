@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('fastcrud_error_logs', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->string('message');
+            $table->longtext('message');
             $table->longText('trace')->nullable();
             $table->string('error_code')->nullable();
             $table->string('url')->nullable();
