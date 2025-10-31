@@ -5,6 +5,7 @@ namespace Satriotol\Fastcrud\Handlers;
 use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Satriotol\Fastcrud\Models\FastcrudErrorLog;
+use Illuminate\Support\Facades\Auth;
 
 class BetaExceptionHandler extends ExceptionHandler
 {
@@ -25,7 +26,7 @@ class BetaExceptionHandler extends ExceptionHandler
                     'method'      => request()->method(),
                     'input'       => $input,
 
-                    'user_id'     => auth()->id(),
+                    'user_id'     => Auth::user() ? Auth::id() : null,
                     'ip_address'  => request()->ip(),
                     'user_agent'  => request()->userAgent(),
 

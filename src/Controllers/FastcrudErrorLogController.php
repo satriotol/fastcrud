@@ -25,7 +25,7 @@ class FastcrudErrorLogController extends Controller
             $request
         )->latest()->paginate();
         $request->flash();
-        return view('backend.fastcrud_error_log.index', compact('fastcrud_error_logs'));
+        return view('fastcrud::fastcrud_error_log.index', compact('fastcrud_error_logs'));
     }
 
     public function create()

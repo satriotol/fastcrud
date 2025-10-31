@@ -16,9 +16,17 @@ class FastcrudErrorLogRepository
         $query = FastcrudErrorLog::query();
         if ($request) {
             $user_id = $request->user_id;
+            $method = $request->method;
+            $url = $request->url;
 
+            if ($url) {
+                $query->where('url', 'like', "%$url%");
+            }
             if ($user_id) {
                 $query->where('user_id', $user_id);
+            }
+            if ($method) {
+                $query->where('method', $method);
             }
         }
 
