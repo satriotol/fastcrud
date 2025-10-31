@@ -21,11 +21,6 @@ class FastCrudServiceProvider extends ServiceProvider
                 \Satriotol\Fastcrud\Handlers\BetaExceptionHandler::class
             );
         }
-
-        $this->mergeConfigFrom(
-            __DIR__ . '/FastcrudConfig/beta.php',
-            'beta'
-        );
     }
 
     /**

@@ -10,8 +10,8 @@ class BetaExceptionHandler extends ExceptionHandler
 {
     public function report(Throwable $e): void
     {
+        if (env('BETA_MODE_ENABLED', true)) {
 
-        if (config('beta.enabled', true)) {
             $trace = substr($e->getTraceAsString(), 0, 5000);
             $inputData = request()->except(['password', 'token']);
             $input = substr(json_encode($inputData), 0, 2000);
