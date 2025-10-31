@@ -15,7 +15,17 @@ class FastCrudServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Register any package services.
+        if (env('BETA_MODE', true)) {
+            $this->app->singleton(
+                \Illuminate\Contracts\Debug\ExceptionHandler::class,
+                \Satriotol\Fastcrud\Handlers\BetaExceptionHandler::class
+            );
+        }
+
+        $this->mergeConfigFrom(
+            __DIR__ . '/FastcrudConfig/beta.php',
+            'beta'
+        );
     }
 
     /**

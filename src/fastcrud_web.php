@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use Satriotol\Fastcrud\Controllers\ApiKeyController;
 use Satriotol\Fastcrud\Controllers\AppSpecsController;
 use Satriotol\Fastcrud\Controllers\AuditController;
+use Satriotol\Fastcrud\Controllers\FastcrudErrorLogController;
 use Satriotol\Fastcrud\Controllers\FastcrudImpersonateController;
 use Satriotol\Fastcrud\Controllers\FastcrudTwoFactorController;
 use Satriotol\Fastcrud\Controllers\FastcrudUserController;
@@ -19,7 +20,7 @@ use Satriotol\Fastcrud\Controllers\RoleController;
 
 Route::prefix('admin')->group(function () {
     Route::middleware(['web'])->group(function () {
-
+        Route::resource('fastcrud_error_log', FastcrudErrorLogController::class);
         Route::get('getMedia/media/{uuid}', [MediaController::class, 'getMedia'])->name('media.getMedia');
         Route::get('getfile', [MinioController::class, 'getfile'])->name('minio.getfile');
         Route::get('getConfig/{uuid}', [ConfigController::class, 'getConfig'])->name('config.getConfig');

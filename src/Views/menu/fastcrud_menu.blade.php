@@ -43,6 +43,12 @@
             <div>FastCRUD Users</div>
         </a>
     </li>
+    <li class="menu-item {{ request()->routeIs('fastcrud_error_log.*') ? 'active' : '' }}">
+        <a href="{{ route('fastcrud_error_log.index') }}" class="menu-link">
+            <i class="menu-icon tf-icons ti ti-log"></i>
+            <div>Fastcrud Beta Mode</div>
+        </a>
+    </li>
 @endrole
 
 {{-- ==================== PENGGUNA ==================== --}}
