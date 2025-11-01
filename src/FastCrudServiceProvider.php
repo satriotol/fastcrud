@@ -62,6 +62,7 @@ class FastCrudServiceProvider extends ServiceProvider
             $this->commands([
                 \Satriotol\Fastcrud\Console\Commands\MakeRepository::class,
                 \Satriotol\Fastcrud\Console\Commands\CreateUserCommand::class,
+                \Satriotol\Fastcrud\Console\Commands\ExportRolePermission::class,
             ]);
         }
     }
