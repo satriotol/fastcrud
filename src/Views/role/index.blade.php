@@ -74,6 +74,7 @@
                     <strong>Tips:</strong> Klik jumlah user untuk melihat detail anggota role. Gunakan tombol <b>Tambah
                         Role</b> untuk menambah role baru.
                 </div>
+                <a href="{{ route('role.view') }}">Download Json</a>
             </div>
             @include('partials.success')
             <div class="table-responsive text-nowrap">

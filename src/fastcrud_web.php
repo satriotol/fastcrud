@@ -50,6 +50,9 @@ Route::prefix('admin')->group(function () {
             Route::resource('media', MediaController::class);
             Route::resource('permission', PermissionController::class);
             Route::resource('role', RoleController::class);
+            Route::as('role.')->prefix('role')->group(function () {
+                Route::get('view', [RoleController::class, 'view'])->name('view');
+            });
             Route::resource('fastcrud_user', FastcrudUserController::class);
             Route::get('setMustChangePassword/fastcrud_user/{uuid}', [FastcrudUserController::class, 'setMustChangePassword'])->name('fastcrud_user.setMustChangePassword');
         });

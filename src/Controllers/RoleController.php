@@ -14,7 +14,7 @@ class RoleController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:role-index|role-create|role-show|role-edit|role-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:role-index|role-create|role-show|role-edit|role-delete', ['only' => ['index', 'show', 'view']]);
         $this->middleware('permission:role-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:role-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:role-delete', ['only' => ['destroy']]);
@@ -23,6 +23,24 @@ class RoleController extends Controller
     {
         $roles = Role::latest()->paginate();
         return view('fastcrud::role.index', compact('roles'));
+    }
+
+    public function view()
+    {
+        $permissions = Permission::all()->pluck('name');
+
+        $roles = Role::with('permissions')->get()
+            ->mapWithKeys(function ($role) {
+                return [
+                    $role->name => $role->permissions->pluck('name')->toArray()
+                ];
+            });
+
+        $data = [
+            'permissions' => $permissions,
+            'roles'       => $roles,
+        ];
+        return $data;
     }
 
     /**
