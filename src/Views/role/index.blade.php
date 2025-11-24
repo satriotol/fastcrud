@@ -71,7 +71,7 @@
             <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
                 <i class="bi bi-info-circle me-2 fs-5"></i>
                 <div>
-                    <strong>Tips:</strong> Klik jumlah user untuk melihat detail anggota role. Gunakan tombol <b>Tambah
+                    <strong>Tips:</strong> Gunakan tombol <b>Tambah
                         Role</b> untuk menambah role baru.
                 </div>
                 <a href="{{ route('role.view') }}">Download Json</a>
@@ -83,7 +83,6 @@
                         <tr>
                             <th style="width: 5%;"><i class="bi bi-hash"></i> No</th>
                             <th><i class="bi bi-person-badge"></i> Nama Role</th>
-                            <th style="width: 12%;"><i class="bi bi-people"></i> User</th>
                             <th style="width: 10%;"><i class="bi bi-gear"></i> Aksi</th>
                         </tr>
                     </thead>
@@ -98,62 +97,6 @@
                                     <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 fs-6">
                                         <i class="bi bi-person-badge me-1"></i> {{ $role->name }}
                                     </span>
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-outline-primary btn-sm px-2 py-1"
-                                        data-bs-toggle="modal" data-bs-target="#modalRole{{ $role->id }}"
-                                        title="Lihat anggota role">
-                                        <i class="bi bi-people-fill me-1"></i> {{ $role->users->count() }}
-                                    </button>
-                                    <div class="modal fade" id="modalRole{{ $role->id }}" tabindex="-1"
-                                        aria-labelledby="modalRoleLabel{{ $role->id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-primary text-white">
-                                                    <h5 class="modal-title" id="modalRoleLabel{{ $role->id }}">
-                                                        <i class="bi bi-people me-2"></i> Anggota Role: <span
-                                                            class="fw-bold">{{ $role->name }}</span>
-                                                    </h5>
-                                                    <button type="button" class="btn-close btn-close-white"
-                                                        data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <table class="table table-striped"
-                                                        id="datatableRole{{ $role->id }}">
-                                                        <thead>
-                                                            <tr>
-                                                                <th><i class="bi bi-person"></i> User</th>
-                                                                <th><i class="bi bi-key"></i> Reset Password</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($role->users as $user)
-                                                                <tr>
-                                                                    <td><i class="bi bi-person-circle me-1"></i>
-                                                                        {{ $user->name }}</td>
-                                                                    <td>
-                                                                        @if ($user->must_change_password)
-                                                                            <span class="badge bg-danger"><i
-                                                                                    class="bi bi-x-circle"></i> Harus
-                                                                                Reset</span>
-                                                                        @else
-                                                                            <span class="badge bg-success"><i
-                                                                                    class="bi bi-check-circle"></i>
-                                                                                Aman</span>
-                                                                        @endif
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Tutup</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </td>
                                 <td class="text-center">
                                     <div class="dropdown">
