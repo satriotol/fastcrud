@@ -18,7 +18,7 @@ class AuditController extends Controller
 
     public function index(Request $request)
     {
-        $audits = $this->fastcrudAuditRepository->getAll([], $request)->latest()->paginate();
+        $audits = $this->fastcrudAuditRepository->getAll([], $request)->orderByDesc('id')->paginate(10);
         $request->flash();
         return view('fastcrud::fastcrud_audit.index', compact('audits'));
     }
