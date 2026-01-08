@@ -108,7 +108,7 @@
                                     </small>
                                 </td>
                                 <td>{{ $config->description }}</td>
-                                <td>{{ $config->config_value }}</td>
+                                <td>{!! $config->config_value !!}</td>
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"

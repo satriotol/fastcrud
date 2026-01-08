@@ -5,66 +5,90 @@
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css">
 @endsection
 
 @section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
-    <script src="https://cdn.ckeditor.com/4.17.0/full/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 @endsection
 
 @section('page-script')
     <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
     <script>
         $(document).ready(function() {
-            // Fungsi untuk memperbarui konten berdasarkan type
+
+            function destroySummernote() {
+                if ($('#config_value').hasClass('summernote')) {
+                    $('#config_value').summernote('destroy');
+                }
+            }
+
+            function initSummernote() {
+                $('#config_value').summernote({
+                    height: 200,
+                    toolbar: [
+                        ['style', ['bold', 'italic', 'underline']],
+                        ['para', ['ul', 'ol']],
+                        ['insert', ['link']],
+                        ['view', ['codeview']]
+                    ]
+                });
+            }
+
             function updateConfigValueInput(type, oldValue = '') {
-                var newContent = '';
+                destroySummernote();
+
+                let html = '';
 
                 if (type === 'string' || type === 'url') {
-                    newContent = `
-                <input name="config_value" id="config_value" class="form-control" type="text" placeholder="Masukkan Value" value="${oldValue}" required>
-            `;
-                } else if (type === 'text') {
-                    newContent = `
-                <textarea name="config_value" id="config_value" class="form-control" placeholder="Masukkan Value" required>${oldValue}</textarea>
+                    html = `
+                <input name="config_value" id="config_value" class="form-control"
+                       type="text" value="${oldValue}" required>
             `;
                 } else if (type === 'int') {
-                    newContent = `
-                <input name="config_value" id="config_value" class="form-control" type="number" placeholder="Masukkan Value" value="${oldValue}" 
-                onkeydown="return event.key !== 'e' && event.key !== 'E' && event.key !== '+' && event.key !== '-'" required>
+                    html = `
+                <input name="config_value" id="config_value" class="form-control"
+                       type="number" value="${oldValue}"
+                       onkeydown="return !['e','E','+','-'].includes(event.key)" required>
             `;
                 } else if (type === 'boolean') {
-                    newContent = `
+                    html = `
                 <div class="form-check">
-                    <input name="config_value" class="form-check-input" type="radio" value="true" id="config_value_true" ${oldValue === 'true' ? 'checked' : ''}>
-                    <label class="form-check-label" for="config_value_true">True</label>
+                    <input name="config_value" type="radio" value="true"
+                        ${oldValue === 'true' ? 'checked' : ''}> True
                 </div>
                 <div class="form-check">
-                    <input name="config_value" class="form-check-input" type="radio" value="false" id="config_value_false" ${oldValue === 'false' ? 'checked' : ''}>
-                    <label class="form-check-label" for="config_value_false">False</label>
+                    <input name="config_value" type="radio" value="false"
+                        ${oldValue === 'false' ? 'checked' : ''}> False
                 </div>
+            `;
+                } else if (type === 'text') {
+                    html = `
+                <textarea name="config_value" id="config_value"
+                          class="form-control summernote">${oldValue}</textarea>
             `;
                 }
 
-                $('#container_value').html(newContent);
+                $('#container_value').html(html);
+
+                if (type === 'text') {
+                    initSummernote();
+                }
             }
 
-            // Trigger saat type berubah
-            $('#type').change(function() {
-                var selectedType = $(this).val();
-                var oldValue = $('#config_value').val(); // Ambil nilai lama
-                updateConfigValueInput(selectedType, oldValue);
+            $('#type').on('change', function() {
+                updateConfigValueInput(this.value);
             });
 
-            // Saat halaman pertama kali dimuat
-            var initialType = $('#type').val();
-            var initialValue = "{{ isset($config) ? $config->config_value : old('config_value') }}";
-            updateConfigValueInput(initialType, initialValue);
+            // init awal
+            updateConfigValueInput(
+                $('#type').val(),
+                @json(isset($config) ? $config->config_value : old('config_value'))
+            );
+
         });
     </script>
-
-
-
 @endsection
 
 @section('content')
