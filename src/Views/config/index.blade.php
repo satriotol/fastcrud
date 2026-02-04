@@ -86,7 +86,6 @@
                         <tr>
                             <th>No</th>
                             <th>Key</th>
-                            <th>Query</th>
                             <th>Deskripsi</th>
                             <th>Config Value</th>
                             <th>Actions</th>
@@ -100,15 +99,34 @@
                             <tr>
                                 <td>{{ $no++ }}</td>
                                 <td>{{ $config->uuid }}</td>
-                                <td>
-                                    <small>{{ $config->model_config }}
-                                        <br>
-                                        <hr>
-                                        {{ route('config.getConfig', $config->uuid) }}
-                                    </small>
-                                </td>
                                 <td>{{ $config->description }}</td>
-                                <td>{!! $config->config_value !!}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalDetail{{ $config->id }}">
+                                        Buka Detail
+                                    </button>
+                                    <div class="modal fade" id="modalDetail{{ $config->id }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel{{ $config->id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel{{ $config->id }}">
+                                                        Detail</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {!! $config->value !!}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
