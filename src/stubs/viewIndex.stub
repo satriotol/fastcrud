@@ -27,7 +27,6 @@
                     <h4 class="fw-bold py-3 mb-2">
                         <i class="ti ti-file-text me-2"></i>{indonesian_name}
                     </h4>
-                    <p class="text-muted mb-0">{indonesian_description}</p>
                 </div>
                 <div class="d-flex gap-2">
                     @can('{modelNameSingular}-create')

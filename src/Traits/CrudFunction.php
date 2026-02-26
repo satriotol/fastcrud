@@ -247,7 +247,6 @@ trait CrudFunction
                 'TableHead',
                 'TableBody',
                 '{indonesian_name}',
-                '{indonesian_description}'
             ],
             [
                 $data['model'],
@@ -257,7 +256,6 @@ trait CrudFunction
                 $theadRows,
                 $rows,
                 $data['indonesian_name'],
-                $data['indonesian_description']
             ],
             file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/viewIndex.stub"))
         );

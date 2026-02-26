@@ -52,7 +52,6 @@ class CrudController extends Controller
             'singular' => ['required', 'string', 'max:64', 'alpha_dash'],
             'table' => ['required', 'string', 'max:64', 'alpha_dash'],
             'indonesian_name' => ['required', 'string', 'max:64'],
-            'indonesian_description' => ['required', 'string', 'max:255'],
             'columns' => ['required', 'array', 'min:1'],
             'columns.*.column_name' => ['required', 'string', 'max:64', 'alpha_dash'],
             'columns.*.column_name_view' => ['required', 'string', 'max:64'],

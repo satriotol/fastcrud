@@ -83,16 +83,6 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="indonesian_description">Deskripsi Menu</label>
-                            <div class="col-sm-10">
-                                {{ html()->text('indonesian_description', isset($crud) ? $crud->indonesian_description : @old('indonesian_description'))->class('form-control')->placeholder('Masukkan Deskripsi Menu')->required(true) }}
-                                <small class="text-muted">Contoh: <code>Deskripsi Profil Pengguna</code></small>
-                                @error('indonesian_description')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="table">Nama Tabel</label>
                             <div class="col-sm-10">
                                 {{ html()->text('table', isset($crud) ? $crud->table : @old('table'))->class('form-control')->placeholder('Masukkan Nama Table')->required(true) }}
