@@ -25,16 +25,20 @@
                 <div class="card-body">
                     <form action="">
                         <div class="row g-3 align-items-end">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label class="form-label fw-semibold"><i class="ti ti-user me-1"></i> Nama</label>
                                 {{ html()->text('name')->class('form-control')->placeholder('Cari Nama')->value(@old('name')) }}
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold"><i class="ti ti-mail me-1"></i> E-mail</label>
+                                {{ html()->text('email')->class('form-control')->placeholder('Cari E-mail')->value(@old('email')) }}
+                            </div>
+                            <div class="col-md-6">
                                 <label class="form-label fw-semibold"><i class="ti ti-lock me-1"></i> Status Reset
                                     Password</label>
                                 {{ html()->select('must_change_password', ['1' => 'Belum', '0' => 'Sudah'])->class('form-select')->placeholder('Pilih Status Reset Password')->value(@old('must_change_password')) }}
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label class="form-label fw-semibold"><i class="ti ti-shield me-1"></i> Role</label>
                                 {{ html()->select('role', $roles->pluck('name', 'name'))->class('form-select')->placeholder('Pilih Role')->value(@old('role')) }}
                             </div>

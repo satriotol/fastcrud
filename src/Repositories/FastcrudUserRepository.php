@@ -28,6 +28,10 @@ class FastcrudUserRepository
             $name = $request->name;
             $must_change_password = $request->must_change_password;
             $role = $request->role;
+            $email = $request->email;
+            if ($email) {
+                $query->where('email', 'LIKE', '%' . $email . '%');
+            }
             if ($name) {
                 $query->where('name', 'LIKE', '%' . $name . '%');
             }
