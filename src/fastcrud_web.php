@@ -17,7 +17,7 @@ use Satriotol\Fastcrud\Controllers\FastcrudUserController;
 use Satriotol\Fastcrud\Controllers\PermissionController;
 use Satriotol\Fastcrud\Controllers\RoleController;
 
-Route::prefix('admin')->group(function () {
+Route::prefix(config('fastcrud.route_prefix', 'admin'))->group(function () {
     Route::middleware(['web'])->group(function () {
         Route::get('getMedia/media/{uuid}', [MediaController::class, 'getMedia'])->name('media.getMedia');
         Route::get('getfile', [MinioController::class, 'getfile'])->name('minio.getfile');

@@ -28,6 +28,7 @@ class FastCrudServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/Views', 'fastcrud');
         $this->loadRoutesFrom(__DIR__ . '/fastcrud_web.php');
         $this->loadMigrationsFrom(__DIR__ . '/Migrations');
+        $this->mergeConfigFrom(__DIR__ . '/config/fastcrud.php', 'fastcrud');
         $router = $this->app->make(Router::class);
 
         // Registrasi middleware
