@@ -9,6 +9,7 @@ use App\Repositories\{{modelName}}Repository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Satriotol\Fastcrud\Exceptions\FastcrudException;
 
 class {{modelName}}Controller extends Controller
 {
@@ -30,7 +31,7 @@ class {{modelName}}Controller extends Controller
         ${{modelNamePlural}} = $this->{{modelNameSingular}}Repository->getAll(
             [
             ], $request
-        )->latest()->paginate();
+        )->orderBy('id','desc')->paginate();
         $request->flash();
         return view('backend.{{modelNameSingular}}.index', compact('{{modelNamePlural}}'));
     }
@@ -49,9 +50,13 @@ class {{modelName}}Controller extends Controller
             $this->{{modelNameSingular}}Repository->create($data);
             DB::commit();
             return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{indonesian_name}} Berhasil Tersimpan');
+        } catch (FastcrudException $fe) {
+            DB::rollBack();
+            return back()->with('error', $fe->getMessage())->withInput();
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with('error', $th->getMessage());
+            Log::error('Terjadi kesalahan ketika menyimpan {{indonesian_name}}: ' . $th->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat menyimpan {{indonesian_name}}. Silakan coba lagi.')->withInput();
         }
     }
 
@@ -77,9 +82,13 @@ class {{modelName}}Controller extends Controller
             $this->{{modelNameSingular}}Repository->update($uuid, $data);
             DB::commit();
             return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{indonesian_name}} Berhasil Terupdate');
+        } catch (FastcrudException $fe) {
+            DB::rollBack();
+            return back()->with('error', $fe->getMessage())->withInput();
         } catch (\Throwable $th) {
             DB::rollBack();
-            return back()->with('error', $th->getMessage());
+            Log::error('Terjadi kesalahan ketika mengupdate {{indonesian_name}}: ' . $th->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat mengupdate {{indonesian_name}}. Silakan coba lagi.')->withInput();
         }
     }
 
@@ -90,9 +99,13 @@ class {{modelName}}Controller extends Controller
             $this->{{modelNameSingular}}Repository->delete($uuid);
             DB::commit();
             return back()->with('success', '{{indonesian_name}} Berhasil Dihapus');
-        }catch(\Throwable $th){
+        }catch(FastcrudException $fe){
             DB::rollBack();
-            return back()->with('error', $th->getMessage());
+            return back()->with('error', $fe->getMessage())->withInput();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Terjadi kesalahan ketika menghapus {{indonesian_name}}: ' . $th->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat menghapus {{indonesian_name}}. Silakan coba lagi.')->withInput();
         }
     }
 }

@@ -68,7 +68,7 @@ class {{modelName}}Repository
             }
         }
         $messages = [
-
+            {{messages}}
         ];
         return ['rules' => $rules, 'messages' => $messages];
     }
@@ -76,6 +76,10 @@ class {{modelName}}Repository
     public function findByUuid(string $uuid)
     {
         return {{modelName}}::where('uuid', $uuid)->firstOrFail();
+    }
+    public function findById(int $id)
+    {
+        return {{modelName}}::findOrFail($id);
     }
 
     public function create(array $data)

@@ -82,10 +82,11 @@ trait CrudFunction
         $uploadLogic = '';
         $deleteLogic = '';
         $validations = [];
-
+        $messages = []; // Tambahkan array untuk menampung pesan error
 
         foreach ($data['columns'] as $d) {
             $validationRule = $d['nullable'] == 0 ? 'required' : 'nullable';
+
             if ($d['is_file']) {
                 if ($d['is_minio']) {
                     $uploadLogic .= "\n        if (isset(\$data['{$d['column_name']}']) && \$data['{$d['column_name']}']->isValid()) {";
@@ -111,22 +112,32 @@ trait CrudFunction
                     $uploadLogic .= "\n            \$data['{$d['column_name']}'] = \$filePath_{$d['column_name']};";
                     $uploadLogic .= "\n        }";
 
-
                     $deleteLogic .= "\n        if (isset(\$model->{$d['column_name']})) {";
                     $deleteLogic .= "\n            Storage::disk('public')->delete(\$model->{$d['column_name']});";
                     $deleteLogic .= "\n        }";
                 }
             }
+
+            // Tambahkan rule validasi
             $validationContent = "'{$d['column_name']}' => '$validationRule',";
             $validations[] = $validationContent;
+
+            // Tambahkan pesan custom jika required (nullable == 0)
+            if ($d['nullable'] == 0) {
+                $messages[] = "'{$d['column_name']}.required' => '{$d['column_name_view']} wajib diisi',";
+            }
         }
-        $validations = implode("\n", $validations);
+
+        // Implode dengan spasi agar rapi di file hasil generate (identasi 12 spasi)
+        $validations = implode("\n            ", $validations);
+        $messages = implode("\n            ", $messages);
 
         $repositoryTemplate = str_replace(
             [
                 '{{modelName}}',
                 '{{modelNameSingular}}',
                 '{{validations}}',
+                '{{messages}}', // Sisipkan variabel messages
                 '//UPLOAD_LOGIC',
                 '//DELETE_LOGIC'
             ],
@@ -134,6 +145,7 @@ trait CrudFunction
                 $data['model'],
                 $data['singular'],
                 $validations,
+                $messages,      // Data array string yang sudah digabung
                 $uploadLogic,
                 $deleteLogic
             ],
@@ -142,7 +154,6 @@ trait CrudFunction
 
         file_put_contents(app_path("/Repositories/{$data['model']}Repository.php"), $repositoryTemplate);
     }
-
 
     protected function generateSidebar($data)
     {
