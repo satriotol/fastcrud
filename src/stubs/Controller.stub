@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use App\Models\{{modelName}};
 use App\Repositories\{{modelName}}Repository;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Satriotol\Fastcrud\Exceptions\FastcrudException;
 
 class {{modelName}}Controller extends Controller
