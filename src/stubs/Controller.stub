@@ -53,7 +53,7 @@ class {{modelName}}Controller extends Controller
             return back()->with('error', $fe->getMessage())->withInput();
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Terjadi kesalahan ketika menyimpan {{indonesian_name}}: ' . $th->getMessage());
+            Log::error('Terjadi kesalahan ketika menyimpan {{indonesian_name}}: ' . $th->getMessage(), ['exception' => $th]);
             return back()->with('error', 'Terjadi kesalahan saat menyimpan {{indonesian_name}}. Silakan coba lagi.')->withInput();
         }
     }
@@ -85,7 +85,7 @@ class {{modelName}}Controller extends Controller
             return back()->with('error', $fe->getMessage())->withInput();
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Terjadi kesalahan ketika mengupdate {{indonesian_name}}: ' . $th->getMessage());
+            Log::error('Terjadi kesalahan ketika mengupdate {{indonesian_name}}: ' . $th->getMessage(), ['exception' => $th]);
             return back()->with('error', 'Terjadi kesalahan saat mengupdate {{indonesian_name}}. Silakan coba lagi.')->withInput();
         }
     }
@@ -102,7 +102,7 @@ class {{modelName}}Controller extends Controller
             return back()->with('error', $fe->getMessage())->withInput();
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Terjadi kesalahan ketika menghapus {{indonesian_name}}: ' . $th->getMessage());
+            Log::error('Terjadi kesalahan ketika menghapus {{indonesian_name}}: ' . $th->getMessage(), ['exception' => $th]);
             return back()->with('error', 'Terjadi kesalahan saat menghapus {{indonesian_name}}. Silakan coba lagi.')->withInput();
         }
     }
