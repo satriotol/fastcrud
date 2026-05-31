@@ -140,6 +140,92 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
         } catch (\Exception $e) {
             // Abaikan agar aplikasi tidak crash jika Telegram gagal
         }
+
+        // Kirim pesan kedua: prompt analisis AI
+        if ($exception instanceof Throwable) {
+            $this->sendAnalysisPrompt($exception, $message);
+        }
+    }
+
+    protected function sendAnalysisPrompt(Throwable $exception, string $message): void
+    {
+        $file      = $exception->getFile();
+        $line      = $exception->getLine();
+        $trace     = $this->formatTraceText($exception);
+        $sourceCode = $this->getSourceCode($file, $line);
+
+        $prompt  = "Anda adalah senior Laravel engineer.\n\n";
+        $prompt .= "Analisis error berikut:\n\n";
+        $prompt .= "ERROR:\n{$message}\n\n";
+        $prompt .= "FILE:\n{$file}\n\n";
+        $prompt .= "LINE:\n{$line}\n\n";
+        $prompt .= "STACK TRACE:\n{$trace}\n\n";
+        $prompt .= "SOURCE CODE:\n{$sourceCode}\n\n";
+        $prompt .= "Berikan output:\n\n";
+        $prompt .= "1. Root Cause\n";
+        $prompt .= "2. Confidence (0-100%)\n";
+        $prompt .= "3. Kemungkinan lokasi masalah\n";
+        $prompt .= "4. Langkah perbaikan\n";
+        $prompt .= "5. Contoh kode perbaikan\n";
+        $prompt .= "6. Risiko jika tidak diperbaiki\n\n";
+        $prompt .= "Jawab dalam bahasa Indonesia.";
+
+        if (mb_strlen($prompt) > self::TELEGRAM_LIMIT) {
+            $prompt = mb_substr($prompt, 0, self::TELEGRAM_LIMIT - 50)
+                    . "\n\n⚠️ [Prompt dipotong karena terlalu panjang]";
+        }
+
+        $url = "https://api.telegram.org/bot{$this->token}/sendMessage";
+
+        try {
+            Http::timeout(5)->post($url, [
+                'chat_id' => $this->chatId,
+                'text'    => $prompt,
+            ]);
+        } catch (\Exception $e) {
+            // Abaikan agar aplikasi tidak crash
+        }
+    }
+
+    private function formatTraceText(Throwable $exception): string
+    {
+        $trace  = $exception->getTrace();
+        $result = '';
+        foreach (array_slice($trace, 0, 8) as $i => $frame) {
+            $file   = $frame['file']     ?? '[internal]';
+            $line   = $frame['line']     ?? '?';
+            $class  = $frame['class']    ?? '';
+            $type   = $frame['type']     ?? '';
+            $func   = $frame['function'] ?? '?';
+            $caller = $class ? "{$class}{$type}{$func}()" : "{$func}()";
+            $result .= "#" . str_pad($i, 2, '0', STR_PAD_LEFT)
+                     . " {$file}:{$line} → {$caller}\n";
+        }
+        return rtrim($result);
+    }
+
+    private function getSourceCode(string $file, int $errorLine, int $context = 5): string
+    {
+        if (!is_readable($file)) {
+            return '(file tidak dapat dibaca)';
+        }
+
+        $lines = file($file);
+        if ($lines === false) {
+            return '(gagal membaca file)';
+        }
+
+        $start  = max(0, $errorLine - $context - 1);
+        $end    = min(count($lines) - 1, $errorLine + $context - 1);
+        $result = '';
+
+        for ($i = $start; $i <= $end; $i++) {
+            $lineNum = $i + 1;
+            $marker  = ($lineNum === $errorLine) ? '>>> ' : '    ';
+            $result .= $marker . str_pad($lineNum, 4) . ': ' . rtrim($lines[$i]) . "\n";
+        }
+
+        return rtrim($result);
     }
 
     /**
