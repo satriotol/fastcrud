@@ -43,8 +43,8 @@ class {{modelName}}Controller extends Controller
     {
         $validation = $this->{{modelNameSingular}}Repository->validate();
         $data = $request->validate($validation['rules'], $validation['messages']);
-        DB::beginTransaction();
         try {
+            DB::beginTransaction();
             $this->{{modelNameSingular}}Repository->create($data);
             DB::commit();
             return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{indonesian_name}} Berhasil Tersimpan');
@@ -72,11 +72,11 @@ class {{modelName}}Controller extends Controller
 
     public function update(Request $request, $uuid)
     {
-        $model = $this->{{modelNameSingular}}Repository->findByUuid($uuid); 
-        $validation = $this->{{modelNameSingular}}Repository->validate(true, $model->id);
-        $data = $request->validate($validation['rules'], $validation['messages']);
-        DB::beginTransaction();
         try {
+            $model = $this->{{modelNameSingular}}Repository->findByUuid($uuid);
+            $validation = $this->{{modelNameSingular}}Repository->validate(true, $model->id);
+            $data = $request->validate($validation['rules'], $validation['messages']);
+            DB::beginTransaction();
             $this->{{modelNameSingular}}Repository->update($uuid, $data);
             DB::commit();
             return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{indonesian_name}} Berhasil Terupdate');
@@ -92,18 +92,18 @@ class {{modelName}}Controller extends Controller
 
     public function destroy($uuid)
     {
-        DB::beginTransaction();
-        try{
+        try {
+            DB::beginTransaction();
             $this->{{modelNameSingular}}Repository->delete($uuid);
             DB::commit();
             return back()->with('success', '{{indonesian_name}} Berhasil Dihapus');
-        }catch(FastcrudException $fe){
+        } catch (FastcrudException $fe) {
             DB::rollBack();
-            return back()->with('error', $fe->getMessage())->withInput();
+            return back()->with('error', $fe->getMessage());
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Terjadi kesalahan ketika menghapus {{indonesian_name}}: ' . $th->getMessage(), ['exception' => $th]);
-            return back()->with('error', 'Terjadi kesalahan saat menghapus {{indonesian_name}}. Silakan coba lagi.')->withInput();
+            return back()->with('error', 'Terjadi kesalahan saat menghapus {{indonesian_name}}. Silakan coba lagi.');
         }
     }
 }
