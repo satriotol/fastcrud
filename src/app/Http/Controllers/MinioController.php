@@ -10,10 +10,21 @@ class MinioController extends Controller
 {
     public function getFile(Request $request)
     {
-        $file = Storage::disk('minio')->get($request->url);
-        $mimetype = Storage::disk('minio')->mimeType($request->url);
-        $response =  Response::make($file, 200, [
-            'Content-Type' => $mimetype
+        $path = $request->input('url');
+
+        if (!$path) {
+            return Response::make('File path is required.', 400);
+        }
+
+        if (!Storage::disk('minio')->exists($path)) {
+            return Response::make('File not found.', 404);
+        }
+
+        $file = Storage::disk('minio')->get($path);
+        $mimetype = Storage::disk('minio')->mimeType($path);
+
+        return Response::make($file, 200, [
+            'Content-Type' => $mimetype,
         ]);
-        return $response;
-    }}
+    }
+}
