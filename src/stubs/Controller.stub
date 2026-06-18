@@ -50,10 +50,18 @@ class {{modelName}}Controller extends Controller
             return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{indonesian_name}} Berhasil Tersimpan');
         } catch (FastcrudException $fe) {
             DB::rollBack();
+            Log::warning('{{indonesian_name}} gagal disimpan (FastcrudException): ' . $fe->getMessage(), [
+                'user_id' => Auth::id(),
+                'input'   => $request->except(['password', 'password_confirmation', '_token']),
+            ]);
             return back()->with('error', $fe->getMessage())->withInput();
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Terjadi kesalahan ketika menyimpan {{indonesian_name}}: ' . $th->getMessage(), ['exception' => $th]);
+            Log::error('Terjadi kesalahan ketika menyimpan {{indonesian_name}}: ' . $th->getMessage(), [
+                'exception' => $th,
+                'user_id'   => Auth::id(),
+                'input'     => $request->except(['password', 'password_confirmation', '_token']),
+            ]);
             return back()->with('error', 'Terjadi kesalahan saat menyimpan {{indonesian_name}}. Silakan coba lagi.')->withInput();
         }
     }
@@ -82,10 +90,20 @@ class {{modelName}}Controller extends Controller
             return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{indonesian_name}} Berhasil Terupdate');
         } catch (FastcrudException $fe) {
             DB::rollBack();
+            Log::warning('{{indonesian_name}} gagal diupdate (FastcrudException): ' . $fe->getMessage(), [
+                'user_id' => Auth::id(),
+                'uuid'    => $uuid,
+                'input'   => $request->except(['password', 'password_confirmation', '_token']),
+            ]);
             return back()->with('error', $fe->getMessage())->withInput();
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Terjadi kesalahan ketika mengupdate {{indonesian_name}}: ' . $th->getMessage(), ['exception' => $th]);
+            Log::error('Terjadi kesalahan ketika mengupdate {{indonesian_name}}: ' . $th->getMessage(), [
+                'exception' => $th,
+                'user_id'   => Auth::id(),
+                'uuid'      => $uuid,
+                'input'     => $request->except(['password', 'password_confirmation', '_token']),
+            ]);
             return back()->with('error', 'Terjadi kesalahan saat mengupdate {{indonesian_name}}. Silakan coba lagi.')->withInput();
         }
     }
@@ -99,10 +117,18 @@ class {{modelName}}Controller extends Controller
             return back()->with('success', '{{indonesian_name}} Berhasil Dihapus');
         } catch (FastcrudException $fe) {
             DB::rollBack();
+            Log::warning('{{indonesian_name}} gagal dihapus (FastcrudException): ' . $fe->getMessage(), [
+                'user_id' => Auth::id(),
+                'uuid'    => $uuid,
+            ]);
             return back()->with('error', $fe->getMessage());
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Terjadi kesalahan ketika menghapus {{indonesian_name}}: ' . $th->getMessage(), ['exception' => $th]);
+            Log::error('Terjadi kesalahan ketika menghapus {{indonesian_name}}: ' . $th->getMessage(), [
+                'exception' => $th,
+                'user_id'   => Auth::id(),
+                'uuid'      => $uuid,
+            ]);
             return back()->with('error', 'Terjadi kesalahan saat menghapus {{indonesian_name}}. Silakan coba lagi.');
         }
     }
