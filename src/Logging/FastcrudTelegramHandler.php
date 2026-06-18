@@ -126,10 +126,7 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
         $url = "https://api.telegram.org/bot{$this->token}/sendMessage";
 
         // Telegram max 4096 karakter — potong jika perlu
-        if (mb_strlen($text) > self::TELEGRAM_LIMIT) {
-            $text = mb_substr($text, 0, self::TELEGRAM_LIMIT - 50)
-                  . "\n\n⚠️ _[Pesan dipotong karena terlalu panjang]_";
-        }
+        $text = $this->truncate($text, "\n\n⚠️ _[Pesan dipotong karena terlalu panjang]_");
 
         try {
             Http::timeout(5)->post($url, [
@@ -170,10 +167,7 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
         $prompt .= "6. Risiko jika tidak diperbaiki\n\n";
         $prompt .= "Jawab dalam bahasa Indonesia.";
 
-        if (mb_strlen($prompt) > self::TELEGRAM_LIMIT) {
-            $prompt = mb_substr($prompt, 0, self::TELEGRAM_LIMIT - 50)
-                    . "\n\n⚠️ [Prompt dipotong karena terlalu panjang]";
-        }
+        $prompt = $this->truncate($prompt, "\n\n⚠️ [Prompt dipotong karena terlalu panjang]");
 
         $url = "https://api.telegram.org/bot{$this->token}/sendMessage";
 
@@ -226,6 +220,22 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
         }
 
         return rtrim($result);
+    }
+
+    /**
+     * Pastikan teks tidak melebihi batas karakter Telegram (4096).
+     * Jika melebihi, potong dan tambahkan keterangan — hasil akhir
+     * (termasuk keterangan) dijamin tidak lebih dari TELEGRAM_LIMIT.
+     */
+    private function truncate(string $text, string $notice): string
+    {
+        if (mb_strlen($text) <= self::TELEGRAM_LIMIT) {
+            return $text;
+        }
+
+        $keep = self::TELEGRAM_LIMIT - mb_strlen($notice);
+
+        return mb_substr($text, 0, max(0, $keep)) . $notice;
     }
 
     /**
