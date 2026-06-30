@@ -31,6 +31,12 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
         $context   = $record->context;
         $datetime  = $record->datetime;
 
+        // Abaikan log duplikat yang ditulis ulang oleh Laravel Debugbar
+        // (mis. "Debugbar exception: SQLSTATE..." untuk error yang sama)
+        if (str_starts_with($message, 'Debugbar exception:')) {
+            return;
+        }
+
         /** @var Throwable|null $exception */
         $exception = $context['exception'] ?? null;
 
@@ -42,15 +48,13 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
         $text .= "🌍 *Env :* `" . env('APP_ENV', 'unknown') . "`\n";
         $text .= "⚡ *Level :* `{$levelName}`\n";
         $text .= "🕐 *Waktu :* `" . ($datetime instanceof \DateTimeInterface
-                    ? $datetime->format('Y-m-d H:i:s')
-                    : (string) $datetime) . "`\n\n";
+                ? $datetime->format('Y-m-d H:i:s')
+                : (string) $datetime) . "`\n\n";
 
         // ── Pesan Error ──────────────────────────────────────
         $text .= "💬 *Pesan:*\n`" . $this->escape($message) . "`\n\n";
 
         // ── Informasi Request HTTP ───────────────────────────
-        // Diletakkan SEBELUM stack trace agar tidak ikut terpotong
-        // saat pesan melebihi batas 4096 karakter Telegram.
         if (app()->runningInConsole()) {
             $text .= "⚙️ *Sumber:* `Console / Artisan`\n";
             $argv = $_SERVER['argv'] ?? [];
@@ -91,7 +95,6 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
             $text .= "📄 *File :*\n`" . $exception->getFile() . "`\n";
             $text .= "📍 *Line :* `" . $exception->getLine() . "`\n\n";
 
-            // Stack trace — tampilkan 10 frame teratas dengan path lengkap
             $trace = $exception->getTrace();
             if (!empty($trace)) {
                 $text .= "🔖 *Stack Trace (10 frame teratas):*\n```\n";
@@ -110,7 +113,6 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
                 $text .= "```\n\n";
             }
 
-            // Pesan exception asli (jika berbeda dari $message)
             if ($exception->getMessage() !== $message) {
                 $text .= "📝 *Exception Message:*\n`"
                        . $this->escape(substr($exception->getMessage(), 0, 300))
@@ -118,7 +120,6 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
             }
 
         } else {
-            // Tidak ada exception — tampilkan context biasa jika ada
             if (!empty($context)) {
                 $encoded = json_encode($context, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
                 $text .= "📦 *Context:*\n```json\n" . substr($encoded, 0, 800) . "\n```\n\n";
@@ -128,18 +129,11 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
         // ── Kirim ke Telegram ────────────────────────────────
         $url = "https://api.telegram.org/bot{$this->token}/sendMessage";
 
-        // Telegram max 4096 karakter — potong jika perlu
+        // Potong jika terlalu panjang
         $text = $this->truncate($text, "\n\n⚠️ _[Pesan dipotong karena terlalu panjang]_");
 
-        try {
-            Http::timeout(5)->post($url, [
-                'chat_id'    => $this->chatId,
-                'text'       => $text,
-                'parse_mode' => 'Markdown',
-            ]);
-        } catch (\Exception $e) {
-            // Abaikan agar aplikasi tidak crash jika Telegram gagal
-        }
+        // Gunakan fungsi helper untuk mengirim laporan error
+        $this->sendToTelegram($url, $text, 'Markdown');
 
         // Kirim pesan kedua: prompt analisis AI
         if ($exception instanceof Throwable) {
@@ -149,9 +143,9 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
 
     protected function sendAnalysisPrompt(Throwable $exception, string $message): void
     {
-        $file      = $exception->getFile();
-        $line      = $exception->getLine();
-        $trace     = $this->formatTraceText($exception);
+        $file       = $exception->getFile();
+        $line       = $exception->getLine();
+        $trace      = $this->formatTraceText($exception);
         $sourceCode = $this->getSourceCode($file, $line);
 
         $prompt  = "Anda adalah senior Laravel engineer.\n\n";
@@ -171,16 +165,37 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
         $prompt .= "Jawab dalam bahasa Indonesia.";
 
         $prompt = $this->truncate($prompt, "\n\n⚠️ [Prompt dipotong karena terlalu panjang]");
-
         $url = "https://api.telegram.org/bot{$this->token}/sendMessage";
 
+        // Gunakan fungsi helper tanpa Parse Mode untuk prompt (lebih aman)
+        $this->sendToTelegram($url, $prompt);
+    }
+
+    /**
+     * Helper untuk memproses pengiriman dengan fitur Auto-Fallback
+     */
+    private function sendToTelegram(string $url, string $text, ?string $parseMode = null): void
+    {
         try {
-            Http::timeout(5)->post($url, [
+            $payload = [
                 'chat_id' => $this->chatId,
-                'text'    => $prompt,
-            ]);
+                'text'    => $text,
+            ];
+
+            if ($parseMode) {
+                $payload['parse_mode'] = $parseMode;
+            }
+
+            $response = Http::timeout(5)->post($url, $payload);
+
+            // Jika respons gagal (biasanya HTTP 400 karena Markdown terpotong) dan kita memakai parse_mode
+            if (!$response->successful() && $parseMode) {
+                // Hapus parse_mode, kirim ulang sebagai PLAIN TEXT agar tetap masuk
+                unset($payload['parse_mode']);
+                Http::timeout(5)->post($url, $payload);
+            }
         } catch (\Exception $e) {
-            // Abaikan agar aplikasi tidak crash
+            // Abaikan error koneksi (Timeout/DNS) agar aplikasi utama tidak crash
         }
     }
 
@@ -225,11 +240,6 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
         return rtrim($result);
     }
 
-    /**
-     * Pastikan teks tidak melebihi batas karakter Telegram (4096).
-     * Jika melebihi, potong dan tambahkan keterangan — hasil akhir
-     * (termasuk keterangan) dijamin tidak lebih dari TELEGRAM_LIMIT.
-     */
     private function truncate(string $text, string $notice): string
     {
         if (mb_strlen($text) <= self::TELEGRAM_LIMIT) {
@@ -241,9 +251,6 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
         return mb_substr($text, 0, max(0, $keep)) . $notice;
     }
 
-    /**
-     * Escape karakter spesial Markdown Telegram agar tidak merusak format.
-     */
     private function escape(string $text): string
     {
         return str_replace(['`', '*', '_', '[', ']'], ['\\`', '\\*', '\\_', '\\[', '\\]'], $text);
