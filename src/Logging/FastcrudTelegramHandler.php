@@ -48,6 +48,43 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
         // ── Pesan Error ──────────────────────────────────────
         $text .= "💬 *Pesan:*\n`" . $this->escape($message) . "`\n\n";
 
+        // ── Informasi Request HTTP ───────────────────────────
+        // Diletakkan SEBELUM stack trace agar tidak ikut terpotong
+        // saat pesan melebihi batas 4096 karakter Telegram.
+        if (app()->runningInConsole()) {
+            $text .= "⚙️ *Sumber:* `Console / Artisan`\n";
+            $argv = $_SERVER['argv'] ?? [];
+            if (!empty($argv)) {
+                $text .= "📜 *Command:* `" . implode(' ', $argv) . "`\n";
+            }
+            $text .= "\n";
+        } else {
+            try {
+                $request = request();
+                $text .= "🌐 *URL :* `" . $request->fullUrl() . "`\n";
+                $text .= "📡 *Method :* `" . $request->method() . "`\n";
+                $text .= "🖥️ *IP :* `" . $request->ip() . "`\n";
+                $ua = $request->userAgent();
+                if ($ua) {
+                    $text .= "🔎 *User-Agent :* `" . substr($ua, 0, 120) . "`\n";
+                }
+                $text .= "\n";
+            } catch (\Throwable) {
+                // request() belum tersedia (bootstrap error)
+            }
+        }
+
+        // ── Informasi User ───────────────────────────────────
+        try {
+            if (Auth::check()) {
+                $user = Auth::user();
+                $text .= "👤 *User :* `" . ($user->name ?? $user->email ?? $user->id ?? 'unknown') . "`\n";
+                $text .= "🆔 *User ID :* `" . $user->id . "`\n\n";
+            }
+        } catch (\Throwable) {
+            // Auth belum siap
+        }
+
         // ── Detail Exception (jika ada) ──────────────────────
         if ($exception instanceof Throwable) {
             $text .= "🔴 *Exception:* `" . get_class($exception) . "`\n";
@@ -86,40 +123,6 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
                 $encoded = json_encode($context, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
                 $text .= "📦 *Context:*\n```json\n" . substr($encoded, 0, 800) . "\n```\n\n";
             }
-        }
-
-        // ── Informasi Request HTTP ───────────────────────────
-        if (app()->runningInConsole()) {
-            $text .= "⚙️ *Sumber:* `Console / Artisan`\n";
-            $argv = $_SERVER['argv'] ?? [];
-            if (!empty($argv)) {
-                $text .= "📜 *Command:* `" . implode(' ', $argv) . "`\n";
-            }
-        } else {
-            try {
-                $request = request();
-                $text .= "🌐 *URL :* `" . $request->fullUrl() . "`\n";
-                $text .= "📡 *Method :* `" . $request->method() . "`\n";
-                $text .= "🖥️ *IP :* `" . $request->ip() . "`\n";
-                $ua = $request->userAgent();
-                if ($ua) {
-                    $text .= "🔎 *User-Agent :* `" . substr($ua, 0, 120) . "`\n";
-                }
-                $text .= "\n";
-            } catch (\Throwable) {
-                // request() belum tersedia (bootstrap error)
-            }
-        }
-
-        // ── Informasi User ───────────────────────────────────
-        try {
-            if (Auth::check()) {
-                $user = Auth::user();
-                $text .= "👤 *User :* `" . ($user->name ?? $user->email ?? $user->id ?? 'unknown') . "`\n";
-                $text .= "🆔 *User ID :* `" . $user->id . "`\n\n";
-            }
-        } catch (\Throwable) {
-            // Auth belum siap
         }
 
         // ── Kirim ke Telegram ────────────────────────────────
