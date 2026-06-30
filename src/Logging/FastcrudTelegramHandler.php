@@ -72,6 +72,19 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
                 if ($ua) {
                     $text .= "🔎 *User-Agent :* `" . substr($ua, 0, 120) . "`\n";
                 }
+
+                // ── Input Request (selalu ditampilkan) ───────────
+                $input = $request->except([
+                    'password',
+                    'password_confirmation',
+                    'current_password',
+                    '_token',
+                ]);
+                $encodedInput = empty($input)
+                    ? '(kosong)'
+                    : json_encode($input, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                $text .= "📥 *Input :*\n```json\n" . substr($encodedInput, 0, 800) . "\n```\n";
+
                 $text .= "\n";
             } catch (\Throwable) {
                 // request() belum tersedia (bootstrap error)
@@ -97,8 +110,8 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
 
             $trace = $exception->getTrace();
             if (!empty($trace)) {
-                $text .= "🔖 *Stack Trace (10 frame teratas):*\n```\n";
-                foreach (array_slice($trace, 0, 10) as $i => $frame) {
+                $text .= "🔖 *Stack Trace (5 frame teratas):*\n```\n";
+                foreach (array_slice($trace, 0, 5) as $i => $frame) {
                     $file  = $frame['file']     ?? '[internal]';
                     $line  = $frame['line']     ?? '?';
                     $class = $frame['class']    ?? '';
@@ -107,8 +120,7 @@ class FastcrudTelegramHandler extends AbstractProcessingHandler
 
                     $caller = $class ? "{$class}{$type}{$func}()" : "{$func}()";
                     $text  .= "#" . str_pad($i, 2, '0', STR_PAD_LEFT)
-                            . " {$file}:{$line}\n"
-                            . "   → {$caller}\n";
+                            . " {$file}:{$line} → {$caller}\n";
                 }
                 $text .= "```\n\n";
             }
