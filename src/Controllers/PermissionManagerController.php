@@ -2,6 +2,7 @@
 
 namespace Satriotol\Fastcrud\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
@@ -17,7 +18,7 @@ class PermissionManagerController extends Controller
     {
         $roles = Role::withCount('permissions')->orderBy('name')->get();
 
-        return view('backend.permission_manager.index', compact('roles'));
+        return view('fastcrud::permission_manager.index', compact('roles'));
     }
 
     /**
@@ -30,7 +31,7 @@ class PermissionManagerController extends Controller
 
         $assigned = $role->permissions->pluck('name')->all();
 
-        return view('backend.permission_manager.edit', compact('role', 'permissions', 'assigned'));
+        return view('fastcrud::permission_manager.edit', compact('role', 'permissions', 'assigned'));
     }
 
     /**
