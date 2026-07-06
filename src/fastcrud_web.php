@@ -14,7 +14,9 @@ use Satriotol\Fastcrud\Controllers\AuditController;
 use Satriotol\Fastcrud\Controllers\FastcrudImpersonateController;
 use Satriotol\Fastcrud\Controllers\FastcrudTwoFactorController;
 use Satriotol\Fastcrud\Controllers\FastcrudUserController;
+use Satriotol\Fastcrud\Controllers\ImpersonateController;
 use Satriotol\Fastcrud\Controllers\PermissionController;
+use Satriotol\Fastcrud\Controllers\PermissionManagerController;
 use Satriotol\Fastcrud\Controllers\RoleController;
 
 Route::prefix(config('fastcrud.route_prefix', 'admin'))->group(function () {
@@ -28,6 +30,17 @@ Route::prefix(config('fastcrud.route_prefix', 'admin'))->group(function () {
         });
         Route::get('/login-back', [FastcrudImpersonateController::class, 'loginBack'])->name('fastcrud_user.impersonate.login_back');
         Route::middleware(['auth', 'force.password.change'])->group(function () {
+            Route::post('/impersonate/{user}', [ImpersonateController::class, 'start'])->name('impersonate.start');
+            Route::get('/impersonate/leave', [ImpersonateController::class, 'stop'])->name('impersonate.stop');
+
+            Route::middleware('superadmin.context')
+                ->prefix('permission-manager')
+                ->as('permission_manager.')
+                ->group(function () {
+                    Route::get('/', [PermissionManagerController::class, 'index'])->name('index');
+                    Route::get('/{role}/edit', [PermissionManagerController::class, 'edit'])->name('edit');
+                    Route::put('/{role}', [PermissionManagerController::class, 'update'])->name('update');
+                });
             Route::prefix('fastcrud_user')->group(function () {
                 Route::get('reset2Fa/{uuid}', [FastcrudUserController::class, 'reset2Fa'])->name('fastcrud_user.reset2Fa');
                 Route::get('/login-as/{id}', [FastcrudImpersonateController::class, 'loginAs'])->name('fastcrud_user.impersonate.login_as');

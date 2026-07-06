@@ -196,6 +196,16 @@
                                             data-bs-toggle="dropdown" title="Aksi"><i
                                                 class="ti ti-settings"></i></button>
                                         <div class="dropdown-menu">
+                                            @if (Auth::user()->hasRole('SUPERADMIN') && Auth::user()->id != $user->id && !$user->hasRole('SUPERADMIN'))
+                                                <form action="{{ route('impersonate.start', $user->id) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    <button type="submit" class="dropdown-item"
+                                                        onclick="return confirm('Lihat panel sebagai {{ $user->name }}?')">
+                                                        <i class="ti ti-eye me-1"></i> Lihat Sebagai
+                                                    </button>
+                                                </form>
+                                            @endif
                                             @can('user-edit')
                                                 <a class="dropdown-item"
                                                     href="{{ route('fastcrud_user.edit', $user->uuid) }}"><i
