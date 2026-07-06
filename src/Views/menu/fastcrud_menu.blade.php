@@ -45,6 +45,18 @@
     </li>
 @endrole
 
+@role('SUPERADMIN')
+    <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">Superadmin</span>
+    </li>
+    <li class="menu-item {{ request()->routeIs('permission_manager.*') ? 'active' : '' }}">
+        <a href="{{ route('permission_manager.index') }}" class="menu-link">
+            <i class="menu-icon tf-icons ti ti-shield-lock"></i>
+            <div>Manajemen Permission</div>
+        </a>
+    </li>
+@endrole
+
 {{-- ==================== PENGGUNA ==================== --}}
 @role(['SUPERADMIN', 'IMPERSONATE'])
     <li class="menu-header small text-uppercase">
