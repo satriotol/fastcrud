@@ -12,7 +12,7 @@
   ],
   "prefer-stable": true,
   "require": {
-    "barryvdh/laravel-debugbar": "^4.4.0",
+    "barryvdh/laravel-debugbar": "^4.4",
     "guzzlehttp/guzzle": "^7.2",
     "laravel/framework": "^13.0",
     "laravel/sanctum": "^4.0",
@@ -21,7 +21,8 @@
     "league/flysystem-aws-s3-v3": "^3.28",
     "spatie/laravel-permission": "^6.0",
     "maatwebsite/excel": "^3.1",
-    "bacon/bacon-qr-code": "^3.0"
+    "bacon/bacon-qr-code": "^3.0",
+    "pragmarx/google2fa-laravel": "^2.3"
   },
   "autoload": {
     "psr-4": {
