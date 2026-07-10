@@ -12,7 +12,7 @@
   ],
   "prefer-stable": true,
   "require": {
-    "barryvdh/laravel-debugbar": "^3.9",
+    "barryvdh/laravel-debugbar": "^4.4",
     "guzzlehttp/guzzle": "^7.2",
     "laravel/framework": "^13.0",
     "laravel/sanctum": "^4.0",
