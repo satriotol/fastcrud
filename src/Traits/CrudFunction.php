@@ -498,6 +498,33 @@ trait CrudFunction
         );
         $getDate = Date::now()->format('Y_m_d_His');
         file_put_contents(database_path("/migrations/{$getDate}_create_{$data['plural']}_table.php"), $migrationTemplate);
+
+        $this->createPermissionMigration($data);
+    }
+    protected function createPermissionMigration($data)
+    {
+        $suffixes = [
+            '-index',
+            '-create',
+            '-edit',
+            '-delete',
+            '-show',
+        ];
+
+        $permissions = [];
+        foreach ($suffixes as $suffix) {
+            $permissions[] = "'" . $data['singular'] . $suffix . "'";
+        }
+        $permissions = implode(",\n" . str_repeat(' ', 8), $permissions);
+
+        $migrationTemplate = str_replace(
+            'DummyPermissions',
+            $permissions,
+            file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/PermissionMigration.stub"))
+        );
+
+        $getDate = Date::now()->format('Y_m_d_His');
+        file_put_contents(database_path("/migrations/{$getDate}_create_{$data['plural']}_permission.php"), $migrationTemplate);
     }
     protected function generateModel($data)
     {
