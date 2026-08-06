@@ -3,7 +3,7 @@
         $impersonatedUser = auth()->user();
         $impersonatedRole = $impersonatedUser?->roles->first();
     @endphp
-    <div class="bg-warning text-dark border-bottom shadow-sm" style="position: sticky; top: 0; z-index: 1080;">
+    <div class="bg-warning text-dark border-bottom shadow-sm d-print-none" style="position: sticky; top: 0; z-index: 1080;">
         <div class="container-fluid py-2 d-flex flex-wrap align-items-center justify-content-between gap-2">
             <div class="d-flex align-items-center gap-2">
                 <i class="ti ti-eye ti-md"></i>
