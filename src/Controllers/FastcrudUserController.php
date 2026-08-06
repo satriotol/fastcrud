@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Str;
+use Satriotol\Fastcrud\Models\FastcrudRegistration;
 use Satriotol\Fastcrud\Models\FastcrudUser;
 use Satriotol\Fastcrud\Repositories\FastcrudRoleRepository;
 use Satriotol\Fastcrud\Repositories\FastcrudUserRepository;
@@ -29,8 +30,10 @@ class FastcrudUserController extends Controller
     $users = $this->fastcrudUserRepository->getAll([], $request)->latest()->paginate(10);
     $users_counts = $this->fastcrudUserRepository->getAll([], $request)->count();
     $roles = $this->fastcrudRoleRepository->search()->get();
+    $registerUrl = FastcrudRegistration::linkUrl();
+    $pendingRegistrations = FastcrudRegistration::where('status', 'pending')->count();
     $request->flash();
-    return view('fastcrud::fastcrud_user.index', compact('users', 'roles', 'users_counts'));
+    return view('fastcrud::fastcrud_user.index', compact('users', 'roles', 'users_counts', 'registerUrl', 'pendingRegistrations'));
   }
   public function setMustChangePassword($uuid)
   {

@@ -54,16 +54,28 @@
         </div>
         <div class="col-lg-4 col-md-5">
             <div class="card shadow-sm border-0 h-100">
-                <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                    <div class="d-flex align-items-center mb-2">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
                         <span class="fs-2 text-primary"><i class="ti ti-users"></i></span>
                         <span class="ms-2 fs-4 fw-bold">{{ $users_counts }}</span>
-                    </div>
-                    <div class="text-muted mb-1">Total Pengguna</div>
-                    <div class="d-flex align-items-center">
-                        <span class="fs-5 text-success"><i class="ti ti-shield-check"></i></span>
+                        <span class="ms-3 fs-5 text-success"><i class="ti ti-shield-check"></i></span>
                         <span class="ms-2 fs-6 fw-semibold">{{ $roles->count() }} Role</span>
                     </div>
+                    <label class="form-label fw-semibold small mb-1">
+                        <i class="ti ti-link me-1"></i> Link Pendaftaran (copas ke calon pengguna)
+                    </label>
+                    <div class="input-group input-group-sm">
+                        <input type="text" id="registerLink" class="form-control" readonly
+                            value="{{ $registerUrl }}">
+                        <button class="btn btn-outline-primary" type="button" onclick="copyRegisterLink(this)">
+                            <i class="ti ti-copy"></i>
+                        </button>
+                    </div>
+                    <a href="{{ route('fastcrud_registration.index') }}"
+                        class="btn btn-sm btn-outline-warning mt-2 d-flex justify-content-between align-items-center">
+                        <span><i class="ti ti-user-plus me-1"></i> Antrian Pendaftaran</span>
+                        <span class="badge bg-danger">{{ $pendingRegistrations }}</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -244,6 +256,17 @@
             {{ $users->appends($_GET)->links('pagination::bootstrap-5')->withClass('pagination-container') }}
         </div>
     </div>
+    <script>
+        function copyRegisterLink(btn) {
+            const input = document.getElementById('registerLink');
+            input.select();
+            input.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(input.value).then(() => {
+                btn.innerHTML = '<i class="ti ti-check"></i>';
+                setTimeout(() => btn.innerHTML = '<i class="ti ti-copy"></i>', 1500);
+            });
+        }
+    </script>
     <style>
         .badge.bg-primary.bg-opacity-10 {
             background-color: #e7f1ff !important;

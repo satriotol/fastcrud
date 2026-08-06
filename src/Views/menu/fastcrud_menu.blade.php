@@ -73,6 +73,15 @@
     </li>
 @endcan
 
+@can('fastcrud_registration-index')
+    <li class="menu-item {{ request()->routeIs('fastcrud_registration.*') ? 'active' : '' }}">
+        <a href="{{ route('fastcrud_registration.index') }}" class="menu-link">
+            <i class="menu-icon tf-icons ti ti-user-plus"></i>
+            <div>Antrian Pendaftaran</div>
+        </a>
+    </li>
+@endcan
+
 @can('api_key-index')
     <li class="menu-item {{ request()->routeIs('api_key.*') ? 'active' : '' }}">
         <a href="{{ route('api_key.index') }}" class="menu-link">

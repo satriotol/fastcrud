@@ -12,6 +12,7 @@ use Satriotol\Fastcrud\Controllers\ApiKeyController;
 use Satriotol\Fastcrud\Controllers\AppSpecsController;
 use Satriotol\Fastcrud\Controllers\AuditController;
 use Satriotol\Fastcrud\Controllers\FastcrudImpersonateController;
+use Satriotol\Fastcrud\Controllers\FastcrudRegistrationController;
 use Satriotol\Fastcrud\Controllers\FastcrudTwoFactorController;
 use Satriotol\Fastcrud\Controllers\FastcrudUserController;
 use Satriotol\Fastcrud\Controllers\ImpersonateController;
@@ -68,6 +69,21 @@ Route::prefix(config('fastcrud.route_prefix', 'admin'))->group(function () {
             });
             Route::resource('fastcrud_user', FastcrudUserController::class);
             Route::get('setMustChangePassword/fastcrud_user/{uuid}', [FastcrudUserController::class, 'setMustChangePassword'])->name('fastcrud_user.setMustChangePassword');
+            Route::prefix('fastcrud_registration')->as('fastcrud_registration.')->group(function () {
+                Route::get('/', [FastcrudRegistrationController::class, 'index'])->name('index');
+                Route::post('{uuid}/approve', [FastcrudRegistrationController::class, 'approve'])->name('approve');
+                Route::post('{uuid}/reject', [FastcrudRegistrationController::class, 'reject'])->name('reject');
+                Route::delete('{uuid}', [FastcrudRegistrationController::class, 'destroy'])->name('destroy');
+            });
         });
     });
+});
+
+// Pendaftaran publik lewat link ber-token, sengaja di luar prefix admin agar URL-nya pendek.
+Route::middleware(['web'])->group(function () {
+    Route::get('daftar/{token}', [FastcrudRegistrationController::class, 'form'])
+        ->name('fastcrud_registration.form');
+    Route::post('daftar/{token}', [FastcrudRegistrationController::class, 'submit'])
+        ->middleware('throttle:5,1')
+        ->name('fastcrud_registration.submit');
 });
