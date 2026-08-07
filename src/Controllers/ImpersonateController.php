@@ -46,7 +46,7 @@ class ImpersonateController extends Controller
         Auth::loginUsingId($impersonatorId);
         session()->forget('impersonator_id');
 
-        return redirect()->route('user.index')
+        return redirect()->route('fastcrud_user.index')
             ->with('success', 'Anda telah kembali ke akun superadmin.');
     }
 }

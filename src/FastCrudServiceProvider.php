@@ -38,6 +38,10 @@ class FastCrudServiceProvider extends ServiceProvider
         $router->aliasMiddleware('2fa', \Satriotol\Fastcrud\Middleware\Google2FAMiddleware::class);
         $router->aliasMiddleware('superadmin.context', \Satriotol\Fastcrud\Middleware\EnsureSuperadminContext::class);
 
+        // Ditempel ke group web (bukan alias) agar route paket maupun route
+        // aplikasi ikut terkunci saat mode maintenance aktif.
+        $router->pushMiddlewareToGroup('web', \Satriotol\Fastcrud\Middleware\MaintenanceMode::class);
+
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/resources' => resource_path('/'),

@@ -55,6 +55,15 @@
             <div>Manajemen Permission</div>
         </a>
     </li>
+    <li class="menu-item {{ request()->routeIs('maintenance.*') ? 'active' : '' }}">
+        <a href="{{ route('maintenance.index') }}" class="menu-link">
+            <i class="menu-icon tf-icons ti ti-tool"></i>
+            <div>Mode Maintenance</div>
+            @if (\Satriotol\Fastcrud\Middleware\MaintenanceMode::active())
+                <div class="badge bg-danger rounded-pill ms-auto">ON</div>
+            @endif
+        </a>
+    </li>
 @endrole
 
 {{-- ==================== PENGGUNA ==================== --}}

@@ -16,6 +16,7 @@ use Satriotol\Fastcrud\Controllers\FastcrudRegistrationController;
 use Satriotol\Fastcrud\Controllers\FastcrudTwoFactorController;
 use Satriotol\Fastcrud\Controllers\FastcrudUserController;
 use Satriotol\Fastcrud\Controllers\ImpersonateController;
+use Satriotol\Fastcrud\Controllers\MaintenanceController;
 use Satriotol\Fastcrud\Controllers\PermissionController;
 use Satriotol\Fastcrud\Controllers\PermissionManagerController;
 use Satriotol\Fastcrud\Controllers\RoleController;
@@ -50,6 +51,8 @@ Route::prefix(config('fastcrud.route_prefix', 'admin'))->group(function () {
                 Route::get('/', [FastcrudTwoFactorController::class, 'show2FASetup'])->name('2fa.setup');
                 Route::post('verify', [FastcrudTwoFactorController::class, 'verify2FA'])->name('2fa.verify');
             });
+            Route::get('maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index');
+            Route::put('maintenance', [MaintenanceController::class, 'update'])->name('maintenance.update');
             Route::get('app-specs', [AppSpecsController::class, 'index'])->name('app-specs.index');
             Route::get('audit', [AuditController::class, 'index'])->name('audit.index');
             Route::get('profile', [UserController::class, 'profile'])->name('user.profile');

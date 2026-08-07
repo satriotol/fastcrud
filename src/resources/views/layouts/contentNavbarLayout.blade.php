@@ -45,6 +45,7 @@
 
             <!-- Layout page -->
             <div class="layout-page">
+                @include('fastcrud::partials.maintenance-banner')
                 @include('fastcrud::partials.impersonation-banner')
 
                 {{-- Below commented code read by artisan command while installing jetstream. !! Do not remove if you want to use jetstream. --}}
