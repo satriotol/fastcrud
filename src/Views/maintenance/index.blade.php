@@ -15,6 +15,17 @@
                     </span>
                 </div>
                 <div class="card-body">
+                    @if ($protected === 0)
+                        <div class="alert alert-warning d-flex align-items-center gap-2" role="alert">
+                            <i class="ti ti-alert-triangle"></i>
+                            <div>
+                                <strong>Belum ada route yang ditandai.</strong>
+                                Menyalakan mode maintenance tidak akan memblokir apa pun.
+                                Tandai dulu route group-nya seperti contoh di bawah.
+                            </div>
+                        </div>
+                    @endif
+
                     @if ($active)
                         <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
                             <i class="ti ti-alert-triangle"></i>
@@ -47,6 +58,26 @@
 
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>
+                </div>
+                <div class="card-footer">
+                    <p class="mb-2">
+                        <i class="ti ti-shield-check me-1"></i>
+                        @if ($protected > 0)
+                            <strong>{{ $protected }}</strong> route terlindungi saat maintenance aktif.
+                        @else
+                            Cara menandai route group yang ikut terkunci:
+                        @endif
+                    </p>
+                    <pre class="mb-2"><code>Route::middleware(['auth', 'maintenance'])->group(function () {
+    // route yang ikut terkunci saat maintenance
+});</code></pre>
+                    <small class="text-muted">
+                        Dua kandidat yang sudah ada di instalasi ini:
+                        <code>routes/web.php</code> (dashboard, <code>/user</code>, dan seluruh CRUD hasil
+                        generator) dan group <code>auth</code> di route paket (panel admin).
+                        Jalankan <code>php artisan route:clear</code> setelah mengubah.
+                        Jangan tandai route login &mdash; itu satu-satunya jalan masuk superadmin.
+                    </small>
                 </div>
             </div>
         </div>

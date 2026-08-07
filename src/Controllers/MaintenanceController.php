@@ -4,6 +4,7 @@ namespace Satriotol\Fastcrud\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Satriotol\Fastcrud\Middleware\MaintenanceMode;
 
 class MaintenanceController extends Controller
@@ -18,7 +19,20 @@ class MaintenanceController extends Controller
         return view('fastcrud::maintenance.index', [
             'active' => MaintenanceMode::active(),
             'message' => MaintenanceMode::active() ? MaintenanceMode::message() : '',
+            'protected' => $this->protectedRouteCount(),
         ]);
+    }
+
+    /**
+     * Middleware 'maintenance' bersifat opt-in, jadi tanpa hitungan ini superadmin
+     * tidak punya cara tahu bahwa menyalakan maintenance belum memblokir apa pun.
+     * gatherMiddleware() sudah mencakup middleware warisan dari route group.
+     */
+    private function protectedRouteCount(): int
+    {
+        return collect(Route::getRoutes())
+            ->filter(fn($route) => in_array('maintenance', $route->gatherMiddleware(), true))
+            ->count();
     }
 
     public function update(Request $request)
