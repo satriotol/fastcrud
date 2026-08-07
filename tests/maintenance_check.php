@@ -28,4 +28,18 @@ assert(str_contains(MaintenanceMode::message(), 'dalam perbaikan'), 'isi kosong 
 unlink($file);
 assert(MaintenanceMode::active() === false, 'file dihapus, maintenance harus nonaktif');
 
-echo "OK: flag maintenance nyala/mati/pesan berperilaku benar.\n";
+// Halaman maintenance menghitung route lewat gatherMiddleware(), yang
+// meng-instantiate tiap controller. Konstruktor yang abort() bikin halaman ini
+// balas 403 di production — pernah kejadian di CrudController.
+foreach (glob(__DIR__ . '/../src/Controllers/*.php') as $controller) {
+    $source = file_get_contents($controller);
+
+    if (preg_match('/function\s+__construct\s*\([^)]*\)\s*\{(.*?)\n    \}/s', $source, $match)) {
+        assert(
+            !str_contains($match[1], 'abort'),
+            basename($controller) . ': konstruktor tidak boleh abort(), pindahkan ke callAction()'
+        );
+    }
+}
+
+echo "OK: flag maintenance nyala/mati/pesan berperilaku benar, konstruktor controller bebas abort().\n";

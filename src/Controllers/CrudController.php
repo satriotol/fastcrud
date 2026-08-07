@@ -10,11 +10,17 @@ use Illuminate\Support\Str;
 class CrudController extends Controller
 {
     use CrudFunction;
-    public function __construct()
+    /**
+     * Guard-nya di callAction, bukan di konstruktor: Route::gatherMiddleware()
+     * meng-instantiate controller cuma untuk membaca middleware-nya, jadi
+     * abort() di konstruktor bikin halaman lain (maintenance, app-specs,
+     * route:list) ikut kena 403 di production.
+     */
+    public function callAction($method, $parameters)
     {
-        if (!config('app.debug')) {
-            abort(403, 'Access denied');
-        }
+        abort_unless(config('app.debug'), 403, 'Access denied');
+
+        return parent::callAction($method, $parameters);
     }
 
     /**
