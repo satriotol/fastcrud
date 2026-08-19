@@ -3,7 +3,7 @@
   "description": "Laravel Fast Crud Buatan Satrio Tamvan",
   "type": "library",
   "license": "MIT",
-  "version": "13.4.10",
+  "version": "13.4.11",
   "authors": [
     {
       "name": "satriotol",
@@ -13,7 +13,7 @@
   "prefer-stable": true,
   "require": {
     "barryvdh/laravel-debugbar": "^4.4",
-    "guzzlehttp/guzzle": "^7.2",
+    "guzzlehttp/guzzle": "^8.0",
     "laravel/framework": "^13.0",
     "laravel/sanctum": "^4.0",
     "owen-it/laravel-auditing": "^14.0",
