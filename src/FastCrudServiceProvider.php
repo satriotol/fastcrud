@@ -35,7 +35,6 @@ class FastCrudServiceProvider extends ServiceProvider
         $router->aliasMiddleware('force.password.change', \Satriotol\Fastcrud\Middleware\ForcePasswordChange::class);
         $router->aliasMiddleware('api_key', \Satriotol\Fastcrud\Middleware\ApiKeyMiddleware::class);
         $router->aliasMiddleware('permission.json', \Satriotol\Fastcrud\Middleware\EnsurePermissionJson::class);
-        $router->aliasMiddleware('2fa', \Satriotol\Fastcrud\Middleware\Google2FAMiddleware::class);
         $router->aliasMiddleware('superadmin.context', \Satriotol\Fastcrud\Middleware\EnsureSuperadminContext::class);
         $router->aliasMiddleware('maintenance', \Satriotol\Fastcrud\Middleware\MaintenanceMode::class);
 

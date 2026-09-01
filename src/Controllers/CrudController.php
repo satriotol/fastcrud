@@ -66,6 +66,7 @@ class CrudController extends Controller
             'columns.*.is_file' => ['required', 'boolean'],
             'columns.*.is_minio' => ['required', 'boolean'],
             'sidebarLogo' => ['required', 'string', 'max:64'],
+            'soft_delete' => ['nullable', 'boolean'],
         ], [
             'model.required' => 'Nama model wajib diisi.',
             'model.alpha_dash' => 'Nama model hanya boleh huruf, angka, tanda hubung atau underscore.',
@@ -85,10 +86,12 @@ class CrudController extends Controller
             'columns.*.is_minio.boolean' => 'Nilai is_minio harus berupa true/false.',
             'sidebarLogo.required' => 'Icon sidebar wajib diisi.',
             'sidebarLogo.max' => 'Nama icon sidebar maksimal 64 karakter.',
+            'soft_delete.boolean' => 'Nilai soft delete harus berupa true/false.',
 
         ]);
 
         $data['plural'] = Str::plural($data['singular']);
+        $data['soft_delete'] = $request->boolean('soft_delete');
 
         $this->createMigration($data);
         $this->generateModel($data);

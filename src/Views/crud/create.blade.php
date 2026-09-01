@@ -116,6 +116,22 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="soft_delete">Soft Delete</label>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    {{ html()->hidden('soft_delete', 0) }}
+                                    {{ html()->checkbox('soft_delete', old('soft_delete'), 1)->class('form-check-input')->id('soft_delete') }}
+                                    <label class="form-check-label" for="soft_delete">Aktifkan soft delete</label>
+                                </div>
+                                <small class="text-muted">Jika dicentang, tabel mendapat kolom <code>deleted_at</code> dan
+                                    data yang dihapus hanya diarsipkan (bisa dipulihkan), bukan dihapus permanen. File
+                                    upload juga tidak ikut dihapus.</small>
+                                @error('soft_delete')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        </div>
                         <div class="col-12">
                             <div class="form-repeater">
                                 <div data-repeater-list="columns">

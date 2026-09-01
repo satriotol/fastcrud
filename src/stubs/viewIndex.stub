@@ -121,7 +121,7 @@
                                                         @csrf
                                                         @method('delete')
                                                         <button type="submit" class="dropdown-item text-danger"
-                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?\n\nTindakan ini tidak dapat dibatalkan.')">
+                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?\n\n{deleteConfirm}')">
                                                             <i class="ti ti-trash me-2"></i>Hapus
                                                         </button>
                                                     </form>

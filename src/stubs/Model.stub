@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use Illuminate\Support\Str;
+DummySoftDeletesImport
 
 class {{modelName}} extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
+    DummySoftDeletesTrait
 
     protected $table = '{{modelNamePlural}}';
 

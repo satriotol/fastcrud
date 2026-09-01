@@ -128,6 +128,11 @@ trait CrudFunction
             }
         }
 
+        if (!empty($data['soft_delete'])) {
+            // File dipertahankan selama row-nya masih bisa dipulihkan.
+            $deleteLogic = '';
+        }
+
         // Implode dengan spasi agar rapi di file hasil generate (identasi 12 spasi)
         $validations = implode("\n            ", $validations);
         $messages = implode("\n            ", $messages);
@@ -258,6 +263,7 @@ trait CrudFunction
                 'TableHead',
                 'TableBody',
                 '{indonesian_name}',
+                '{deleteConfirm}',
             ],
             [
                 $data['model'],
@@ -267,6 +273,9 @@ trait CrudFunction
                 $theadRows,
                 $rows,
                 $data['indonesian_name'],
+                empty($data['soft_delete'])
+                    ? 'Tindakan ini tidak dapat dibatalkan.'
+                    : 'Data akan diarsipkan (soft delete), bukan dihapus permanen.',
             ],
             file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/viewIndex.stub"))
         );
@@ -489,10 +498,12 @@ trait CrudFunction
             [
                 'DummyStructure',
                 'DummyTable',
+                'DummySoftDeletes',
             ],
             [
                 $rows,
                 $data['plural'],
+                empty($data['soft_delete']) ? '' : '$table->softDeletes();',
             ],
             file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/Migration.stub"))
         );
@@ -561,12 +572,14 @@ trait CrudFunction
         }
 
         $rows = implode(', ', $fillable);
+        $softDeletesImport = empty($data['soft_delete']) ? '' : 'use Illuminate\Database\Eloquent\SoftDeletes;';
+        $softDeletesTrait = empty($data['soft_delete']) ? '' : 'use SoftDeletes;';
         $appendsRows = !empty($appends) ? 'protected $appends = [' . implode(', ', $appends) . '];' : '';
         $accessorsCode = implode("\n\n", $accessors);
 
         $modelTemplate = str_replace(
-            ['{{modelName}}', '{{modelNamePlural}}', 'DummyTable', 'DummyAppends', 'DummyAccessors'],
-            [$data['model'], $data['plural'], $rows, $appendsRows, $accessorsCode],
+            ['{{modelName}}', '{{modelNamePlural}}', 'DummyTable', 'DummyAppends', 'DummyAccessors', 'DummySoftDeletesImport', 'DummySoftDeletesTrait'],
+            [$data['model'], $data['plural'], $rows, $appendsRows, $accessorsCode, $softDeletesImport, $softDeletesTrait],
             file_get_contents(base_path("vendor/satriotol/fastcrud/src/stubs/Model.stub"))
         );
 
