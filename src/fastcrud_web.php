@@ -58,6 +58,7 @@ Route::prefix(config('fastcrud.route_prefix', 'admin'))->group(function () {
             Route::get('profile', [UserController::class, 'profile'])->name('user.profile');
             Route::put('/updateProfile', [UserController::class, 'updateProfile'])->name('user.updateProfile');
             Route::resource('crud', CrudController::class);
+            Route::patch('api_key/{uuid}/toggle', [ApiKeyController::class, 'toggle'])->name('api_key.toggle');
             Route::resource('api_key', ApiKeyController::class);
             Route::resource('config', ConfigController::class);
             Route::post('/user/reset-password/{uuid}', [PasswordController::class, 'resetPassword'])->name('user.resetPassword');

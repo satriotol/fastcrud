@@ -12,7 +12,7 @@ class ApiKeyController extends Controller
     {
         $this->middleware('permission:api_key-index|api_key-create|api_key-edit|api_key-delete', ['only' => ['index', 'show']]);
         $this->middleware('permission:api_key-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:api_key-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:api_key-edit', ['only' => ['edit', 'update', 'toggle']]);
         $this->middleware('permission:api_key-delete', ['only' => ['destroy']]);
     }
 
@@ -49,7 +49,6 @@ class ApiKeyController extends Controller
     {
         $api_key = ApiKey::where('uuid', $uuid)->firstOrFail();
         $data = $request->validate([
-            'is_active' => 'required',
             'last_used_at' => 'nullable',
             'note' => 'nullable',
         ]);
@@ -64,6 +63,13 @@ class ApiKeyController extends Controller
 
         $api_key->update($data);
         return redirect(route('api_key.index'))->with('success', 'ApiKey Berhasil Terupdate');
+    }
+
+    public function toggle($uuid)
+    {
+        $api_key = ApiKey::where('uuid', $uuid)->firstOrFail();
+        $api_key->update(['is_active' => !$api_key->is_active]);
+        return back()->with('success', 'Status ApiKey Berhasil Diubah');
     }
 
     public function destroy($uuid)

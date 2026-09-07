@@ -62,7 +62,24 @@
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $api_key->key }}</td>
-                                    <td>{{ $api_key->is_active }}</td>
+                                    <td>
+                                        @can('api_key-edit')
+                                            <form action="{{ route('api_key.toggle', $api_key->uuid) }}" method="post">
+                                                @csrf
+                                                @method('patch')
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        onchange="this.form.submit()"
+                                                        {{ $api_key->is_active ? 'checked' : '' }}>
+                                                </div>
+                                            </form>
+                                        @else
+                                            <span
+                                                class="badge bg-label-{{ $api_key->is_active ? 'success' : 'secondary' }}">
+                                                {{ $api_key->is_active ? 'Aktif' : 'Nonaktif' }}
+                                            </span>
+                                        @endcan
+                                    </td>
                                     <td>{{ $api_key->note }}</td>
                                     <td>{{ $api_key->last_used_at }}</td>
                                     <td>
