@@ -18,8 +18,21 @@ class AuditController extends Controller
 
     public function index(Request $request)
     {
-        $audits = $this->fastcrudAuditRepository->getAll([], $request)->orderByDesc('id')->paginate(10);
+        $audits = $this->fastcrudAuditRepository->getAll([], $request)->with('user')->orderByDesc('id')->paginate(10);
+
+        // Total aktivitas per hari (bukan hanya per halaman) untuk header grup tanggal
+        $dayCounts = collect();
+        if ($audits->count()) {
+            $dates = $audits->getCollection()->map(fn($audit) => $audit->created_at->toDateString());
+            $dayCounts = $this->fastcrudAuditRepository->getAll([], $request)
+                ->selectRaw('DATE(created_at) as d, COUNT(*) as c')
+                ->whereDate('created_at', '>=', $dates->min())
+                ->whereDate('created_at', '<=', $dates->max())
+                ->groupByRaw('DATE(created_at)')
+                ->pluck('c', 'd');
+        }
+
         $request->flash();
-        return view('fastcrud::fastcrud_audit.index', compact('audits'));
+        return view('fastcrud::fastcrud_audit.index', compact('audits', 'dayCounts'));
     }
 }

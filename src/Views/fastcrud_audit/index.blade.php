@@ -2,269 +2,238 @@
 
 @section('title', 'Audit - Pages')
 
-@section('vendor-style')
-    <!-- Menggunakan Bootstrap bawaan, tanpa custom CSS berat -->
-@endsection
-
-@section('vendor-script')
+@section('page-style')
+    <style>
+        .audit-day { font-size: .8125rem; }
+        .audit-day hr { flex: 1; margin: 0; opacity: .15; }
+        .audit-time { width: 64px; flex-shrink: 0; }
+        .audit-icon { width: 38px; height: 38px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 0 0 5px rgba(115, 103, 240, .08); }
+        .audit-details summary { list-style: none; cursor: pointer; width: fit-content; }
+        .audit-details summary::-webkit-details-marker { display: none; }
+        .audit-details .label-hide, .audit-details[open] .label-show { display: none; }
+        .audit-details[open] .label-hide { display: inline; }
+        .audit-diff th { font-size: .6875rem; letter-spacing: .04em; }
+        .audit-diff td { word-break: break-word; }
+        .audit-meta dt { font-weight: 400; min-width: 70px; }
+        .audit-meta dd { min-width: 0; }
+        .audit-meta .col-12, .audit-meta .col-md-6 { display: flex; gap: .5rem; }
+    </style>
 @endsection
 
 @section('page-script')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Show loading state on form submit
-            document.querySelector('form').addEventListener('submit', function() {
+            document.getElementById('audit-filter').addEventListener('submit', function() {
                 const submitBtn = this.querySelector('button[type="submit"]');
-                if (submitBtn) {
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML =
-                        '<span class="spinner-border spinner-border-sm me-1"></span>Mencari...';
-                }
-            });
-
-            // Tooltip initialization
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
-
-            // Expandable audit values
-            document.querySelectorAll('.audit-values').forEach(function(element) {
-                if (element.scrollHeight > element.clientHeight) {
-                    element.style.cursor = 'pointer';
-                    element.title = 'Klik untuk expand/collapse';
-                    element.addEventListener('click', function() {
-                        if (this.style.maxHeight === 'none') {
-                            this.style.maxHeight = '200px';
-                        } else {
-                            this.style.maxHeight = 'none';
-                        }
-                    });
-                }
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Mencari...';
             });
         });
     </script>
 @endsection
 
 @section('content')
-    <!-- Header dengan Informasi -->
-    <div class="row mb-3">
-        <div class="col-12">
-            <div class="card border-0 bg-primary text-white">
-                <div class="card-body py-3 px-3">
-                    <div class="d-flex flex-wrap align-items-center justify-content-between">
-                        <div>
-                            <h4 class="mb-1"><i class="ti ti-history me-2"></i> Audit Log Sistem</h4>
-                            <small class="text-white-50">Pantau dan lacak semua aktivitas dan perubahan data dalam sistem secara real-time</small>
-                        </div>
-                        <div class="text-end">
-                            <span class="badge bg-light text-dark">Total Log: {{ $audits->total() }}</span>
-                        </div>
+    @php
+        $events = [
+            'created' => ['Dibuat', 'success', 'ti-plus'],
+            'updated' => ['Diubah', 'info', 'ti-pencil'],
+            'deleted' => ['Dihapus', 'danger', 'ti-trash'],
+            'restored' => ['Dipulihkan', 'warning', 'ti-restore'],
+        ];
+        $formatValue = function ($value) {
+            if ($value === null || $value === '') {
+                return '—';
+            }
+            if (is_bool($value)) {
+                return $value ? 'Ya' : 'Tidak';
+            }
+            if (is_array($value) || is_object($value)) {
+                return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            }
+            return (string) $value;
+        };
+    @endphp
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                <div>
+                    <h5 class="mb-1"><i class="ti ti-history me-2"></i>Audit Log Sistem</h5>
+                    <small class="text-muted">Pantau semua aktivitas dan perubahan data dalam sistem</small>
+                </div>
+                <span class="badge bg-label-primary">Total Log: {{ $audits->total() }}</span>
+            </div>
+
+            <form action="" id="audit-filter">
+                <div class="row g-3">
+                    <div class="col-md-4 col-lg-2">
+                        <label class="form-label">Event</label>
+                        {{ html()->text('event')->class('form-control')->placeholder('created, updated, ...')->value(@old('event')) }}
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <label class="form-label">User ID</label>
+                        {{ html()->text('user_id')->class('form-control')->placeholder('ID user')->value(@old('user_id')) }}
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <label class="form-label">Tipe Model</label>
+                        {{ html()->text('auditable_type')->class('form-control')->placeholder('App\Models\User')->value(@old('auditable_type')) }}
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <label class="form-label">ID Model</label>
+                        {{ html()->text('auditable_id')->class('form-control')->placeholder('ID model')->value(@old('auditable_id')) }}
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <label class="form-label">Alamat IP</label>
+                        {{ html()->text('ip_address')->class('form-control')->placeholder('127.0.0.1')->value(@old('ip_address')) }}
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <label class="form-label">Dari Tanggal</label>
+                        {{ html()->date('created_from')->class('form-control')->value(@old('created_from')) }}
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <label class="form-label">Sampai Tanggal</label>
+                        {{ html()->date('created_to')->class('form-control')->value(@old('created_to')) }}
+                    </div>
+                    <div class="col-md-8 col-lg-6 d-flex align-items-end justify-content-end gap-2">
+                        <a href="{{ url()->current() }}" class="btn btn-label-secondary">Reset</a>
+                        <button class="btn btn-primary" type="submit"><i class="ti ti-search me-1"></i>Cari</button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
-    <div class="card border-0">
-        <!-- Filter Section -->
-        <div class="card-header bg-light border-0 py-2">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h5 class="card-title mb-0">
-                        <i class="ti ti-filter me-2 text-primary"></i>
-                        Filter Audit Log
-                    </h5>
-                </div>
-            </div>
+    @forelse ($audits->getCollection()->groupBy(fn($audit) => $audit->created_at->toDateString()) as $date => $items)
+        @php $day = $items->first()->created_at; @endphp
+        <div class="audit-day d-flex align-items-center gap-2 mb-2 {{ $loop->first ? '' : 'mt-4' }}">
+            <span class="fw-semibold text-heading">
+                {{ $day->isToday() ? 'Hari Ini' : ($day->isYesterday() ? 'Kemarin' : $day->translatedFormat('l')) }}
+            </span>
+            <span class="text-muted">{{ $day->translatedFormat('d F Y') }}</span>
+            <hr>
+            <span class="text-muted">{{ $dayCounts[$date] ?? $items->count() }} aktivitas</span>
         </div>
-    </div>
 
-    <div class="card-body pb-0 pt-2">
-        <form action="" class="mb-3">
-            <div class="row g-3">
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold">
-                        <i class="ti ti-activity me-1"></i>Event/Action
-                    </label>
-                    {{ html()->text('event')->class('form-control')->placeholder('Contoh: created, updated, deleted')->value(@old('event')) }}
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold">
-                        <i class="ti ti-calendar me-1"></i>Tanggal
-                    </label>
-                    {{ html()->date('created_at')->class('form-control')->placeholder('Pilih tanggal')->value(@old('created_at')) }}
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold">
-                        <i class="ti ti-user me-1"></i>User ID
-                    </label>
-                    {{ html()->text('user_id')->class('form-control')->placeholder('Masukkan ID atau nama user')->value(@old('user_id')) }}
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold">
-                        <i class="ti ti-id me-1"></i>ID Model
-                    </label>
-                    {{ html()->text('auditable_id')->class('form-control')->placeholder('Masukkan ID Model')->value(@old('auditable_id')) }}
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold">
-                        <i class="ti ti-database me-1"></i>Tipe Model
-                    </label>
-                    {{ html()->text('auditable_type')->class('form-control')->placeholder('Contoh: User, Operational')->value(@old('auditable_type')) }}
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold">
-                        <i class="ti ti-world me-1"></i>IP Address
-                    </label>
-                    {{ html()->text('ip_address')->class('form-control')->placeholder('Masukkan IP Address')->value(@old('ip_address')) }}
-                </div>
-            </div>
+        <div class="card">
+            @foreach ($items as $audit)
+                @php
+                    [$eventLabel, $color, $icon] = $events[$audit->event] ?? [Str::headline($audit->event), 'secondary', 'ti-shield'];
+                    $model = Str::headline(class_basename($audit->auditable_type));
+                    $old = $audit->old_values ?? [];
+                    $new = $audit->new_values ?? [];
+                    $keys = array_unique(array_merge(array_keys($old), array_keys($new)));
+                    $userName = $audit->user->name ?? null;
+                    $role = $audit->user && method_exists($audit->user, 'getRoleNames') ? $audit->user->getRoleNames()->first() : null;
+                @endphp
+                <div class="card-body d-flex gap-3 {{ $loop->last ? '' : 'border-bottom' }}">
+                    <div class="audit-time text-center">
+                        <div class="fw-semibold text-heading mb-2">{{ $audit->created_at->format('H:i') }}</div>
+                        <span class="audit-icon bg-label-{{ $color }}"><i class="ti {{ $icon }}"></i></span>
+                    </div>
 
-            <div class="row mt-3">
-                <div class="col-12 text-end">
-                    <button class="btn btn-primary" type="submit">
-                        <i class="ti ti-search me-1"></i>
-                        Cari Data
-                    </button>
-                </div>
-            </div>
-        </form>
-        <div class="alert alert-info mt-2">
-            <i class="ti ti-info-circle me-2"></i>
-            <b>Tips:</b> Gunakan filter di atas untuk mencari log tertentu. Kolom <b>Nilai Lama</b> dan <b>Nilai Baru</b>
-            dapat di-klik untuk melihat detail lebih banyak jika datanya panjang.
-        </div>
-    </div>
+                    <div class="flex-grow-1" style="min-width:0">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                            <h6 class="mb-0">Data {{ $model }} {{ Str::lower($eventLabel) }}</h6>
+                            <span class="badge rounded-pill bg-label-{{ $color }}">{{ $eventLabel }}</span>
+                        </div>
 
-    <!-- Table Section -->
-    <div class="card-body pt-0">
-        @if ($audits->count() > 0)
-            <div class="table-responsive">
-                <table class="table table-sm table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                                <th>No</th>
-                                <th>IP Address<br><span class="text-muted small">IP pengguna</span></th>
-                                <th>Action<br><span class="text-muted small">Jenis aksi</span></th>
-                                <th>Model Info<br><span class="text-muted small">Tipe & ID</span></th>
-                                <th>User<br><span class="text-muted small">Nama & ID</span></th>
-                                <th>Nilai Lama<br><span class="text-muted small">Sebelum</span></th>
-                                <th>Nilai Baru<br><span class="text-muted small">Sesudah</span></th>
-                                <th>Waktu<br><span class="text-muted small">Tanggal & Jam</span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $no = ($audits->currentPage() - 1) * $audits->perPage() + 1;
-                        @endphp
-                        @foreach ($audits as $audit)
-                            <tr>
-                                <td>{{ $no++ }}</td>
-
-                                <!-- IP Address -->
-                                <td>
-                                    <span class="badge bg-light text-dark" data-bs-toggle="tooltip" title="IP Address pengguna">
-                                        {{ $audit->ip_address }}
+                        <div class="d-flex flex-wrap align-items-center gap-2 small mb-2">
+                            @if ($userName)
+                                <span class="avatar avatar-xs">
+                                    <span class="avatar-initial rounded-circle bg-label-secondary" style="font-size:.625rem">
+                                        {{ collect(explode(' ', $userName))->take(2)->map(fn($w) => Str::upper(Str::substr($w, 0, 1)))->join('') }}
                                     </span>
-                                </td>
+                                </span>
+                                <span class="text-heading">{{ $userName }}</span>
+                                @if ($role)
+                                    <span class="badge rounded-pill bg-label-secondary">{{ $role }}</span>
+                                @endif
+                            @else
+                                <span class="badge rounded-pill bg-label-secondary"><i class="ti ti-robot ti-xs me-1"></i>Sistem</span>
+                            @endif
+                            <span class="text-muted">•</span>
+                            <span class="text-muted"><i class="ti ti-database ti-xs me-1"></i>{{ $model }}</span>
+                            <span class="text-heading">#{{ $audit->auditable_id }}</span>
+                        </div>
 
-                                <!-- Action/Event -->
-                                <td>
-                                    <span class="badge bg-secondary text-uppercase">
-                                        {{ $audit->event }}
-                                    </span>
-                                </td>
+                        <details class="audit-details">
+                            <summary class="small fw-medium text-muted">
+                                <span class="label-show">Tampilkan rincian</span>
+                                <span class="label-hide">Sembunyikan rincian</span>
+                                <span class="badge rounded-pill bg-label-secondary ms-1">{{ count($keys) }}</span>
+                            </summary>
 
-                                <!-- Model Info -->
-                                <td>
-                                    <div>
-                                        <span class="badge bg-info text-dark mb-1">{{ $audit->auditable_type }}</span><br>
-                                        <span class="badge bg-light text-dark">ID: {{ $audit->auditable_id }}</span>
-                                    </div>
-                                </td>
-
-                                <!-- User Info -->
-                                <td>
-                                    <div>
-                                        @if ($audit->user)
-                                            <span class="badge bg-primary">{{ $audit->user->name }}</span><br>
-                                            <small class="text-muted">ID: {{ $audit->user_id }}</small>
-                                        @else
-                                            <span class="badge bg-secondary"><i class="ti ti-robot"></i> System</span>
-                                        @endif
-                                    </div>
-                                </td>
-
-                                <!-- Old Values -->
-                                <td>
-                                    @if (!empty($audit->old_values))
-                                        <div style="max-height:120px;overflow-y:auto;font-size:0.9em;" data-bs-toggle="tooltip" title="Klik untuk expand">
-                                            <ul class="mb-0 ps-2">
-                                                @foreach ($audit->old_values as $key => $old_value)
-                                                    <li>
-                                                        <strong>{{ $key }}:</strong>
-                                                        <span class="text-muted">
-                                                            {{ is_string($old_value) ? Str::limit($old_value, 50) : $old_value }}
-                                                        </span>
-                                                    </li>
+                            <div class="border rounded mt-2 p-3">
+                                @if (count($keys))
+                                    <div class="table-responsive">
+                                        <table class="table table-sm audit-diff mb-3">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-muted">Kolom</th>
+                                                    <th class="text-muted">Sebelum</th>
+                                                    <th class="text-muted">Sesudah</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($keys as $key)
+                                                    @php
+                                                        $before = $formatValue($old[$key] ?? null);
+                                                        $after = $formatValue($new[$key] ?? null);
+                                                    @endphp
+                                                    <tr>
+                                                        <td class="text-heading">{{ Str::headline($key) }}</td>
+                                                        <td class="{{ $before !== '—' && $before !== $after ? 'text-danger' : 'text-muted' }}" title="{{ $before }}">
+                                                            {{ Str::limit($before, 120) }}
+                                                        </td>
+                                                        <td class="{{ $after !== '—' ? 'text-success' : 'text-muted' }}" title="{{ $after }}">
+                                                            {{ Str::limit($after, 120) }}
+                                                        </td>
+                                                    </tr>
                                                 @endforeach
-                                            </ul>
-                                        </div>
-                                    @else
-                                        <span class="text-muted fst-italic">
-                                            <i class="ti ti-minus"></i> Tidak ada
-                                        </span>
-                                    @endif
-                                </td>
-
-                                <!-- New Values -->
-                                <td>
-                                    @if (!empty($audit->new_values))
-                                        <div style="max-height:120px;overflow-y:auto;font-size:0.9em;" data-bs-toggle="tooltip" title="Klik untuk expand">
-                                            <ul class="mb-0 ps-2">
-                                                @foreach ($audit->new_values as $key => $new_value)
-                                                    <li>
-                                                        <strong>{{ $key }}:</strong>
-                                                        <span class="text-success">
-                                                            {{ is_string($new_value) ? Str::limit($new_value, 50) : $new_value }}
-                                                        </span>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @else
-                                        <span class="text-muted fst-italic">
-                                            <i class="ti ti-minus"></i> Tidak ada
-                                        </span>
-                                    @endif
-                                </td>
-
-                                <!-- Date Time -->
-                                <td>
-                                    <div>
-                                        <span class="badge bg-light text-dark">{{ $audit->created_at->format('d M Y') }}</span><br>
-                                        <small class="text-muted">{{ $audit->created_at->format('H:i:s') }}</small><br>
-                                        <small class="text-muted">{{ $audit->created_at->diffForHumans() }}</small>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                                @endif
 
-            <!-- Pagination -->
-            <div class="d-flex justify-content-center mt-3">
-                {{ $audits->appends($_GET)->links('pagination::bootstrap-5') }}
+                                <dl class="row g-1 small mb-0 audit-meta">
+                                    <div class="col-md-6">
+                                        <dt class="text-muted">Waktu</dt>
+                                        <dd class="mb-0 text-heading">{{ $audit->created_at->translatedFormat('d F Y, H:i:s') }}</dd>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <dt class="text-muted">Alamat IP</dt>
+                                        <dd class="mb-0 text-heading">{{ $audit->ip_address ?: '—' }}</dd>
+                                    </div>
+                                    <div class="col-12">
+                                        <dt class="text-muted">Halaman</dt>
+                                        <dd class="mb-0 text-heading text-truncate" title="{{ $audit->url }}">{{ $audit->url ?: '—' }}</dd>
+                                    </div>
+                                    <div class="col-12">
+                                        <dt class="text-muted">Perangkat</dt>
+                                        <dd class="mb-0 text-heading text-truncate" title="{{ $audit->user_agent }}">{{ $audit->user_agent ?: '—' }}</dd>
+                                    </div>
+                                    <div class="col-12">
+                                        <dt class="text-muted">ID Entitas</dt>
+                                        <dd class="mb-0 text-heading font-monospace">{{ $audit->auditable_id }}</dd>
+                                    </div>
+                                </dl>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @empty
+        <div class="card">
+            <div class="card-body text-center py-5 text-muted">
+                <i class="ti ti-search-off mb-2" style="font-size:2.5rem;opacity:.5"></i>
+                <h6 class="mb-1">Tidak Ada Data Audit</h6>
+                <p class="mb-0">Belum ada log audit yang sesuai dengan filter.</p>
             </div>
-        @else
-            <div class="text-center py-5 text-muted">
-                <i class="ti ti-search-off" style="font-size:2.5rem;opacity:0.5;"></i>
-                <h6 class="mb-2">Tidak Ada Data Audit</h6>
-                <p class="mb-0">Belum ada log audit yang ditemukan atau sesuai dengan filter yang diterapkan.</p>
-            </div>
-        @endif
-    </div>
+        </div>
+    @endforelse
+
+    <div class="d-flex justify-content-center mt-4">
+        {{ $audits->appends(request()->query())->links('pagination::bootstrap-5') }}
     </div>
 @endsection

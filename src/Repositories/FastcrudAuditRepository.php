@@ -41,6 +41,12 @@ class FastcrudAuditRepository
             if ($created_at) {
                 $query->whereDate('created_at', $created_at);
             }
+            if ($request->created_from) {
+                $query->whereDate('created_at', '>=', $request->created_from);
+            }
+            if ($request->created_to) {
+                $query->whereDate('created_at', '<=', $request->created_to);
+            }
         }
 
         if (!empty($params['filters'])) {
