@@ -122,8 +122,12 @@
                     $old = $audit->old_values ?? [];
                     $new = $audit->new_values ?? [];
                     $keys = array_unique(array_merge(array_keys($old), array_keys($new)));
-                    $userName = $audit->user->name ?? null;
-                    $role = $audit->user && method_exists($audit->user, 'getRoleNames') ? $audit->user->getRoleNames()->first() : null;
+                    $user = $audit->user;
+                    $userName = $user->name ?? null;
+                    $userId = $audit->user_id;
+                    $userEmail = $user->email ?? null;
+                    $role = $user && method_exists($user, 'getRoleNames') ? $user->getRoleNames()->first() : null;
+                    $totalChangedFields = collect($keys)->filter(fn($k) => ($old[$k] ?? null) !== ($new[$k] ?? null))->count();
                 @endphp
                 <div class="card-body d-flex gap-3 {{ $loop->last ? '' : 'border-bottom' }}">
                     <div class="audit-time text-center">
@@ -145,15 +149,33 @@
                                     </span>
                                 </span>
                                 <span class="text-heading">{{ $userName }}</span>
+                                <a href="{{ request()->fullUrlWithQuery(['user_id' => $userId]) }}"
+                                    class="badge rounded-pill bg-label-primary font-monospace text-decoration-none"
+                                    title="Filter aktivitas User ID {{ $userId }}">ID: {{ $userId }}</a>
                                 @if ($role)
                                     <span class="badge rounded-pill bg-label-secondary">{{ $role }}</span>
                                 @endif
                             @else
                                 <span class="badge rounded-pill bg-label-secondary"><i class="ti ti-robot ti-xs me-1"></i>Sistem</span>
+                                <span class="badge rounded-pill bg-label-secondary font-monospace" title="Tidak ada user terautentikasi">ID: —</span>
                             @endif
                             <span class="text-muted">•</span>
                             <span class="text-muted"><i class="ti ti-database ti-xs me-1"></i>{{ $model }}</span>
-                            <span class="text-heading">#{{ $audit->auditable_id }}</span>
+                            <a href="{{ request()->fullUrlWithQuery(['auditable_type' => $audit->auditable_type, 'auditable_id' => $audit->auditable_id]) }}"
+                                class="text-heading text-decoration-none" title="Lihat seluruh riwayat entitas ini">#{{ $audit->auditable_id }}</a>
+                            @if ($audit->tags)
+                                <span class="badge rounded-pill bg-label-warning"><i class="ti ti-tag ti-xs me-1"></i>{{ $audit->tags }}</span>
+                            @endif
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-3 small text-muted mb-2">
+                            <span title="Nomor log audit"><i class="ti ti-hash ti-xs me-1"></i>Log #{{ $audit->id }}</span>
+                            <span title="Email pengguna"><i class="ti ti-mail ti-xs me-1"></i>{{ $userEmail ?: 'Tanpa email' }}</span>
+                            <span title="Alamat IP"><i class="ti ti-network ti-xs me-1"></i>{{ $audit->ip_address ?: '—' }}</span>
+                            <span title="Jumlah kolom berubah dari total kolom tercatat">
+                                <i class="ti ti-columns-3 ti-xs me-1"></i>{{ $totalChangedFields }}/{{ count($keys) }} kolom berubah
+                            </span>
+                            <span title="Waktu relatif"><i class="ti ti-clock ti-xs me-1"></i>{{ $audit->created_at->diffForHumans() }}</span>
                         </div>
 
                         <details class="audit-details">
@@ -179,9 +201,15 @@
                                                     @php
                                                         $before = $formatValue($old[$key] ?? null);
                                                         $after = $formatValue($new[$key] ?? null);
+                                                        $isChanged = ($old[$key] ?? null) !== ($new[$key] ?? null);
                                                     @endphp
-                                                    <tr>
-                                                        <td class="text-heading">{{ Str::headline($key) }}</td>
+                                                    <tr class="{{ $isChanged ? '' : 'opacity-50' }}">
+                                                        <td class="text-heading">
+                                                            {{ Str::headline($key) }}
+                                                            @if ($isChanged)
+                                                                <i class="ti ti-arrows-diff ti-xs text-warning ms-1" title="Kolom ini berubah"></i>
+                                                            @endif
+                                                        </td>
                                                         <td class="{{ $before !== '—' && $before !== $after ? 'text-danger' : 'text-muted' }}" title="{{ $before }}">
                                                             {{ Str::limit($before, 120) }}
                                                         </td>
@@ -196,6 +224,21 @@
                                 @endif
 
                                 <dl class="row g-1 small mb-0 audit-meta">
+                                    <div class="col-md-6">
+                                        <dt class="text-muted">Log ID</dt>
+                                        <dd class="mb-0 text-heading font-monospace">{{ $audit->id }}</dd>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <dt class="text-muted">User ID</dt>
+                                        <dd class="mb-0 text-heading font-monospace">
+                                            {{ $userId ?? '—' }}
+                                            @if ($userName)
+                                                <span class="text-muted">({{ $userName }}{{ $userEmail ? ', ' . $userEmail : '' }})</span>
+                                            @else
+                                                <span class="text-muted">(Sistem / tidak terautentikasi)</span>
+                                            @endif
+                                        </dd>
+                                    </div>
                                     <div class="col-md-6">
                                         <dt class="text-muted">Waktu</dt>
                                         <dd class="mb-0 text-heading">{{ $audit->created_at->translatedFormat('d F Y, H:i:s') }}</dd>
