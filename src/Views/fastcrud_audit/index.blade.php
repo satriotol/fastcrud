@@ -61,8 +61,27 @@
                     <h5 class="mb-1"><i class="ti ti-history me-2"></i>Audit Log Sistem</h5>
                     <small class="text-muted">Pantau semua aktivitas dan perubahan data dalam sistem</small>
                 </div>
-                <span class="badge bg-label-primary">Total Log: {{ $audits->total() }}</span>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-label-primary">Total Log: {{ $audits->total() }}</span>
+                    <a href="{{ route('audit.export.excel') }}?{{ http_build_query(request()->query()) }}"
+                        class="btn btn-sm btn-label-success"
+                        title="Export sesuai filter aktif, maks. {{ number_format(config('fastcrud.audit_export_limit', 500)) }} record terbaru">
+                        <i class="ti ti-file-spreadsheet me-1"></i>Export Excel
+                    </a>
+                </div>
             </div>
+
+            @php $exportLimit = config('fastcrud.audit_export_limit', 500); @endphp
+            @if ($audits->total() > $exportLimit)
+                <div class="alert alert-warning d-flex align-items-center py-2 mb-3 small" role="alert">
+                    <i class="ti ti-alert-triangle me-2"></i>
+                    <div>
+                        Hasil filter saat ini <strong>{{ number_format($audits->total()) }}</strong> record, melebihi batas export
+                        <strong>{{ number_format($exportLimit) }}</strong>. Export hanya akan merekap {{ number_format($exportLimit) }} record terbaru —
+                        persempit rentang tanggal, User ID, atau model agar rekap lengkap.
+                    </div>
+                </div>
+            @endif
 
             <form action="" id="audit-filter">
                 <div class="row g-3">

@@ -54,6 +54,7 @@ Route::prefix(config('fastcrud.route_prefix', 'admin'))->group(function () {
             Route::get('maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index');
             Route::put('maintenance', [MaintenanceController::class, 'update'])->name('maintenance.update');
             Route::get('app-specs', [AppSpecsController::class, 'index'])->name('app-specs.index');
+            Route::get('audit/export/excel', [AuditController::class, 'exportExcel'])->name('audit.export.excel');
             Route::get('audit', [AuditController::class, 'index'])->name('audit.index');
             Route::get('profile', [UserController::class, 'profile'])->name('user.profile');
             Route::put('/updateProfile', [UserController::class, 'updateProfile'])->name('user.updateProfile');
