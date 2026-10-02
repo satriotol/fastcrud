@@ -56,54 +56,87 @@
 
     <div class="card mb-4">
         <div class="card-body">
+            @php
+                $exportLimit = config('fastcrud.audit_export_limit', 500);
+                $firstOnPage = $audits->first();
+                $lastOnPage = $audits->getCollection()->last();
+                $advancedKeys = ['auditable_type', 'auditable_id', 'ip_address'];
+                $advancedOpen = collect($advancedKeys)->contains(fn($key) => filled(request()->query($key)));
+                $quickRanges = [
+                    'Hari ini' => [now()->toDateString(), now()->toDateString()],
+                    '7 hari' => [now()->subDays(6)->toDateString(), now()->toDateString()],
+                    '30 hari' => [now()->subDays(29)->toDateString(), now()->toDateString()],
+                ];
+            @endphp
+
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
                 <div>
                     <h5 class="mb-1"><i class="ti ti-history me-2"></i>Audit Log Sistem</h5>
                     <small class="text-muted">Pantau semua aktivitas dan perubahan data dalam sistem</small>
                 </div>
-                <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-label-primary">Total Log: {{ $audits->total() }}</span>
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    @if ($firstOnPage)
+                        <span class="badge bg-label-primary" title="Total keseluruhan tidak dihitung agar halaman tetap cepat">
+                            <i class="ti ti-list-numbers ti-xs me-1"></i>Log #{{ number_format($lastOnPage->id) }}–#{{ number_format($firstOnPage->id) }}
+                        </span>
+                    @endif
+                    <span class="badge bg-label-secondary">Halaman {{ $audits->currentPage() }}</span>
                     <a href="{{ route('audit.export.excel') }}?{{ http_build_query(request()->query()) }}"
                         class="btn btn-sm btn-label-success"
-                        title="Export sesuai filter aktif, maks. {{ number_format(config('fastcrud.audit_export_limit', 500)) }} record terbaru">
+                        title="Export sesuai filter aktif, maks. {{ number_format($exportLimit) }} record terbaru">
                         <i class="ti ti-file-spreadsheet me-1"></i>Export Excel
                     </a>
                 </div>
             </div>
 
-            @php $exportLimit = config('fastcrud.audit_export_limit', 500); @endphp
-            @if ($audits->total() > $exportLimit)
-                <div class="alert alert-warning d-flex align-items-center py-2 mb-3 small" role="alert">
-                    <i class="ti ti-alert-triangle me-2"></i>
-                    <div>
-                        Hasil filter saat ini <strong>{{ number_format($audits->total()) }}</strong> record, melebihi batas export
-                        <strong>{{ number_format($exportLimit) }}</strong>. Export hanya akan merekap {{ number_format($exportLimit) }} record terbaru —
-                        persempit rentang tanggal, User ID, atau model agar rekap lengkap.
-                    </div>
+            <div class="alert alert-info d-flex align-items-center py-2 mb-3 small" role="alert">
+                <i class="ti ti-bolt me-2"></i>
+                <div>
+                    Halaman ini menampilkan log terbaru secara bertahap tanpa menghitung total keseluruhan, agar tetap
+                    ringan pada tabel audit berukuran besar. Export merekap maks.
+                    <strong>{{ number_format($exportLimit) }}</strong> record terbaru sesuai filter aktif — persempit
+                    rentang tanggal, User ID, atau model agar rekap lebih lengkap.
+                </div>
+            </div>
+
+            @if (count($activeFilters))
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                    <span class="small text-muted"><i class="ti ti-filter ti-xs me-1"></i>Filter aktif:</span>
+                    @foreach ($activeFilters as $filter)
+                        <span class="badge bg-label-primary d-inline-flex align-items-center gap-1">
+                            {{ $filter['label'] }}: {{ Str::limit($filter['value'], 28) }}
+                            <a href="{{ request()->fullUrlWithQuery([$filter['key'] => null, 'page' => null]) }}"
+                                class="text-reset text-decoration-none" title="Hapus filter {{ $filter['label'] }}">
+                                <i class="ti ti-x ti-xs"></i>
+                            </a>
+                        </span>
+                    @endforeach
+                    <a href="{{ url()->current() }}" class="btn btn-xs btn-label-secondary">Hapus semua</a>
                 </div>
             @endif
 
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                <span class="small text-muted"><i class="ti ti-calendar-stats ti-xs me-1"></i>Rentang cepat:</span>
+                @foreach ($quickRanges as $rangeLabel => [$rangeFrom, $rangeTo])
+                    <a href="{{ request()->fullUrlWithQuery(['created_from' => $rangeFrom, 'created_to' => $rangeTo, 'page' => null]) }}"
+                        class="btn btn-sm btn-label-secondary">{{ $rangeLabel }}</a>
+                @endforeach
+            </div>
+
             <form action="" id="audit-filter">
                 <div class="row g-3">
-                    <div class="col-md-4 col-lg-2">
-                        <label class="form-label">Event</label>
-                        {{ html()->text('event')->class('form-control')->placeholder('created, updated, ...')->value(@old('event')) }}
+                    <div class="col-md-4 col-lg-3">
+                        <label class="form-label" for="audit-event">Event</label>
+                        <select name="event" id="audit-event" class="form-select">
+                            <option value="">Semua event</option>
+                            @foreach (['created' => 'Dibuat', 'updated' => 'Diubah', 'deleted' => 'Dihapus', 'restored' => 'Dipulihkan'] as $eventValue => $eventText)
+                                <option value="{{ $eventValue }}" @selected(request('event') === $eventValue)>{{ $eventText }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="col-md-4 col-lg-2">
+                    <div class="col-md-4 col-lg-3">
                         <label class="form-label">User ID</label>
-                        {{ html()->text('user_id')->class('form-control')->placeholder('ID user')->value(@old('user_id')) }}
-                    </div>
-                    <div class="col-md-4 col-lg-2">
-                        <label class="form-label">Tipe Model</label>
-                        {{ html()->text('auditable_type')->class('form-control')->placeholder('App\Models\User')->value(@old('auditable_type')) }}
-                    </div>
-                    <div class="col-md-4 col-lg-2">
-                        <label class="form-label">ID Model</label>
-                        {{ html()->text('auditable_id')->class('form-control')->placeholder('ID model')->value(@old('auditable_id')) }}
-                    </div>
-                    <div class="col-md-4 col-lg-4">
-                        <label class="form-label">Alamat IP</label>
-                        {{ html()->text('ip_address')->class('form-control')->placeholder('127.0.0.1')->value(@old('ip_address')) }}
+                        {{ html()->text('user_id')->class('form-control')->attribute('inputmode', 'numeric')->placeholder('ID user')->value(@old('user_id')) }}
                     </div>
                     <div class="col-md-4 col-lg-3">
                         <label class="form-label">Dari Tanggal</label>
@@ -113,10 +146,34 @@
                         <label class="form-label">Sampai Tanggal</label>
                         {{ html()->date('created_to')->class('form-control')->value(@old('created_to')) }}
                     </div>
-                    <div class="col-md-8 col-lg-6 d-flex align-items-end justify-content-end gap-2">
-                        <a href="{{ url()->current() }}" class="btn btn-label-secondary">Reset</a>
-                        <button class="btn btn-primary" type="submit"><i class="ti ti-search me-1"></i>Cari</button>
+                </div>
+
+                <details class="mt-3 audit-details" @if ($advancedOpen) open @endif>
+                    <summary class="small fw-semibold text-muted">
+                        <i class="ti ti-adjustments-horizontal me-1"></i>Filter lanjutan
+                        @if ($advancedOpen)
+                            <span class="badge rounded-pill bg-label-primary ms-1">aktif</span>
+                        @endif
+                    </summary>
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-4">
+                            <label class="form-label">Tipe Model</label>
+                            {{ html()->text('auditable_type')->class('form-control')->placeholder('App\Models\User')->value(@old('auditable_type')) }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">ID Model</label>
+                            {{ html()->text('auditable_id')->class('form-control')->attribute('inputmode', 'numeric')->placeholder('ID model')->value(@old('auditable_id')) }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Alamat IP</label>
+                            {{ html()->text('ip_address')->class('form-control')->placeholder('127.0.0.1')->value(@old('ip_address')) }}
+                        </div>
                     </div>
+                </details>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <a href="{{ url()->current() }}" class="btn btn-label-secondary">Reset</a>
+                    <button class="btn btn-primary" type="submit"><i class="ti ti-search me-1"></i>Cari</button>
                 </div>
             </form>
         </div>
@@ -290,12 +347,26 @@
             <div class="card-body text-center py-5 text-muted">
                 <i class="ti ti-search-off mb-2" style="font-size:2.5rem;opacity:.5"></i>
                 <h6 class="mb-1">Tidak Ada Data Audit</h6>
-                <p class="mb-0">Belum ada log audit yang sesuai dengan filter.</p>
+                <p class="mb-2">
+                    @if (count($activeFilters))
+                        Tidak ada log yang sesuai dengan filter saat ini.
+                    @else
+                        Belum ada log audit yang tercatat.
+                    @endif
+                </p>
+                @if (count($activeFilters))
+                    <a href="{{ url()->current() }}" class="btn btn-sm btn-label-secondary">
+                        <i class="ti ti-filter-off me-1"></i>Reset filter
+                    </a>
+                @endif
             </div>
         </div>
     @endforelse
 
-    <div class="d-flex justify-content-center mt-4">
-        {{ $audits->appends(request()->query())->links('pagination::bootstrap-5') }}
-    </div>
+    @if ($audits->count())
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-4">
+            <small class="text-muted">Menampilkan {{ $audits->count() }} log pada halaman ini</small>
+            <div>{{ $audits->links('pagination::simple-bootstrap-5') }}</div>
+        </div>
+    @endif
 @endsection

@@ -2,6 +2,7 @@
 
 namespace Satriotol\Fastcrud\Repositories;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Satriotol\Fastcrud\Traits\RemovesFiles;
 use Illuminate\Support\Str;
@@ -23,29 +24,34 @@ class FastcrudAuditRepository
             $auditable_id = $request->auditable_id;
             $created_at = $request->created_at;
 
-            if ($auditable_id) {
-                $query->where('auditable_id', $auditable_id);
+            if ($this->filled($auditable_id)) {
+                $this->whereInteger($query, 'auditable_id', $auditable_id);
             }
-            if ($user_id) {
-                $query->where('user_id', $user_id);
+            if ($this->filled($user_id)) {
+                $this->whereInteger($query, 'user_id', $user_id);
             }
-            if ($auditable_type) {
-                $query->where('auditable_type', $auditable_type);
+            if ($this->filled($auditable_type)) {
+                $query->where('auditable_type', trim($auditable_type));
             }
-            if ($event) {
-                $query->where('event', $event);
+            if ($this->filled($event)) {
+                $query->where('event', trim($event));
             }
-            if ($ip_address) {
-                $query->where('ip_address', $ip_address);
+            if ($this->filled($ip_address)) {
+                $query->where('ip_address', trim($ip_address));
             }
-            if ($created_at) {
-                $query->whereDate('created_at', $created_at);
+
+            // Filter tanggal memakai rentang datetime (>= awal hari, < awal hari berikutnya)
+            // alih-alih whereDate(), karena DATE(created_at) membungkus kolom dengan fungsi
+            // sehingga database tidak bisa memakai index pada created_at.
+            if ($date = $this->parseDate($created_at)) {
+                $query->where('created_at', '>=', $date->copy()->startOfDay())
+                    ->where('created_at', '<', $date->copy()->addDay()->startOfDay());
             }
-            if ($request->created_from) {
-                $query->whereDate('created_at', '>=', $request->created_from);
+            if ($from = $this->parseDate($request->created_from)) {
+                $query->where('created_at', '>=', $from->startOfDay());
             }
-            if ($request->created_to) {
-                $query->whereDate('created_at', '<=', $request->created_to);
+            if ($to = $this->parseDate($request->created_to)) {
+                $query->where('created_at', '<', $to->addDay()->startOfDay());
             }
         }
 
@@ -84,6 +90,32 @@ class FastcrudAuditRepository
 
         return $query;
     }
+
+    private function filled($value): bool
+    {
+        return $value !== null && trim((string) $value) !== '';
+    }
+
+    private function whereInteger($query, string $column, $value): void
+    {
+        if (filter_var($value, FILTER_VALIDATE_INT) !== false) {
+            $query->where($column, (int) $value);
+        }
+    }
+
+    private function parseDate($value): ?Carbon
+    {
+        if (!$this->filled($value)) {
+            return null;
+        }
+
+        try {
+            return Carbon::createFromFormat('Y-m-d', trim($value))->startOfDay();
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
     public function search()
     {
         $query = Audit::query();
