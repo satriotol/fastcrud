@@ -11,6 +11,15 @@
     </li>
 @endcan
 
+@can('fastcrud_note-index')
+    <li class="menu-item {{ request()->routeIs('fastcrud_note.*') ? 'active' : '' }}">
+        <a href="{{ route('fastcrud_note.index') }}" class="menu-link">
+            <i class="menu-icon tf-icons ti ti-notes"></i>
+            <div>Catatan Rapat</div>
+        </a>
+    </li>
+@endcan
+
 @can('media-index')
     <li class="menu-item {{ request()->routeIs('media.*') ? 'active' : '' }}">
         <a href="{{ route('media.index') }}" class="menu-link">

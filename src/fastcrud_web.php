@@ -12,6 +12,7 @@ use Satriotol\Fastcrud\Controllers\ApiKeyController;
 use Satriotol\Fastcrud\Controllers\AppSpecsController;
 use Satriotol\Fastcrud\Controllers\AuditController;
 use Satriotol\Fastcrud\Controllers\FastcrudImpersonateController;
+use Satriotol\Fastcrud\Controllers\FastcrudNoteController;
 use Satriotol\Fastcrud\Controllers\FastcrudRegistrationController;
 use Satriotol\Fastcrud\Controllers\FastcrudTwoFactorController;
 use Satriotol\Fastcrud\Controllers\FastcrudUserController;
@@ -72,6 +73,9 @@ Route::prefix(config('fastcrud.route_prefix', 'admin'))->group(function () {
             Route::as('role.')->prefix('role')->group(function () {
                 Route::get('only/view', [RoleController::class, 'view'])->name('view');
             });
+            Route::post('fastcrud_note/autosave/{uuid?}', [FastcrudNoteController::class, 'autosave'])->name('fastcrud_note.autosave');
+            Route::post('fastcrud_note/upload-image', [FastcrudNoteController::class, 'uploadImage'])->name('fastcrud_note.upload-image');
+            Route::resource('fastcrud_note', FastcrudNoteController::class)->except('show');
             Route::resource('fastcrud_user', FastcrudUserController::class);
             Route::get('setMustChangePassword/fastcrud_user/{uuid}', [FastcrudUserController::class, 'setMustChangePassword'])->name('fastcrud_user.setMustChangePassword');
             Route::prefix('fastcrud_registration')->as('fastcrud_registration.')->group(function () {
