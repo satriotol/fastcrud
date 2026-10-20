@@ -7,7 +7,6 @@ use App\Repositories\{{modelName}}Repository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Satriotol\Fastcrud\Exceptions\FastcrudException;
 
 class {{modelName}}Controller extends Controller
 {
@@ -48,9 +47,9 @@ class {{modelName}}Controller extends Controller
             $this->{{modelNameSingular}}Repository->create($data);
             DB::commit();
             return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{indonesian_name}} Berhasil Tersimpan');
-        } catch (FastcrudException $fe) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', $fe->getMessage())->withInput();
+            return back()->with('error', $e->getMessage())->withInput();
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Terjadi kesalahan ketika menyimpan {{indonesian_name}}: ' . $th->getMessage(), [
@@ -82,9 +81,9 @@ class {{modelName}}Controller extends Controller
             $this->{{modelNameSingular}}Repository->update($uuid, $data);
             DB::commit();
             return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{indonesian_name}} Berhasil Terupdate');
-        } catch (FastcrudException $fe) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', $fe->getMessage())->withInput();
+            return back()->with('error', $e->getMessage())->withInput();
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Terjadi kesalahan ketika mengupdate {{indonesian_name}}: ' . $th->getMessage(), [
@@ -101,9 +100,9 @@ class {{modelName}}Controller extends Controller
             $this->{{modelNameSingular}}Repository->delete($uuid);
             DB::commit();
             return back()->with('success', '{{indonesian_name}} Berhasil Dihapus');
-        } catch (FastcrudException $fe) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', $fe->getMessage());
+            return back()->with('error', $e->getMessage());
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Terjadi kesalahan ketika menghapus {{indonesian_name}}: ' . $th->getMessage(), [
