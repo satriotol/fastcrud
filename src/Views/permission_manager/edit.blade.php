@@ -5,7 +5,11 @@
 @section('content')
     @include('partials.success')
 
-    <form action="{{ route('permission_manager.update', $role->id) }}" method="post">
+    <form id="missingPermissionsForm" action="{{ route('permission_manager.missing_permissions.store', $role->id) }}" method="post" class="d-none">
+        @csrf
+    </form>
+
+    <form id="permissionForm" action="{{ route('permission_manager.update', $role->id) }}" method="post">
         @csrf
         @method('put')
 
@@ -256,15 +260,20 @@
                 }
                 if (invalid.length) {
                     warnings += '<div class="alert alert-warning mb-3">Ada ' + invalid.length +
-                        ' permission yang tidak tersedia di environment ini dan akan diabaikan.</div>';
+                        ' permission yang tidak tersedia di environment ini.</div>';
                 }
 
+                var createButton = invalid.length
+                    ? '<button type="button" id="createMissingPermissions" class="btn btn-warning">' +
+                        '<i class="ti ti-plus me-1"></i> Buat Permission Tidak Tersedia</button>'
+                    : '';
                 var html = warnings +
                     '<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">' +
                     '<div><strong>Review selesai.</strong><br><small>Permission valid: ' + validDesired.length +
                     ' dari ' + desired.length + '.</small></div>' +
+                    '<div class="d-flex flex-wrap gap-2">' + createButton +
                     '<button type="button" id="applyRoleJson" class="btn btn-primary">' +
-                    '<i class="ti ti-check me-1"></i> Terapkan ke Form</button></div>' +
+                    '<i class="ti ti-check me-1"></i> Terapkan ke Form</button></div></div>' +
                     '<div class="row g-3">' +
                     listHtml('Ditambahkan', 'bg-success', added) +
                     listHtml('Dihapus', 'bg-danger', removed) +
@@ -284,6 +293,21 @@
                     refreshGroupToggles();
                     setReview('Permission JSON sudah diterapkan ke checkbox. Klik <strong>Simpan</strong> untuk menyimpan ke database.', 'success');
                 });
+
+                var createMissingButton = document.getElementById('createMissingPermissions');
+                if (createMissingButton) {
+                    createMissingButton.addEventListener('click', function() {
+                        var form = document.getElementById('missingPermissionsForm');
+                        invalid.forEach(function(name) {
+                            var input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'permissions[]';
+                            input.value = name;
+                            form.appendChild(input);
+                        });
+                        form.submit();
+                    });
+                }
             });
         })();
     </script>

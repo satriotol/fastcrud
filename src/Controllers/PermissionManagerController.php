@@ -35,12 +35,35 @@ class PermissionManagerController extends Controller
     }
 
     /**
+     * Buat permission dari JSON yang belum tersedia di environment ini.
+     */
+    public function createMissingPermissions(Request $request, Role $role)
+    {
+        $data = $request->validate([
+            'permissions' => ['required', 'array', 'max:200'],
+            'permissions.*' => ['required', 'string', 'distinct', 'max:255'],
+        ]);
+
+        foreach ($data['permissions'] as $name) {
+            Permission::firstOrCreate([
+                'name' => trim($name),
+                'guard_name' => $role->guard_name,
+            ]);
+        }
+
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+        return redirect()->back()->with(
+            'success',
+            count($data['permissions']) . ' permission yang belum tersedia berhasil dibuat.'
+        );
+    }
+
+    /**
      * Simpan perubahan permission role. Berlaku langsung setelah cache dibersihkan.
      */
     public function update(Request $request, Role $role)
     {
-        abort_if($role->name === 'SUPERADMIN', 403, 'Permission SUPERADMIN tidak dapat diubah.');
-
         $names = $request->input('permissions', []);
 
         // Pastikan hanya permission yang benar-benar ada yang di-sync.

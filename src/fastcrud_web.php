@@ -42,6 +42,7 @@ Route::prefix(config('fastcrud.route_prefix', 'admin'))->group(function () {
                 ->group(function () {
                     Route::get('/', [PermissionManagerController::class, 'index'])->name('index');
                     Route::get('/{role}/edit', [PermissionManagerController::class, 'edit'])->name('edit');
+                    Route::post('/{role}/missing-permissions', [PermissionManagerController::class, 'createMissingPermissions'])->name('missing_permissions.store');
                     Route::put('/{role}', [PermissionManagerController::class, 'update'])->name('update');
                 });
             Route::prefix('fastcrud_user')->group(function () {

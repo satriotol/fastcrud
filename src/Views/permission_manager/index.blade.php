@@ -30,14 +30,10 @@
                                 </td>
                                 <td>{{ $role->permissions_count }}</td>
                                 <td>
-                                    @if ($role->name === 'SUPERADMIN')
-                                        <span class="text-muted"><i class="ti ti-lock me-1"></i> Terkunci</span>
-                                    @else
-                                        <a href="{{ route('permission_manager.edit', $role->id) }}"
-                                            class="btn btn-sm btn-primary">
-                                            <i class="ti ti-adjustments me-1"></i> Atur Permission
-                                        </a>
-                                    @endif
+                                    <a href="{{ route('permission_manager.edit', $role->id) }}"
+                                        class="btn btn-sm btn-primary">
+                                        <i class="ti ti-adjustments me-1"></i> Atur Permission
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
