@@ -80,12 +80,23 @@ class ApiKeyMiddleware
         }
 
         // Desktop apps
-        if (str_contains($ua, 'electron') || str_contains($ua, 'java') || str_contains($ua, 'python-requests') || str_contains($ua, 'curl')) {
+        if (str_contains($ua, 'electron') || str_contains($ua, 'java/') || str_contains($ua, 'python') || str_contains($ua, 'curl/')) {
             return 'desktop';
         }
 
-        // Backend / server-to-server (no UA or generic)
-        if (empty($ua) || str_contains($ua, 'guzzle') || str_contains($ua, 'axios') || str_contains($ua, 'node-fetch') || str_contains($ua, 'okhttp') || str_contains($ua, 'go-http-client')) {
+        // Backend / server-to-server / API clients
+        if (empty($ua)
+            || str_contains($ua, 'guzzle')
+            || str_contains($ua, 'axios')
+            || str_contains($ua, 'node-fetch')
+            || str_contains($ua, 'node/')
+            || str_starts_with($ua, 'node')
+            || str_contains($ua, 'go-http-client')
+            || str_contains($ua, 'postman')
+            || str_contains($ua, 'insomnia')
+            || str_contains($ua, 'httpie')
+            || str_contains($ua, 'wget')
+            || str_contains($ua, 'okhttp')) {
             return 'backend';
         }
 
@@ -110,13 +121,14 @@ class ApiKeyMiddleware
         // Cek localhost
         $ip = $request->ip();
         $isLocalhost = in_array($ip, ['127.0.0.1', '::1']) || str_starts_with($ip, '192.168.') || str_starts_with($ip, '10.');
+        if ($isLocalhost && !$apiKeyRecord->allow_localhost) {
+            return false;
+        }
+
         // Jika semua platform false, berarti belum diatur — izinkan semua (backward compat)
         $hasAnyPlatformSet = $apiKeyRecord->allow_web || $apiKeyRecord->allow_mobile || $apiKeyRecord->allow_flutter || $apiKeyRecord->allow_desktop || $apiKeyRecord->allow_backend;
         if (!$hasAnyPlatformSet) {
             return true;
-        }
-        if ($isLocalhost && !$apiKeyRecord->allow_localhost) {
-            return false;
         }
 
         return match ($clientType) {
