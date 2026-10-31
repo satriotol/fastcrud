@@ -93,6 +93,7 @@
                                                             class="ti ti-pencil me-1"></i>
                                                         Edit</a>
                                                 @endcan
+                                                <a class="dropdown-item" href="{{ route('api_key.logs', $api_key->uuid) }}"><i class="ti ti-list me-1"></i>Lihat Log</a>
                                                 @can('api_key-delete')
                                                     <form action="{{ route('api_key.destroy', $api_key->uuid) }}"
                                                         method="post">

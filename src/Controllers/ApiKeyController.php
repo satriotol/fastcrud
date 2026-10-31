@@ -31,11 +31,30 @@ class ApiKeyController extends Controller
     public function store(Request $request)
     {
         $key = bin2hex(random_bytes(32));
-        ApiKey::create([
-            'key' => $key,
-            'is_active' => true,
-            'note' => $request->note ?? '',
+        $data = $request->validate([
+            'note' => 'nullable',
+            'allow_web' => 'boolean',
+            'allow_mobile' => 'boolean',
+            'allow_flutter' => 'boolean',
+            'allow_desktop' => 'boolean',
+            'allow_backend' => 'boolean',
+            'allow_localhost' => 'boolean',
+            'allowed_routes_text' => 'nullable|string',
         ]);
+
+        foreach (['allow_web', 'allow_mobile', 'allow_flutter', 'allow_desktop', 'allow_backend', 'allow_localhost'] as $field) {
+            $data[$field] = $request->boolean($field);
+        }
+
+        $routes = array_filter(array_map('trim', explode("\n", $request->input('allowed_routes_text', ''))));
+        $data['allowed_routes'] = count($routes) ? array_values($routes) : null;
+        unset($data['allowed_routes_text']);
+
+        $data['key'] = $key;
+        $data['is_active'] = true;
+        $data['note'] = $request->note ?? '';
+
+        ApiKey::create($data);
         return redirect(route('api_key.index'))->with('success', 'ApiKey Berhasil Tersimpan');
     }
 
@@ -51,18 +70,35 @@ class ApiKeyController extends Controller
         $data = $request->validate([
             'last_used_at' => 'nullable',
             'note' => 'nullable',
+            'allow_web' => 'boolean',
+            'allow_mobile' => 'boolean',
+            'allow_flutter' => 'boolean',
+            'allow_desktop' => 'boolean',
+            'allow_backend' => 'boolean',
+            'allow_localhost' => 'boolean',
+            'allowed_routes_text' => 'nullable|string',
         ]);
 
-        // Handle file uploads
+        foreach (['allow_web', 'allow_mobile', 'allow_flutter', 'allow_desktop', 'allow_backend', 'allow_localhost'] as $field) {
+            $data[$field] = $request->boolean($field);
+        }
 
-
-
+        $routes = array_filter(array_map('trim', explode("\n", $request->input('allowed_routes_text', ''))));
+        $data['allowed_routes'] = count($routes) ? array_values($routes) : null;
+        unset($data['allowed_routes_text']);
 
         // Handle boolean fields
         $data['is_active'] = $request->has('is_active');
 
         $api_key->update($data);
         return redirect(route('api_key.index'))->with('success', 'ApiKey Berhasil Terupdate');
+    }
+
+    public function logs($uuid)
+    {
+        $api_key = ApiKey::where('uuid', $uuid)->firstOrFail();
+        $logs = $api_key->logs()->latest()->paginate(50);
+        return view('fastcrud::api_key.logs', compact('api_key', 'logs'));
     }
 
     public function toggle($uuid)

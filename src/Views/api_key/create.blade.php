@@ -53,6 +53,19 @@
                             </div>
                         </div>
 
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Platform Diizinkan</label>
+                            <div class="col-sm-10">
+                                @foreach(['allow_web'=>'Web','allow_mobile'=>'Mobile','allow_flutter'=>'Flutter','allow_desktop'=>'Desktop','allow_backend'=>'Backend','allow_localhost'=>'Localhost'] as $field => $label)
+                                    <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" name="{{ $field }}" value="1" {{ isset($api_key) && $api_key->$field ? 'checked' : '' }}><label class="form-check-label">{{ $label }}</label></div>
+                                @endforeach
+                                <small class="text-muted d-block">Jika semua platform kosong, semua platform diizinkan.</small>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="allowed_routes">Whitelist Endpoint</label>
+                            <div class="col-sm-10"><textarea name="allowed_routes_text" id="allowed_routes" class="form-control" rows="3" placeholder="Satu endpoint per baris, kosong = semua endpoint">{{ isset($api_key) ? implode("\n", $api_key->allowed_routes ?? []) : '' }}</textarea><small class="text-muted">Contoh: api/products atau api/orders/*</small></div>
+                        </div>
                         <div class="form-check mt-3">
                             {{ html()->checkbox('is_active', isset($api_key) ? $api_key->is_active : @old('is_active'))->class('form-check-input')->id('is_active') }}
                             <label class="form-check-label" for="is_active"> Aktif </label>
