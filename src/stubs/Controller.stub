@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\{{modelName}}Repository;
+use Satriotol\Fastcrud\Exceptions\FastcrudException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -47,7 +48,7 @@ class {{modelName}}Controller extends Controller
             $this->{{modelNameSingular}}Repository->create($data);
             DB::commit();
             return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{indonesian_name}} Berhasil Tersimpan');
-        } catch (\Exception $e) {
+        } catch (FastcrudException $e) {
             DB::rollBack();
             return back()->with('error', $e->getMessage())->withInput();
         } catch (\Throwable $th) {
@@ -81,7 +82,7 @@ class {{modelName}}Controller extends Controller
             $this->{{modelNameSingular}}Repository->update($uuid, $data);
             DB::commit();
             return redirect(route('{{modelNameSingular}}.index'))->with('success', '{{indonesian_name}} Berhasil Terupdate');
-        } catch (\Exception $e) {
+        } catch (FastcrudException $e) {
             DB::rollBack();
             return back()->with('error', $e->getMessage())->withInput();
         } catch (\Throwable $th) {
@@ -100,7 +101,7 @@ class {{modelName}}Controller extends Controller
             $this->{{modelNameSingular}}Repository->delete($uuid);
             DB::commit();
             return back()->with('success', '{{indonesian_name}} Berhasil Dihapus');
-        } catch (\Exception $e) {
+        } catch (FastcrudException $e) {
             DB::rollBack();
             return back()->with('error', $e->getMessage());
         } catch (\Throwable $th) {
