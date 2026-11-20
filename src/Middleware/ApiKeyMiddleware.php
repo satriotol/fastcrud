@@ -21,6 +21,12 @@ class ApiKeyMiddleware
         $apiKeyRecord = ApiKey::where('key', $apiKey)->first();
         $clientType = $this->detectClientType($request);
 
+        // Enforce IP whitelist (kosong = semua IP boleh)
+        if (!$this->isIpAllowed($apiKeyRecord, $request->ip())) {
+            $this->log($apiKeyRecord, $request, $clientType, 403);
+            return ResponseFormatter::error("Alamat IP Anda tidak terdaftar", 'Forbidden', 403);
+        }
+
         // Enforce platform access
         if (!$this->isClientAllowed($apiKeyRecord, $clientType, $request)) {
             $this->log($apiKeyRecord, $request, $clientType, 403);
@@ -139,6 +145,43 @@ class ApiKeyMiddleware
             'backend' => (bool) $apiKeyRecord->allow_backend,
             default   => true, // unknown = izinkan
         };
+    }
+
+    /**
+     * Cek apakah IP request termasuk daftar allowed_ips.
+     * Kosong = semua IP diizinkan. Support wildcard (192.168.*) dan CIDR (10.0.0.0/8).
+     */
+    protected function isIpAllowed(ApiKey $apiKeyRecord, ?string $ip): bool
+    {
+        if (empty($apiKeyRecord->allowed_ips) || !$ip) {
+            return true;
+        }
+
+        foreach ($apiKeyRecord->allowed_ips as $rule) {
+            if (str_contains($rule, '/')) {
+                if ($this->ipInCidr($ip, $rule)) {
+                    return true;
+                }
+            } elseif (fnmatch($rule, $ip)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function ipInCidr(string $ip, string $cidr): bool
+    {
+        [$subnet, $bits] = explode('/', $cidr, 2);
+        $ipLong = ip2long($ip);
+        $subnetLong = ip2long($subnet);
+        if ($ipLong === false || $subnetLong === false || !is_numeric($bits)) {
+            return false;
+        }
+        $bits = (int) $bits;
+        $mask = $bits === 0 ? 0 : (-1 << (32 - $bits));
+
+        return ($ipLong & $mask) === ($subnetLong & $mask);
     }
 
     protected function log(ApiKey $apiKeyRecord, Request $request, string $clientType, int $statusCode): void

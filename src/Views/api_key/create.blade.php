@@ -66,6 +66,10 @@
                             <label class="col-sm-2 col-form-label" for="allowed_routes">Whitelist Endpoint</label>
                             <div class="col-sm-10"><textarea name="allowed_routes_text" id="allowed_routes" class="form-control" rows="3" placeholder="Satu endpoint per baris, kosong = semua endpoint">{{ isset($api_key) ? implode("\n", $api_key->allowed_routes ?? []) : '' }}</textarea><small class="text-muted">Contoh: api/products atau api/orders/*</small></div>
                         </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="allowed_ips">Whitelist IP</label>
+                            <div class="col-sm-10"><textarea name="allowed_ips_text" id="allowed_ips" class="form-control" rows="3" placeholder="Pisahkan dengan koma atau baris baru, kosong = semua IP">{{ isset($api_key) ? implode("\n", $api_key->allowed_ips ?? []) : '' }}</textarea><small class="text-muted">Contoh: 203.0.113.5, 192.168.*, 10.0.0.0/8 — pisah dengan koma atau enter. Kosong = semua IP diizinkan.</small></div>
+                        </div>
                         <div class="form-check mt-3">
                             {{ html()->checkbox('is_active', isset($api_key) ? $api_key->is_active : @old('is_active'))->class('form-check-input')->id('is_active') }}
                             <label class="form-check-label" for="is_active"> Aktif </label>
