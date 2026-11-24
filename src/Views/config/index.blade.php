@@ -72,6 +72,12 @@
                                         </span>
                                     </a>
                                 @endcan
+                                @can('config-edit')
+                                    <form action="{{ route('config.clearCache') }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button class="btn btn-warning" type="submit">Clear Cache</button>
+                                    </form>
+                                @endcan
 
                             </div>
                         </div>

@@ -4,9 +4,7 @@ namespace Satriotol\Fastcrud\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Satriotol\Fastcrud\Models\Config;
-use Illuminate\Support\Str;
 use Satriotol\Fastcrud\Traits\RemovesFiles;
 
 class ConfigController extends Controller
@@ -45,8 +43,9 @@ class ConfigController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'config_key' => 'nullable|string|max:191|unique:configs,config_key',
             'description' => 'required',
-            'type' => 'required',
+            'type' => 'required|in:' . implode(',', Config::types()),
             'config_value' => 'required',
         ]);
 
@@ -58,7 +57,13 @@ class ConfigController extends Controller
         // Handle boolean fields
 
 
+        if (Config::isFileTypeValue($data['type'])) {
+            $request->validate(['config_value' => 'required|file|max:10240']);
+            $data['config_value'] = $this->storeAsset($request->file('config_value'));
+        }
+
         Config::create($data);
+        Config::flushCache();
         return redirect(route('config.index'))->with('success', 'Config Berhasil Dibuat');
     }
     public function getConfig($uuid)
@@ -67,6 +72,8 @@ class ConfigController extends Controller
 
         if ($config->type == 'url') {
             return redirect($config->config_value);
+        } elseif ($config->isFileType()) {
+            return redirect($config->asset_url);
         } else {
             return response($config->config_value);  // Tampilkan nilai config_value sebagai teks
         }
@@ -83,9 +90,10 @@ class ConfigController extends Controller
     {
         $config = Config::where('uuid', $uuid)->firstOrFail();
         $data = $request->validate([
+            'config_key' => 'nullable|string|max:191|unique:configs,config_key,' . $config->id,
             'description' => 'required',
-            'type' => 'required',
-            'config_value' => 'required',
+            'type' => 'required|in:' . implode(',', Config::types()),
+            'config_value' => Config::isFileTypeValue($request->input('type')) ? 'nullable|file|max:10240' : 'required',
         ]);
 
         // Handle file uploads
@@ -96,7 +104,14 @@ class ConfigController extends Controller
         // Handle boolean fields
 
 
+        if (Config::isFileTypeValue($data['type'])) {
+            $data['config_value'] = $request->hasFile('config_value')
+                ? $this->storeAsset($request->file('config_value'))
+                : $config->config_value;
+        }
+
         $config->update($data);
+        Config::flushCache();
         return redirect(route('config.index'))->with('success', 'Config Berhasil Terupdate');
     }
 
@@ -104,6 +119,18 @@ class ConfigController extends Controller
     {
         $config = Config::where('uuid', $uuid)->firstOrFail();
         $config->delete();
+        Config::flushCache();
         return back()->with('success', 'Config Berhasil Dihapus');
+    }
+
+    public function clearCache()
+    {
+        Config::flushCache();
+        return back()->with('success', 'Cache Config Berhasil Dibersihkan');
+    }
+
+    private function storeAsset($file): string
+    {
+        return $file->store('config', config('fastcrud.asset_disk', 'public'));
     }
 }

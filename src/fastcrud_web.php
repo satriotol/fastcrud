@@ -64,7 +64,7 @@ Route::prefix(config('fastcrud.route_prefix', 'admin'))->group(function () {
             Route::get('api_key/{uuid}/logs', [ApiKeyController::class, 'logs'])->name('api_key.logs');
             Route::patch('api_key/{uuid}/toggle', [ApiKeyController::class, 'toggle'])->name('api_key.toggle');
             Route::resource('api_key', ApiKeyController::class);
-            Route::resource('config', ConfigController::class);
+            Route::post('config/clear-cache', [ConfigController::class, 'clearCache'])->name('config.clearCache'); Route::resource('config', ConfigController::class);
             Route::post('/user/reset-password/{uuid}', [PasswordController::class, 'resetPassword'])->name('user.resetPassword');
             Route::post('/users/reset-passwords', [PasswordController::class, 'resetPasswords'])->name('users.resetPasswords');
             Route::put('password', [PasswordController::class, 'update'])->name('password.update');

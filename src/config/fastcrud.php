@@ -2,6 +2,7 @@
 
 return [
     'route_prefix' => 'admin',
+    'asset_disk' => env('FASTCRUD_ASSET_DISK', 'public'),
 
     /*
     |--------------------------------------------------------------------------

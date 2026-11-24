@@ -68,6 +68,15 @@
                 <textarea name="config_value" id="config_value"
                           class="form-control summernote">${oldValue}</textarea>
             `;
+                } else if (type === 'image' || type === 'file') {
+                    const accept = type === 'image' ? 'accept="image/*"' : '';
+                    const preview = (type === 'image' && oldValue) ?
+                        `<img src="${oldValue}" class="mt-2 d-block" style="max-height:120px">` : '';
+                    html = `
+                <input name="config_value" id="config_value" class="form-control"
+                       type="file" ${accept} ${oldValue ? '' : 'required'}>
+                ${preview}
+            `;
                 }
 
                 $('#container_value').html(html);
@@ -84,7 +93,7 @@
             // init awal
             updateConfigValueInput(
                 $('#type').val(),
-                @json(isset($config) ? $config->config_value : old('config_value'))
+                @json(isset($config) && $config->isFileType() ? $config->asset_url : (isset($config) ? $config->config_value : old('config_value')))
             );
 
         });
@@ -113,6 +122,16 @@
                         <div class="row mb-3">
                             @include('partials.errors')
                         </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="config_key">Key</label>
+                            <div class="col-sm-10">
+                                {{ html()->text('config_key', isset($config) ? $config->config_key : @old('config_key'))->class('form-control')->placeholder('contoh: app.logo (opsional, untuk akses via helper/cache)') }}
+                                @error('config_key')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="description">Deskripsi</label>
                             <div class="col-sm-10">
@@ -156,6 +175,13 @@
                                                 {{ (isset($config) && $config->config_value === 'false') || old('config_value') === 'false' ? 'checked' : '' }}>
                                             <label class="form-check-label" for="config_value_false">False</label>
                                         </div>
+                                    @elseif ((isset($config) && $config->isFileType()) || in_array(old('type'), ['image', 'file']))
+                                        <input name="config_value" id="config_value" class="form-control" type="file"
+                                            accept="{{ (isset($config) ? $config->type : old('type')) === 'image' ? 'image/*' : '' }}"
+                                            {{ isset($config) && $config->config_value ? '' : 'required' }}>
+                                        @if (isset($config) && $config->type === 'image' && $config->config_value)
+                                            <img src="{{ $config->asset_url }}" class="mt-2 d-block" style="max-height:120px">
+                                        @endif
                                     @else
                                         <input name="config_value" id="config_value" class="form-control" type="text"
                                             value="{{ isset($config) ? $config->config_value : old('config_value') }}"
